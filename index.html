@@ -83,7 +83,8 @@
     97% { opacity: 1; }
   }
 
-  .crt-wrap { animation: flicker 8s infinite; }
+  .crt-wrap { }
+  body.caffeinated-party .crt-wrap { animation: flicker 8s infinite; }
 
   /* ===================== */
   /* INTRO / SPLASH        */
@@ -180,18 +181,19 @@
   .age-gate {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    gap: 16px;
     margin-bottom: 32px;
-    padding: 14px 20px;
-    border: 1px solid #222;
+    padding: 16px 24px;
+    border: 1px solid #333;
   }
 
   .age-checkbox {
     appearance: none;
     -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border: 1px solid #444;
+    width: 22px;
+    height: 22px;
+    border: 1px solid #555;
     background: transparent;
     cursor: pointer;
     position: relative;
@@ -329,11 +331,26 @@
   .header-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     font-size: var(--fs-xs);
     color: var(--dim);
     letter-spacing: 2px;
   }
+
+  .sfx-toggle {
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+  }
+  .sfx-toggle:hover { border-color: #555; color: var(--white); }
+  .sfx-toggle.muted { color: #444; border-color: #1A1A1A; }
 
   .live-dot {
     width: 6px; height: 6px;
@@ -351,7 +368,8 @@
   .main {
     display: grid;
     grid-template-columns: 1fr 300px;
-    min-height: calc(100vh - 53px);
+    height: calc(100vh - 53px);
+    overflow: hidden;
   }
 
   .freq-core {
@@ -361,6 +379,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
+    overflow: hidden;
   }
 
   /* ===================== */
@@ -1051,13 +1070,26 @@
     border-color: #555;
     box-shadow: 0 0 20px rgba(255,255,255,0.1);
   }
+  body.caffeinated-party .dose-name {
+    animation: glitch-shake 0.1s linear infinite;
+    text-shadow: 0 0 20px rgba(255,255,255,0.5), 3px 0 #ff0040, -3px 0 #00ff88;
+  }
+  body.caffeinated-party .waveform-container {
+    box-shadow: 0 0 30px rgba(255,255,255,0.08);
+    border-color: #555;
+  }
+  body.caffeinated-party .freq-val {
+    animation: glitch-shake 0.2s linear infinite;
+  }
 
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; }
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
     .dose-name { font-size: var(--fs-lg); letter-spacing: 6px; }
     .dose-name.pixel-font { font-size: 28px; }
-    .freq-core { padding: 20px; min-height: auto; }
+    .main { height: auto; overflow: visible; }
+    .freq-core { padding: 20px; min-height: auto; overflow: visible; }
+    .right-panel { max-height: none; }
     .dose-icon-wrap { width: 120px; height: 120px; }
     .intro-title { font-size: 24px; letter-spacing: 8px; }
     .freq-info { gap: 24px; }
@@ -1133,6 +1165,7 @@
       </div>
     </div>
     <div class="header-right">
+      <button class="sfx-toggle" id="sfxToggle" onclick="toggleSfx()">SFX ON</button>
       <span><span class="live-dot"></span> FREQ ACTIVE</span>
       <span id="clock">00:00:00</span>
     </div>
@@ -1240,8 +1273,7 @@
 // ============================================
 
 // SOUND FX SYSTEM
-const fxAudio = new Audio('FX.mp4');
-fxAudio.volume = 0.5;
+let sfxEnabled = true;
 let uiSoundCtx = null;
 
 function getUiSoundCtx() {
@@ -1251,28 +1283,59 @@ function getUiSoundCtx() {
   return uiSoundCtx;
 }
 
-function playClickSound() {
-  const ctx = getUiSoundCtx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'square';
-  osc.frequency.value = 800;
-  gain.gain.value = 0.08;
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(); osc.stop(ctx.currentTime + 0.08);
+function toggleSfx() {
+  sfxEnabled = !sfxEnabled;
+  const btn = document.getElementById('sfxToggle');
+  btn.textContent = sfxEnabled ? 'SFX ON' : 'SFX OFF';
+  btn.classList.toggle('muted', !sfxEnabled);
 }
 
-function playHoverSound() {
+function playClickSound() {
+  if (!sfxEnabled) return;
   const ctx = getUiSoundCtx();
+  const t = ctx.currentTime;
+  // Sci-fi blip: short sine sweep down
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'sine';
-  osc.frequency.value = 1200;
-  gain.gain.value = 0.03;
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+  osc.frequency.setValueAtTime(1400, t);
+  osc.frequency.exponentialRampToValueAtTime(400, t + 0.06);
+  gain.gain.setValueAtTime(0.06, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
   osc.connect(gain).connect(ctx.destination);
-  osc.start(); osc.stop(ctx.currentTime + 0.04);
+  osc.start(t); osc.stop(t + 0.1);
+}
+
+function playHoverSound() {
+  if (!sfxEnabled) return;
+  const ctx = getUiSoundCtx();
+  const t = ctx.currentTime;
+  // Subtle sci-fi tick: very quiet high sine
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = 2400;
+  gain.gain.setValueAtTime(0.015, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t); osc.stop(t + 0.03);
+}
+
+function playEnterSound() {
+  if (!sfxEnabled) return;
+  const ctx = getUiSoundCtx();
+  const t = ctx.currentTime;
+  // Sci-fi boot sequence: ascending tones
+  [0, 0.08, 0.16, 0.28].forEach((delay, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 300 + (i * 200);
+    gain.gain.setValueAtTime(0.04, t + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.12);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t + delay); osc.stop(t + delay + 0.12);
+  });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1292,8 +1355,7 @@ function toggleAgeGate() {
 
 function enterTerminal() {
   if (!document.getElementById('ageCheck').checked) return;
-  fxAudio.currentTime = 0;
-  fxAudio.play().catch(() => {});
+  playEnterSound();
   document.getElementById('introScreen').classList.add('hidden');
   setTimeout(() => document.getElementById('introScreen').style.display = 'none', 800);
 }
