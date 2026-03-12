@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAFFEINATE_ // Neural Frequency Terminal</title>
+<meta name="description" content="Binaural frequency terminal for coders. Real frequencies. Real focus. The only boost you need at 3AM when the deadline is real and the coffee ran out.">
+<meta name="theme-color" content="#0A0A0A">
+
+<!-- OG / Social -->
+<meta property="og:title" content="CAFFEINATE_ // Neural Frequency Terminal">
+<meta property="og:description" content="Binaural frequencies tuned for focus, wakefulness, and shipping code at 3AM. Like the macOS command — but for your brain.">
+<meta property="og:url" content="https://caffeinate.club">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://caffeinate.club/og.png">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CAFFEINATE_ // Neural Frequency Terminal">
+<meta name="twitter:description" content="Binaural frequencies tuned for focus, wakefulness, and shipping code at 3AM.">
+<meta name="twitter:image" content="https://caffeinate.club/og.png">
+
+<!-- Favicon (inline SVG as data URI — 8-bit coffee cup) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='8' y='4' width='16' height='2' fill='%23E0E0E0'/><rect x='6' y='6' width='2' height='2' fill='%23E0E0E0'/><rect x='24' y='6' width='2' height='2' fill='%23E0E0E0'/><rect x='6' y='8' width='20' height='2' fill='%23E0E0E0'/><rect x='6' y='10' width='2' height='12' fill='%23E0E0E0'/><rect x='24' y='10' width='2' height='12' fill='%23E0E0E0'/><rect x='26' y='12' width='2' height='6' fill='%23E0E0E0'/><rect x='28' y='12' width='2' height='2' fill='%23E0E0E0'/><rect x='28' y='16' width='2' height='2' fill='%23E0E0E0'/><rect x='6' y='22' width='20' height='2' fill='%23E0E0E0'/><rect x='8' y='24' width='16' height='2' fill='%23E0E0E0'/><rect x='4' y='26' width='24' height='2' fill='%23E0E0E0'/></svg>">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* =============================
+     FONT SCALE (6 sizes only)
+     --fs-2xs: 7px  — disclaimers, abuse
+     --fs-xs:  9px  — labels, tags, hz
+     --fs-sm:  11px — body, buttons, log
+     --fs-md:  14px — brand, nav
+     --fs-lg:  24px — freq values, timer
+     --fs-xl:  40px — dose name
+     --fs-xxl: 56px — caffeinate_d only (pixel font)
+     ============================= */
+  :root {
+    --fs-2xs: 7px;
+    --fs-xs: 9px;
+    --fs-sm: 11px;
+    --fs-md: 14px;
+    --fs-lg: 24px;
+    --fs-xl: 40px;
+    --fs-xxl: 48px;
+    --white: #E0E0E0;
+    --dim: #808080;
+    --dark: #1A1A1A;
+    --black: #0A0A0A;
+  }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    min-height: 100vh;
+    cursor: crosshair;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 2px,
+      rgba(255,255,255,0.015) 2px,
+      rgba(255,255,255,0.015) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.8; }
+    94% { opacity: 1; }
+    96% { opacity: 0.9; }
+    97% { opacity: 1; }
+  }
+
+  .crt-wrap { animation: flicker 8s infinite; }
+
+  /* ===================== */
+  /* INTRO / SPLASH        */
+  /* ===================== */
+  .intro-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--black);
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .intro-screen.hidden {
+    opacity: 0;
+    transform: scale(1.02);
+    pointer-events: none;
+  }
+
+  .intro-top-line {
+    font-size: var(--fs-xs);
+    letter-spacing: 6px;
+    color: #333;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+  }
+
+  .intro-logo-cup { margin-bottom: 40px; opacity: 0.6; }
+
+  .intro-title {
+    font-size: 36px;
+    letter-spacing: 16px;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-shadow: 0 0 60px rgba(255,255,255,0.1);
+    text-align: center;
+  }
+
+  .intro-cursor {
+    display: inline-block;
+    animation: blink-cursor 1s step-end infinite;
+  }
+
+  @keyframes blink-cursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .intro-subtitle {
+    font-size: var(--fs-xs);
+    letter-spacing: 6px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    text-align: center;
+  }
+
+  .intro-story {
+    max-width: 520px;
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .intro-story p {
+    font-size: var(--fs-sm);
+    line-height: 2;
+    color: #555;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+
+  .intro-story .highlight { color: #888; }
+  .intro-story .era-ref { color: #666; border-bottom: 1px solid #333; padding-bottom: 1px; }
+
+  /* AGE GATE */
+  .age-gate {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+    padding: 14px 20px;
+    border: 1px solid #222;
+  }
+
+  .age-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #444;
+    background: transparent;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .age-checkbox:checked {
+    border-color: var(--white);
+    background: var(--white);
+  }
+
+  .age-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 5px;
+    width: 5px; height: 10px;
+    border: solid var(--black);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .age-label {
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    color: #555;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .intro-enter {
+    width: 240px;
+    height: 52px;
+    background: transparent;
+    border: 1px solid #222;
+    color: #333;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-sm);
+    letter-spacing: 6px;
+    cursor: not-allowed;
+    text-transform: uppercase;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .intro-enter.enabled {
+    border-color: #444;
+    color: var(--white);
+    cursor: pointer;
+  }
+
+  .intro-enter.enabled:hover {
+    border-color: var(--white);
+    box-shadow: 0 0 30px rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .intro-enter::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .intro-enter.enabled:hover::after { left: 100%; }
+
+  .intro-disclaimer {
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    color: #222;
+    text-transform: uppercase;
+    text-align: center;
+    line-height: 2;
+    max-width: 440px;
+  }
+
+  .intro-corner-tl, .intro-corner-tr, .intro-corner-bl, .intro-corner-br {
+    position: fixed; width: 20px; height: 20px; z-index: 10001;
+  }
+  .intro-corner-tl { top: 12px; left: 12px; border-top: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
+  .intro-corner-tr { top: 12px; right: 12px; border-top: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
+  .intro-corner-bl { bottom: 12px; left: 12px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
+  .intro-corner-br { bottom: 12px; right: 12px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
+
+  @keyframes introFadeIn {
+    0% { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-title { animation: introFadeIn 1s ease 0.2s both; }
+  .intro-subtitle { animation: introFadeIn 1s ease 0.4s both; }
+  .intro-story { animation: introFadeIn 1s ease 0.6s both; }
+  .age-gate { animation: introFadeIn 1s ease 0.8s both; }
+  .intro-enter { animation: introFadeIn 1s ease 1s both; }
+  .intro-disclaimer { animation: introFadeIn 1s ease 1.1s both; }
+
+  /* ===================== */
+  /* MAIN TERMINAL         */
+  /* ===================== */
+  .header {
+    border-bottom: 1px solid #222;
+    padding: 14px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo-area { display: flex; align-items: center; gap: 12px; }
+
+  .brand-name {
+    font-size: var(--fs-md);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+  }
+
+  .brand-cursor {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--white);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink-cursor 1s step-end infinite;
+  }
+
+  .brand-sub {
+    font-size: var(--fs-xs);
+    letter-spacing: 3px;
+    color: #444;
+    margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: var(--fs-xs);
+    color: var(--dim);
+    letter-spacing: 2px;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    background: var(--white);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; box-shadow: 0 0 8px rgba(255,255,255,0.6); }
+  }
+
+  .main {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    min-height: calc(100vh - 53px);
+  }
+
+  .freq-core {
+    padding: 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* ===================== */
+  /* 3D CSS DOSE ICONS     */
+  /* ===================== */
+  .dose-icon-wrap {
+    width: 160px;
+    height: 160px;
+    perspective: 600px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dose-icon {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 1s ease;
+  }
+
+  .dose-icon.active {
+    animation: icon-rotate 8s linear infinite;
+  }
+
+  .dose-icon.active.overdrive {
+    animation: icon-rotate-fast 4s linear infinite;
+  }
+
+  @keyframes icon-rotate {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(360deg); }
+  }
+
+  @keyframes icon-rotate-fast {
+    0% { transform: rotateY(0deg) rotateX(10deg); }
+    100% { transform: rotateY(360deg) rotateX(10deg); }
+  }
+
+  /* Generic 3D face styling */
+  .face {
+    position: absolute;
+    border: 1px solid #333;
+    background: rgba(20, 20, 20, 0.9);
+    backface-visibility: visible;
+    transition: border-color 0.5s ease, box-shadow 0.5s ease;
+  }
+
+  .dose-icon.active .face {
+    border-color: #555;
+    box-shadow: 0 0 20px rgba(255,255,255,0.03);
+  }
+
+  .dose-icon.active.overdrive .face {
+    border-color: #777;
+    box-shadow: 0 0 30px rgba(255,255,255,0.06);
+  }
+
+  .face-label {
+    position: absolute;
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    color: #333;
+    text-align: center;
+    width: 100%;
+    transition: color 0.5s ease;
+  }
+
+  .dose-icon.active .face-label { color: #666; }
+
+  /* ESPRESSO — tall cup */
+  .espresso-body {
+    width: 60px; height: 80px;
+    left: 50px; top: 50px;
+    transform: translateZ(15px);
+  }
+  .espresso-body-back {
+    width: 60px; height: 80px;
+    left: 50px; top: 50px;
+    transform: translateZ(-15px);
+  }
+  .espresso-left {
+    width: 30px; height: 80px;
+    left: 35px; top: 50px;
+    transform: rotateY(-90deg) translateZ(15px);
+  }
+  .espresso-right {
+    width: 30px; height: 80px;
+    left: 95px; top: 50px;
+    transform: rotateY(90deg) translateZ(15px);
+  }
+  .espresso-top {
+    width: 60px; height: 30px;
+    left: 50px; top: 35px;
+    transform: rotateX(90deg) translateZ(15px);
+  }
+  .espresso-bottom {
+    width: 60px; height: 30px;
+    left: 50px; top: 115px;
+    transform: rotateX(-90deg) translateZ(15px);
+  }
+  .espresso-handle {
+    width: 16px; height: 30px;
+    left: 110px; top: 65px;
+    transform: translateZ(0px);
+    border-radius: 0 4px 4px 0;
+    background: transparent !important;
+  }
+  .espresso-steam1, .espresso-steam2, .espresso-steam3 {
+    width: 2px;
+    background: rgba(255,255,255,0.08) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .espresso-steam1 { height: 20px; left: 65px; top: 28px; transform: translateZ(15px); animation: steam 2s ease-in-out infinite; }
+  .espresso-steam2 { height: 16px; left: 80px; top: 32px; transform: translateZ(15px); animation: steam 2s ease-in-out 0.4s infinite; }
+  .espresso-steam3 { height: 18px; left: 95px; top: 30px; transform: translateZ(15px); animation: steam 2s ease-in-out 0.8s infinite; }
+
+  @keyframes steam {
+    0%, 100% { opacity: 0.15; transform: translateZ(15px) translateY(0); }
+    50% { opacity: 0.4; transform: translateZ(15px) translateY(-8px); }
+  }
+
+  .espresso-label { bottom: -4px; left: 0; }
+
+  /* RED BULL — tall thin can */
+  .redbull-body { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(12px); }
+  .redbull-back { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(-12px); }
+  .redbull-left { width: 24px; height: 100px; left: 46px; top: 30px; transform: rotateY(-90deg) translateZ(12px); }
+  .redbull-right { width: 24px; height: 100px; left: 90px; top: 30px; transform: rotateY(90deg) translateZ(12px); }
+  .redbull-top { width: 44px; height: 24px; left: 58px; top: 18px; transform: rotateX(90deg) translateZ(12px); }
+  .redbull-bottom { width: 44px; height: 24px; left: 58px; top: 118px; transform: rotateX(-90deg) translateZ(12px); }
+  .redbull-stripe {
+    width: 44px; height: 3px; left: 58px;
+    background: rgba(255,255,255,0.08) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .redbull-s1 { top: 55px; transform: translateZ(12.5px); }
+  .redbull-s2 { top: 62px; transform: translateZ(12.5px); }
+  .redbull-label { bottom: -4px; left: 0; }
+
+  /* COLD BREW — mason jar */
+  .coldbrew-body { width: 56px; height: 84px; left: 52px; top: 46px; transform: translateZ(14px); }
+  .coldbrew-back { width: 56px; height: 84px; left: 52px; top: 46px; transform: translateZ(-14px); }
+  .coldbrew-left { width: 28px; height: 84px; left: 38px; top: 46px; transform: rotateY(-90deg) translateZ(14px); }
+  .coldbrew-right { width: 28px; height: 84px; left: 94px; top: 46px; transform: rotateY(90deg) translateZ(14px); }
+  .coldbrew-top { width: 56px; height: 28px; left: 52px; top: 32px; transform: rotateX(90deg) translateZ(14px); }
+  .coldbrew-lid { width: 40px; height: 20px; left: 60px; top: 28px; transform: translateZ(14px); border-color: #444; }
+  .coldbrew-fill {
+    width: 52px; height: 50px; left: 54px; top: 78px;
+    transform: translateZ(14.5px);
+    background: rgba(255,255,255,0.04) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .coldbrew-label { bottom: -4px; left: 0; }
+
+  /* YERBA MATE — gourd */
+  .yerba-body {
+    width: 56px; height: 72px; left: 52px; top: 50px;
+    transform: translateZ(16px);
+    border-radius: 0 0 12px 12px;
+  }
+  .yerba-back {
+    width: 56px; height: 72px; left: 52px; top: 50px;
+    transform: translateZ(-16px);
+    border-radius: 0 0 12px 12px;
+  }
+  .yerba-left {
+    width: 32px; height: 72px; left: 36px; top: 50px;
+    transform: rotateY(-90deg) translateZ(12px);
+  }
+  .yerba-right {
+    width: 32px; height: 72px; left: 92px; top: 50px;
+    transform: rotateY(90deg) translateZ(12px);
+  }
+  .yerba-straw {
+    width: 3px; height: 60px; left: 85px; top: 16px;
+    transform: translateZ(10px) rotate(15deg);
+    background: rgba(255,255,255,0.1) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  .yerba-top { width: 56px; height: 32px; left: 52px; top: 34px; transform: rotateX(90deg) translateZ(16px); }
+  .yerba-label { bottom: -4px; left: 0; }
+
+  /* COPIUM — canister */
+  .copium-cap { width: 36px; height: 20px; left: 62px; top: 30px; transform: translateZ(10px); border-radius: 4px 4px 0 0; }
+  .copium-body { width: 52px; height: 76px; left: 54px; top: 50px; transform: translateZ(14px); }
+  .copium-back { width: 52px; height: 76px; left: 54px; top: 50px; transform: translateZ(-14px); }
+  .copium-left { width: 28px; height: 76px; left: 40px; top: 50px; transform: rotateY(-90deg) translateZ(14px); }
+  .copium-right { width: 28px; height: 76px; left: 92px; top: 50px; transform: rotateY(90deg) translateZ(14px); }
+  .copium-x {
+    width: 24px; height: 24px; left: 68px; top: 74px;
+    transform: translateZ(14.5px);
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: var(--fs-lg);
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .dose-icon.active .copium-x { color: #666; }
+  .copium-label { bottom: -4px; left: 0; }
+
+  /* SUDO — terminal screen */
+  .sudo-frame { width: 90px; height: 70px; left: 35px; top: 40px; transform: translateZ(8px); }
+  .sudo-back { width: 90px; height: 70px; left: 35px; top: 40px; transform: translateZ(-8px); }
+  .sudo-screen {
+    width: 82px; height: 54px; left: 39px; top: 46px;
+    transform: translateZ(8.5px);
+    background: rgba(255,255,255,0.02) !important;
+    border-color: #222 !important;
+  }
+  .sudo-base { width: 60px; height: 8px; left: 50px; top: 112px; transform: translateZ(4px); }
+  .sudo-stand { width: 12px; height: 20px; left: 74px; top: 108px; transform: translateZ(4px); }
+  .sudo-prompt {
+    position: absolute;
+    left: 44px; top: 54px;
+    transform: translateZ(9px);
+    font-size: var(--fs-2xs);
+    color: #333;
+    letter-spacing: 1px;
+    white-space: pre;
+  }
+  .dose-icon.active .sudo-prompt { color: #555; }
+  .sudo-label { bottom: -4px; left: 0; }
+
+  /* STACKOVERFLOW — stacked blocks */
+  .so-block1 { width: 70px; height: 18px; left: 45px; top: 92px; transform: translateZ(12px); }
+  .so-block2 { width: 70px; height: 18px; left: 45px; top: 72px; transform: translateZ(12px) translateX(4px); }
+  .so-block3 { width: 70px; height: 18px; left: 45px; top: 52px; transform: translateZ(12px) translateX(-2px); }
+  .so-block4 { width: 70px; height: 18px; left: 45px; top: 32px; transform: translateZ(12px) translateX(6px); }
+  .so-side1 { width: 24px; height: 18px; left: 103px; top: 92px; transform: rotateY(90deg) translateZ(12px); }
+  .so-side2 { width: 24px; height: 18px; left: 107px; top: 72px; transform: rotateY(90deg) translateZ(12px); }
+  .so-side3 { width: 24px; height: 18px; left: 101px; top: 52px; transform: rotateY(90deg) translateZ(12px); }
+  .so-side4 { width: 24px; height: 18px; left: 109px; top: 32px; transform: rotateY(90deg) translateZ(12px); }
+  .so-label { bottom: -4px; left: 0; }
+
+  /* WORKS LOCAL — laptop */
+  .wl-screen { width: 86px; height: 56px; left: 37px; top: 36px; transform: translateZ(6px) rotateX(-5deg); }
+  .wl-screen-back { width: 86px; height: 56px; left: 37px; top: 36px; transform: translateZ(-2px) rotateX(-5deg); }
+  .wl-display {
+    width: 78px; height: 44px; left: 41px; top: 42px;
+    transform: translateZ(6.5px) rotateX(-5deg);
+    background: rgba(255,255,255,0.02) !important;
+    border-color: #222 !important;
+  }
+  .wl-base { width: 92px; height: 6px; left: 34px; top: 94px; transform: translateZ(6px); }
+  .wl-keyboard { width: 86px; height: 36px; left: 37px; top: 98px; transform: rotateX(80deg) translateZ(6px); }
+  .wl-smiley {
+    position: absolute;
+    left: 72px; top: 56px;
+    transform: translateZ(7px) rotateX(-5deg);
+    font-size: var(--fs-xs);
+    color: #333;
+  }
+  .dose-icon.active .wl-smiley { color: #555; }
+  .wl-label { bottom: -4px; left: 0; }
+
+  /* CAFFEINATE_D — complex multi-shape */
+  .cd-core { width: 50px; height: 50px; left: 55px; top: 55px; transform: translateZ(20px); border-color: #444; }
+  .cd-core-back { width: 50px; height: 50px; left: 55px; top: 55px; transform: translateZ(-20px); border-color: #444; }
+  .cd-ring1 {
+    width: 80px; height: 80px; left: 40px; top: 40px;
+    transform: translateZ(10px);
+    border-radius: 50%;
+    background: transparent !important;
+    border-color: #2A2A2A;
+  }
+  .cd-ring2 {
+    width: 110px; height: 110px; left: 25px; top: 25px;
+    transform: translateZ(0px) rotateX(20deg);
+    border-radius: 50%;
+    background: transparent !important;
+    border-color: #1A1A1A;
+  }
+  .cd-ring3 {
+    width: 140px; height: 140px; left: 10px; top: 10px;
+    transform: translateZ(-10px) rotateY(15deg);
+    border-radius: 50%;
+    background: transparent !important;
+    border-color: #151515;
+  }
+  .cd-left { width: 40px; height: 50px; left: 35px; top: 55px; transform: rotateY(-90deg) translateZ(20px); border-color: #444; }
+  .cd-right { width: 40px; height: 50px; left: 85px; top: 55px; transform: rotateY(90deg) translateZ(20px); border-color: #444; }
+  .cd-top { width: 50px; height: 40px; left: 55px; top: 35px; transform: rotateX(90deg) translateZ(20px); border-color: #444; }
+  .cd-bottom { width: 50px; height: 40px; left: 55px; top: 85px; transform: rotateX(-90deg) translateZ(20px); border-color: #444; }
+
+  .dose-icon.active .cd-ring1 { border-color: #444; }
+  .dose-icon.active .cd-ring2 { border-color: #333; }
+  .dose-icon.active .cd-ring3 { border-color: #2A2A2A; }
+  .dose-icon.active .cd-core,
+  .dose-icon.active .cd-core-back,
+  .dose-icon.active .cd-left,
+  .dose-icon.active .cd-right,
+  .dose-icon.active .cd-top,
+  .dose-icon.active .cd-bottom {
+    border-color: #777;
+    box-shadow: 0 0 20px rgba(255,255,255,0.08);
+  }
+
+  .cd-label { bottom: -12px; left: 0; font-size: var(--fs-xs) !important; }
+
+  /* DOSE INFO */
+  .dose-label {
+    font-size: var(--fs-xs);
+    letter-spacing: 8px;
+    color: #444;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+
+  .dose-name {
+    font-size: var(--fs-xl);
+    letter-spacing: 14px;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    text-shadow: 0 0 40px rgba(255,255,255,0.12);
+    transition: text-shadow 0.5s ease, font-size 0.3s ease;
+    text-align: center;
+  }
+
+  .dose-name.active {
+    text-shadow: 0 0 60px rgba(255,255,255,0.25), 0 0 120px rgba(255,255,255,0.08);
+  }
+
+  /* PIXEL FONT for caffeinate_d */
+  .dose-name.pixel-font {
+    font-family: 'Press Start 2P', monospace;
+    font-size: var(--fs-xxl);
+    letter-spacing: 6px;
+    text-shadow: 0 0 40px rgba(255,255,255,0.15),
+                 2px 2px 0 #1A1A1A,
+                 -1px -1px 0 #0A0A0A;
+  }
+
+  .dose-name.pixel-font.active {
+    text-shadow: 0 0 60px rgba(255,255,255,0.3),
+                 0 0 120px rgba(255,255,255,0.1),
+                 2px 2px 0 #1A1A1A;
+  }
+
+  .dose-desc {
+    font-size: var(--fs-xs);
+    letter-spacing: 4px;
+    color: #444;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  /* WAVEFORM */
+  .waveform-container {
+    width: 100%;
+    max-width: 580px;
+    height: 110px;
+    border: 1px solid #1A1A1A;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .waveform-container::before {
+    content: 'NEURAL WAVEFORM';
+    position: absolute;
+    top: 6px; left: 8px;
+    font-size: var(--fs-2xs);
+    letter-spacing: 3px;
+    color: #2A2A2A;
+    z-index: 2;
+  }
+
+  .waveform-container::after {
+    content: attr(data-status);
+    position: absolute;
+    top: 6px; right: 8px;
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    color: #333;
+    z-index: 2;
+  }
+
+  canvas#waveform { width: 100%; height: 100%; display: block; }
+
+  .freq-info {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 28px;
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    color: var(--dim);
+  }
+
+  .freq-val {
+    font-size: var(--fs-lg);
+    color: var(--white);
+    letter-spacing: 3px;
+    margin-top: 4px;
+  }
+
+  .master-btn {
+    width: 220px;
+    height: 48px;
+    background: transparent;
+    border: 1px solid #333;
+    color: var(--white);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-sm);
+    letter-spacing: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .master-btn:hover {
+    border-color: var(--white);
+    box-shadow: 0 0 20px rgba(255,255,255,0.08);
+  }
+
+  .master-btn.active {
+    background: var(--white);
+    color: var(--black);
+    box-shadow: 0 0 40px rgba(255,255,255,0.15);
+  }
+
+  /* RIGHT PANEL */
+  .right-panel {
+    border-left: 1px solid #1A1A1A;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .panel-section {
+    padding: 16px 18px;
+    border-bottom: 1px solid #141414;
+  }
+
+  .panel-title {
+    font-size: var(--fs-2xs);
+    letter-spacing: 4px;
+    color: #333;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .dose-grid { display: flex; flex-direction: column; gap: 3px; }
+
+  .dose-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 9px 12px;
+    background: transparent;
+    border: 1px solid #141414;
+    color: #555;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .dose-btn:hover { border-color: #333; color: var(--white); }
+
+  .dose-btn.selected {
+    border-color: #555;
+    color: var(--white);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .dose-hz { color: #2A2A2A; font-size: var(--fs-2xs); letter-spacing: 1px; }
+  .dose-btn.selected .dose-hz { color: #555; }
+
+  .dose-btn.cocktail { border-style: dashed; margin-top: 4px; }
+  .dose-btn.cocktail.selected { border-style: solid; border-color: #777; }
+
+  .slider-wrap { margin-top: 4px; }
+
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--fs-2xs);
+    color: #333;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .slider-track {
+    width: 100%;
+    height: 20px;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #1A1A1A;
+  }
+
+  .slider-fill {
+    height: 100%;
+    background: var(--white);
+    transition: width 0.1s linear;
+  }
+
+  .abuse-indicator {
+    margin-top: 10px;
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    color: #222;
+    text-align: center;
+    height: 14px;
+    transition: color 0.3s ease;
+  }
+
+  .abuse-indicator.warning { color: #555; }
+  .abuse-indicator.danger { color: #888; }
+  .abuse-indicator.critical { color: var(--white); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+
+  /* AMBIENT NOISE */
+  .noise-section { background: rgba(255,255,255,0.01); }
+
+  .noise-independent {
+    font-size: var(--fs-2xs);
+    color: #2A2A2A;
+    letter-spacing: 1px;
+    margin-left: 4px;
+  }
+
+  .noise-types {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .noise-btn {
+    padding: 8px;
+    background: transparent;
+    border: 1px solid #1A1A1A;
+    color: #444;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .noise-btn:hover { border-color: #333; color: var(--white); }
+
+  .noise-btn.active {
+    border-color: var(--white);
+    color: var(--white);
+    background: rgba(255,255,255,0.04);
+    box-shadow: 0 0 12px rgba(255,255,255,0.04);
+  }
+
+  .noise-hint {
+    margin-top: 8px;
+    font-size: var(--fs-2xs);
+    letter-spacing: 1px;
+    color: #222;
+    text-align: center;
+  }
+
+  .timer-display {
+    font-size: var(--fs-lg);
+    letter-spacing: 6px;
+    color: var(--white);
+    text-align: center;
+    margin: 12px 0;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .timer-presets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+  }
+
+  .timer-preset {
+    padding: 7px;
+    background: transparent;
+    border: 1px solid #141414;
+    color: #555;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-xs);
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .timer-preset:hover { border-color: #333; color: var(--white); }
+  .timer-preset.selected { border-color: #555; color: var(--white); }
+
+  .status-log {
+    flex: 1;
+    padding: 16px 18px;
+    overflow-y: auto;
+    max-height: 200px;
+  }
+
+  .log-entry {
+    font-size: var(--fs-2xs);
+    color: #2A2A2A;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+    line-height: 1.6;
+  }
+
+  .log-entry.active { color: #555; }
+  .log-entry.warn { color: #777; }
+  .log-entry.critical { color: #AAA; }
+  .log-entry .timestamp { color: #1A1A1A; margin-right: 6px; }
+  .log-entry.active .timestamp { color: #333; }
+  .log-entry.warn .timestamp { color: #444; }
+  .log-entry.critical .timestamp { color: #666; }
+
+  .disclaimer {
+    padding: 10px 18px;
+    border-top: 1px solid #141414;
+    font-size: var(--fs-2xs);
+    color: #222;
+    letter-spacing: 1px;
+    line-height: 1.7;
+    text-transform: uppercase;
+  }
+
+  .corner-tl, .corner-tr, .corner-bl, .corner-br {
+    position: fixed; width: 12px; height: 12px; z-index: 100;
+  }
+  .corner-tl { top: 4px; left: 4px; border-top: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
+  .corner-tr { top: 4px; right: 4px; border-top: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
+  .corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
+  .corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
+
+  @media (max-width: 860px) {
+    .main { grid-template-columns: 1fr; }
+    .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
+    .dose-name { font-size: var(--fs-lg); letter-spacing: 6px; }
+    .dose-name.pixel-font { font-size: 28px; }
+    .freq-core { padding: 20px; }
+    .dose-icon-wrap { width: 120px; height: 120px; }
+    .intro-title { font-size: 22px; letter-spacing: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div class="intro-screen" id="introScreen">
+  <div class="intro-corner-tl"></div>
+  <div class="intro-corner-tr"></div>
+  <div class="intro-corner-bl"></div>
+  <div class="intro-corner-br"></div>
+  <div class="intro-top-line">MASTERBLOX LABS // EXPERIMENTAL</div>
+  <svg class="intro-logo-cup" width="64" height="64" viewBox="0 0 32 32" fill="none">
+    <rect x="8" y="4" width="16" height="2" fill="#555"/><rect x="6" y="6" width="2" height="2" fill="#555"/>
+    <rect x="24" y="6" width="2" height="2" fill="#555"/><rect x="6" y="8" width="20" height="2" fill="#555"/>
+    <rect x="6" y="10" width="2" height="12" fill="#555"/><rect x="24" y="10" width="2" height="12" fill="#555"/>
+    <rect x="26" y="12" width="2" height="6" fill="#555"/><rect x="28" y="12" width="2" height="2" fill="#555"/>
+    <rect x="28" y="16" width="2" height="2" fill="#555"/><rect x="6" y="22" width="20" height="2" fill="#555"/>
+    <rect x="8" y="24" width="16" height="2" fill="#555"/><rect x="4" y="26" width="24" height="2" fill="#555"/>
+  </svg>
+  <div class="intro-title">CAFFEINATE<span class="intro-cursor">_</span></div>
+  <div class="intro-subtitle">Neural Frequency Terminal</div>
+  <div class="intro-story">
+    <p>In the <span class="era-ref">early internet era</span>, a strange subculture emerged on forums and file-sharing networks: <span class="highlight">frequency terminals</span>. Users would plug in headphones, load obscure audio programs, and let <span class="highlight">layered sound frequencies</span> alter their state of mind. It was raw, low-fi, and felt like hacking your own brain.</p>
+    <p>The science behind it is real. <span class="highlight">Two slightly different frequencies</span>, one in each ear, create a phantom third frequency your brain synchronizes to — a phenomenon called <span class="highlight">binaural entrainment</span>, discovered in 1839 and studied for its effects on focus, relaxation, and brainwave states.</p>
+    <p>This is <span class="highlight">caffeinate_</span> — a neural frequency terminal for the modern coder. Like the command that keeps your machine awake, this keeps <span class="highlight">you</span> awake. Just sound frequencies, headphones, and willpower. The only boost you need at 3AM when the deadline is real and the coffee ran out.</p>
+  </div>
+  <div class="age-gate">
+    <input type="checkbox" class="age-checkbox" id="ageCheck" onchange="toggleAgeGate()">
+    <label class="age-label" for="ageCheck">I CONFIRM I AM 18 YEARS OR OLDER</label>
+  </div>
+  <button class="intro-enter" id="introEnter" onclick="enterTerminal()" disabled>ENTER TERMINAL</button>
+  <div class="intro-disclaimer">
+    Headphones required for binaural effect. This is not medical advice.
+    All content is digital audio frequencies only. Caffeinate_ is inspired
+    by the original macOS terminal command. By entering you confirm you are 18+.
+  </div>
+</div>
+
+<!-- MAIN TERMINAL -->
+<div class="crt-wrap">
+  <div class="corner-tl"></div><div class="corner-tr"></div>
+  <div class="corner-bl"></div><div class="corner-br"></div>
+
+  <div class="header">
+    <div class="logo-area">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+        <rect x="8" y="4" width="16" height="2" fill="#E0E0E0"/><rect x="6" y="6" width="2" height="2" fill="#E0E0E0"/>
+        <rect x="24" y="6" width="2" height="2" fill="#E0E0E0"/><rect x="6" y="8" width="20" height="2" fill="#E0E0E0"/>
+        <rect x="6" y="10" width="2" height="12" fill="#E0E0E0"/><rect x="24" y="10" width="2" height="12" fill="#E0E0E0"/>
+        <rect x="26" y="12" width="2" height="6" fill="#E0E0E0"/><rect x="28" y="12" width="2" height="2" fill="#E0E0E0"/>
+        <rect x="28" y="16" width="2" height="2" fill="#E0E0E0"/><rect x="6" y="22" width="20" height="2" fill="#E0E0E0"/>
+        <rect x="8" y="24" width="16" height="2" fill="#E0E0E0"/><rect x="4" y="26" width="24" height="2" fill="#E0E0E0"/>
+      </svg>
+      <div>
+        <div class="brand-name">CAFFEINATE<span class="brand-cursor"></span></div>
+        <div class="brand-sub">$ caffeinate -d // neural freq terminal v0.6</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span><span class="live-dot"></span> FREQ ACTIVE</span>
+      <span id="clock">00:00:00</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="freq-core">
+      <!-- 3D ICON CONTAINER -->
+      <div class="dose-icon-wrap">
+        <div class="dose-icon" id="doseIcon"></div>
+      </div>
+
+      <div class="dose-label">CURRENT DOSE</div>
+      <div class="dose-name" id="doseName">ESPRESSO</div>
+      <div class="dose-desc" id="doseDesc">FOCUS // ALERTNESS // 40HZ GAMMA</div>
+
+      <div class="waveform-container" id="waveformContainer" data-status="STANDBY">
+        <canvas id="waveform"></canvas>
+      </div>
+
+      <div class="freq-info">
+        <div><div>LEFT EAR</div><div class="freq-val" id="freqL">200 HZ</div></div>
+        <div><div>RIGHT EAR</div><div class="freq-val" id="freqR">240 HZ</div></div>
+        <div><div>BINAURAL</div><div class="freq-val" id="freqB">40 HZ</div></div>
+      </div>
+
+      <button class="master-btn" id="masterBtn" onclick="toggleDose()">START DOSE</button>
+    </div>
+
+    <div class="right-panel">
+      <div class="panel-section">
+        <div class="panel-title">SELECT DOSE</div>
+        <div class="dose-grid">
+          <button class="dose-btn selected" data-dose="espresso" onclick="selectDose(this)">ESPRESSO <span class="dose-hz">40HZ γ</span></button>
+          <button class="dose-btn" data-dose="redbull" onclick="selectDose(this)">RED BULL <span class="dose-hz">18HZ β</span></button>
+          <button class="dose-btn" data-dose="coldbrew" onclick="selectDose(this)">COLD BREW <span class="dose-hz">25HZ β</span></button>
+          <button class="dose-btn" data-dose="yerba" onclick="selectDose(this)">YERBA MATE <span class="dose-hz">12HZ α</span></button>
+          <button class="dose-btn" data-dose="copium" onclick="selectDose(this)">COPIUM <span class="dose-hz">6HZ θ</span></button>
+          <button class="dose-btn" data-dose="sudo" onclick="selectDose(this)">sudo rm -sleep <span class="dose-hz">50HZ γ+</span></button>
+          <button class="dose-btn" data-dose="stackoverflow" onclick="selectDose(this)">STACK OVERFLOW <span class="dose-hz">35HZ γ</span></button>
+          <button class="dose-btn" data-dose="workslocal" onclick="selectDose(this)">WORKS ON MY MACHINE <span class="dose-hz">22HZ β</span></button>
+          <button class="dose-btn cocktail" data-dose="caffeinated" onclick="selectDose(this)">caffeinate_d <span class="dose-hz">∞ HZ ALL</span></button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-title">INTENSITY</div>
+        <div class="slider-wrap">
+          <div class="slider-label"><span>MILD</span><span id="intensityVal">70%</span><span>LETHAL</span></div>
+          <div class="slider-track" id="sliderTrack" onmousedown="startSlider(event)" ontouchstart="startSliderTouch(event)">
+            <div class="slider-fill" id="sliderFill" style="width:70%"></div>
+          </div>
+        </div>
+        <div class="abuse-indicator" id="abuseIndicator"></div>
+      </div>
+
+      <div class="panel-section noise-section">
+        <div class="panel-title">AMBIENT NOISE <span class="noise-independent">(INDEPENDENT)</span></div>
+        <div class="noise-types">
+          <button class="noise-btn" data-noise="white" onclick="toggleNoise('white',this)">WHITE</button>
+          <button class="noise-btn" data-noise="pink" onclick="toggleNoise('pink',this)">PINK</button>
+          <button class="noise-btn" data-noise="brown" onclick="toggleNoise('brown',this)">BROWN</button>
+        </div>
+        <div class="slider-wrap" style="margin-top:10px">
+          <div class="slider-label"><span>QUIET</span><span id="noiseVolVal">40%</span><span>LOUD</span></div>
+          <div class="slider-track" id="noiseVolTrack" onmousedown="startNoiseSlider(event)" ontouchstart="startNoiseSliderTouch(event)">
+            <div class="slider-fill" id="noiseVolFill" style="width:40%"></div>
+          </div>
+        </div>
+        <div class="noise-hint">RUNS INDEPENDENTLY FROM DOSES. STACK OR USE SOLO.</div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-title">SESSION TIMER</div>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-presets">
+          <button class="timer-preset" onclick="setTimer(15,this)">15M</button>
+          <button class="timer-preset selected" onclick="setTimer(25,this)">25M</button>
+          <button class="timer-preset" onclick="setTimer(45,this)">45M</button>
+          <button class="timer-preset" onclick="setTimer(60,this)">60M</button>
+          <button class="timer-preset" onclick="setTimer(120,this)">2HR</button>
+          <button class="timer-preset" onclick="setTimer(0,this)">∞</button>
+        </div>
+      </div>
+
+      <div class="status-log" id="statusLog">
+        <div class="panel-title">SYSTEM LOG</div>
+        <div class="log-entry"><span class="timestamp">[SYS]</span> CAFFEINATE_ v0.6 LOADED</div>
+        <div class="log-entry"><span class="timestamp">[SYS]</span> 9 DOSES INDEXED</div>
+        <div class="log-entry"><span class="timestamp">[SYS]</span> AWAITING DOSE START...</div>
+      </div>
+
+      <div class="disclaimer">
+        BINAURAL FREQUENCIES MAY INDUCE MILD FOCUS STATES.
+        USE HEADPHONES FOR FULL EFFECT. NOT MEDICAL ADVICE.
+        MASTERBLOX LABS // 2026 // CAFFEINATE_
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================
+// CAFFEINATE_ v0.6
+// ============================================
+
+// AGE GATE
+function toggleAgeGate() {
+  const btn = document.getElementById('introEnter');
+  const checked = document.getElementById('ageCheck').checked;
+  btn.disabled = !checked;
+  btn.classList.toggle('enabled', checked);
+}
+
+function enterTerminal() {
+  if (!document.getElementById('ageCheck').checked) return;
+  document.getElementById('introScreen').classList.add('hidden');
+  setTimeout(() => document.getElementById('introScreen').style.display = 'none', 800);
+}
+
+// 3D ICON HTML TEMPLATES
+const ICONS = {
+  espresso: `
+    <div class="face espresso-steam1"></div>
+    <div class="face espresso-steam2"></div>
+    <div class="face espresso-steam3"></div>
+    <div class="face espresso-body"></div>
+    <div class="face espresso-body-back"></div>
+    <div class="face espresso-left"></div>
+    <div class="face espresso-right"></div>
+    <div class="face espresso-top"></div>
+    <div class="face espresso-bottom"></div>
+    <div class="face espresso-handle"></div>
+    <div class="face-label espresso-label">ESPRESSO</div>`,
+  redbull: `
+    <div class="face redbull-body"></div>
+    <div class="face redbull-back"></div>
+    <div class="face redbull-left"></div>
+    <div class="face redbull-right"></div>
+    <div class="face redbull-top"></div>
+    <div class="face redbull-bottom"></div>
+    <div class="face redbull-stripe redbull-s1"></div>
+    <div class="face redbull-stripe redbull-s2"></div>
+    <div class="face-label redbull-label">RED BULL</div>`,
+  coldbrew: `
+    <div class="face coldbrew-body"></div>
+    <div class="face coldbrew-back"></div>
+    <div class="face coldbrew-left"></div>
+    <div class="face coldbrew-right"></div>
+    <div class="face coldbrew-top"></div>
+    <div class="face coldbrew-lid"></div>
+    <div class="face coldbrew-fill"></div>
+    <div class="face-label coldbrew-label">COLD BREW</div>`,
+  yerba: `
+    <div class="face yerba-body"></div>
+    <div class="face yerba-back"></div>
+    <div class="face yerba-left"></div>
+    <div class="face yerba-right"></div>
+    <div class="face yerba-top"></div>
+    <div class="face yerba-straw"></div>
+    <div class="face-label yerba-label">YERBA MATE</div>`,
+  copium: `
+    <div class="face copium-cap"></div>
+    <div class="face copium-body"></div>
+    <div class="face copium-back"></div>
+    <div class="face copium-left"></div>
+    <div class="face copium-right"></div>
+    <div class="face copium-x">×</div>
+    <div class="face-label copium-label">COPIUM</div>`,
+  sudo: `
+    <div class="face sudo-frame"></div>
+    <div class="face sudo-back"></div>
+    <div class="face sudo-screen"></div>
+    <div class="face sudo-stand"></div>
+    <div class="face sudo-base"></div>
+    <div class="sudo-prompt">$ sudo rm\n  -sleep_</div>
+    <div class="face-label sudo-label">sudo rm -sleep</div>`,
+  stackoverflow: `
+    <div class="face so-block1"></div><div class="face so-side1"></div>
+    <div class="face so-block2"></div><div class="face so-side2"></div>
+    <div class="face so-block3"></div><div class="face so-side3"></div>
+    <div class="face so-block4"></div><div class="face so-side4"></div>
+    <div class="face-label so-label">STACK OVERFLOW</div>`,
+  workslocal: `
+    <div class="face wl-screen"></div>
+    <div class="face wl-screen-back"></div>
+    <div class="face wl-display"></div>
+    <div class="face wl-base"></div>
+    <div class="face wl-keyboard"></div>
+    <div class="wl-smiley">:)</div>
+    <div class="face-label wl-label">WORKS LOCAL</div>`,
+  caffeinated: `
+    <div class="face cd-ring3"></div>
+    <div class="face cd-ring2"></div>
+    <div class="face cd-ring1"></div>
+    <div class="face cd-core"></div>
+    <div class="face cd-core-back"></div>
+    <div class="face cd-left"></div>
+    <div class="face cd-right"></div>
+    <div class="face cd-top"></div>
+    <div class="face cd-bottom"></div>
+    <div class="face-label cd-label">caffeinate_d</div>`
+};
+
+// DOSE CONFIG (same as before, abbreviated for space)
+const DOSES = {
+  espresso: { name:'ESPRESSO', desc:'FOCUS // ALERTNESS // 40HZ GAMMA', baseFreq:200, binauralHz:40, type:'γ', noiseGain:0.015,
+    messages:['GAMMA WAVES FLOODING PREFRONTAL CORTEX...','FOCUS: SEMICOLONS VISIBLE IN THE DARK','CODE CLARITY AT 94%','BUG FROM 2019 FIXED. VOLUNTARILY.'],
+    abuse:['HEART RATE ELEVATED. THIRD SHOT.','CORTISOL SPIKE. HANDS VIBRATING.','OVERDOSE: REFACTORING WORKING CODE','CRITICAL: ALPHABETIZING IMPORTS BY HAND'] },
+  redbull: { name:'RED BULL', desc:'ENERGY // SUSTAINED WAKEFULNESS // 18HZ BETA', baseFreq:180, binauralHz:18, type:'β', noiseGain:0.012,
+    messages:['BETA FREQUENCY LOCKED... WINGS DEPLOYING','WAKEFULNESS: INDEFINITE','EYES OPEN. WILL STAY OPEN.','SUSTAINED ENERGY NOMINAL'],
+    abuse:['THIRD CAN. KIDNEYS WARNING.','TAURINE: ATMOSPHERIC','HEART HAS BPM IN TASKBAR','CRITICAL: BLOOD 40% RED BULL'] },
+  coldbrew: { name:'COLD BREW', desc:'SMOOTH ENERGY // STEADY CLIMB // 25HZ BETA', baseFreq:190, binauralHz:25, type:'β', noiseGain:0.01,
+    messages:['SLOW RELEASE INITIATED...','CAFFEINE ABSORPTION: GRADUAL','47 TABS OPEN. ON PURPOSE.','COLD BREW PEAK: REWRITING API'],
+    abuse:['STEEP TIME EXCEEDED 24 HOURS.','NO LONGER COFFEE. CHEMICAL WEAPON.','STOMACH: REQUESTING CEASEFIRE','CRITICAL: FRENCH PRESS AT 4AM'] },
+  yerba: { name:'YERBA MATE', desc:'CLEAN ENERGY // FLOW STATE // 12HZ ALPHA', baseFreq:160, binauralHz:12, type:'α', noiseGain:0.008,
+    messages:['ALPHA WAVES INDUCING FLOW...','CALM FOCUS. BUGS FEAR YOU.','MERGE CONFLICTS RESOLVING...','PR HAS PROPER FORMATTING'],
+    abuse:['SEVENTH REFILL. GOURD DRY.','FLOW → DISSOCIATION','TOO MUCH ONENESS WITH CODEBASE','CRITICAL: SPEAKING FUNCTIONAL'] },
+  copium: { name:'COPIUM', desc:'DENIAL // ACCEPTANCE // 6HZ THETA', baseFreq:140, binauralHz:6, type:'θ', noiseGain:0.02,
+    messages:['INHALING... BUG IS A FEATURE','THETA: NOT YOUR FAULT','PROD IS FINE. EVERYTHING FINE.','DEADLINE WAS UNREALISTIC'],
+    abuse:['COPIUM DEPLETED. REALITY INCOMING.','DENIAL OVERLOADED.','BUG IS NOT A FEATURE. NEVER WAS.','CRITICAL: JIRA BECOMING SELF-AWARE'] },
+  sudo: { name:'sudo rm -sleep', desc:'OVERDRIVE // CONSCIOUSNESS OVERRIDE // 50HZ GAMMA+', baseFreq:250, binauralHz:50, type:'γ+', noiseGain:0.025,
+    messages:['ROOT ACCESS GRANTED','sleep.exe: TERMINATED','MELATONIN: STOPPED','REWRITING COMPILER. IN RUST.'],
+    abuse:['SUNRISE. NO BLINKS IN 3 HOURS.','SECOND SUNRISE. STILL NO BLINKS.','BRAIN ON SWAP MEMORY','CRITICAL: KERNEL PANIC IN CORTEX'] },
+  stackoverflow: { name:'STACK OVERFLOW', desc:'BORROWED WISDOM // INTELLECTUAL CAFFEINE // 35HZ GAMMA', baseFreq:220, binauralHz:35, type:'γ', noiseGain:0.018,
+    messages:['SCANNING ANSWERS FROM 2014...','FOUND. COPYING. NO SHAME.','847 UPVOTES. DOES NOT WORK.','ANSWERED OWN QUESTION. PEAK.'],
+    abuse:['READING 2011. JQUERY.','COPY-PASTE ALL THE WAY DOWN.','DOWNVOTED CORRECT ANSWER.','CRITICAL: MARKED OWN Q AS DUPLICATE'] },
+  workslocal: { name:'WORKS ON MY MACHINE', desc:'PURE CONFIDENCE // ZERO ACCOUNTABILITY // 22HZ BETA', baseFreq:200, binauralHz:22, type:'β', noiseGain:0.014,
+    messages:['CONFIDENCE ENGAGED','ENV VARS: NOT YOUR PROBLEM','PUSHING TO MAIN. NO REGRETS.','QA WRONG. SCREENSHOT SENT.'],
+    abuse:['CONFIDENCE > COMPETENCE BY 300%.','LINTER DISABLED. ON PURPOSE.','FORCE PUSH --no-verify.','CRITICAL: DELETED STAGING. CLEANUP.'] },
+  caffeinated: { name:'caffeinate_d', desc:'THE COCKTAIL // ALL FREQUENCIES // DISPLAY WILL NOT SLEEP', baseFreq:200, binauralHz:40, type:'∞', noiseGain:0.035, cocktail:true, pixelFont:true,
+    layers:[{freq:200,binaural:40},{freq:180,binaural:18},{freq:240,binaural:30},{freq:220,binaural:35}],
+    messages:['MULTI-FREQUENCY COCKTAIL ACTIVE...','ALL BRAINWAVE BANDS SATURATED','GAMMA + BETA + ALPHA: SIMULTANEOUS','YOU ARE NOW THE COMPILER','CONSCIOUSNESS: TRANSCENDENT','caffeinate -d: DISPLAY WILL NOT SLEEP'],
+    abuse:['COCKTAIL EXCEEDING NEURAL BANDWIDTH','MULTIPLE FREQUENCY INTERFERENCE','YOU HAVE BECOME THE TERMINAL','CRITICAL: BRAIN ON ALTERNATING CURRENT','CRITICAL: IDE WRITING CODE FOR YOU','CRITICAL: MASS APPROVED 47 PRs UNREAD'] }
+};
+
+let audioCtx=null, oscillators=[], gainNodes=[], sfxOscillators=[];
+let noiseSource=null, noiseGainNode=null, analyser=null;
+let isPlaying=false, currentDose='espresso', intensity=0.7;
+let timerSeconds=25*60, timerRemaining=25*60;
+let timerInterval=null, msgInterval=null, animFrame=null;
+let sessionTime=0, sessionInterval=null, abuseTriggered=false;
+
+// INIT
+document.getElementById('doseIcon').innerHTML = ICONS.espresso;
+
+function updateClock() { document.getElementById('clock').textContent = new Date().toTimeString().split(' ')[0]; }
+setInterval(updateClock, 1000); updateClock();
+
+function selectDose(btn) {
+  document.querySelectorAll('.dose-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentDose = btn.dataset.dose;
+  const d = DOSES[currentDose];
+  const nameEl = document.getElementById('doseName');
+
+  nameEl.textContent = d.name;
+  nameEl.classList.toggle('pixel-font', !!d.pixelFont);
+  document.getElementById('doseDesc').textContent = d.desc;
+  document.getElementById('doseIcon').innerHTML = ICONS[currentDose];
+
+  const icon = document.getElementById('doseIcon');
+  icon.classList.remove('overdrive');
+  if (d.cocktail) icon.classList.add('overdrive');
+  if (isPlaying) icon.classList.add('active');
+
+  if (d.cocktail) {
+    document.getElementById('freqL').textContent = 'MULTI';
+    document.getElementById('freqR').textContent = 'MULTI';
+    document.getElementById('freqB').textContent = '∞ HZ';
+  } else {
+    document.getElementById('freqL').textContent = d.baseFreq + ' HZ';
+    document.getElementById('freqR').textContent = (d.baseFreq + d.binauralHz) + ' HZ';
+    document.getElementById('freqB').textContent = d.binauralHz + ' HZ';
+  }
+
+  if (isPlaying) { stopDose(); setTimeout(startDose, 200); }
+}
+
+function toggleDose() { if (isPlaying) stopDose(); else startDose(); }
+
+function createNoiseBuffer(ctx) {
+  const bs = ctx.sampleRate*2, buf = ctx.createBuffer(1,bs,ctx.sampleRate), d = buf.getChannelData(0);
+  for (let i=0;i<bs;i++) d[i]=Math.random()*2-1;
+  return buf;
+}
+
+function createSfxLayer(ctx, dest) {
+  const r=ctx.createOscillator(), rg=ctx.createGain(), rf=ctx.createBiquadFilter();
+  r.type='sawtooth'; r.frequency.value=28; rg.gain.value=intensity*0.008;
+  rf.type='lowpass'; rf.frequency.value=60;
+  r.connect(rf).connect(rg).connect(dest); r.start(); sfxOscillators.push(r);
+  const s=ctx.createOscillator(), sg=ctx.createGain(), sf=ctx.createBiquadFilter();
+  s.type='sine'; s.frequency.value=80; sg.gain.value=intensity*0.006;
+  sf.type='bandpass'; sf.frequency.value=120; sf.Q.value=8;
+  const lfo=ctx.createOscillator(), lg=ctx.createGain();
+  lfo.type='sine'; lfo.frequency.value=0.07; lg.gain.value=60;
+  lfo.connect(lg).connect(sf.frequency); lfo.start(); sfxOscillators.push(lfo);
+  s.connect(sf).connect(sg).connect(dest); s.start(); sfxOscillators.push(s);
+  const sh=ctx.createOscillator(), shg=ctx.createGain(), shf=ctx.createBiquadFilter();
+  sh.type='sine'; sh.frequency.value=4200; shg.gain.value=intensity*0.003;
+  shf.type='highpass'; shf.frequency.value=3000;
+  const sl=ctx.createOscillator(), slg=ctx.createGain();
+  sl.type='triangle'; sl.frequency.value=0.15; slg.gain.value=800;
+  sl.connect(slg).connect(sh.frequency); sl.start(); sfxOscillators.push(sl);
+  sh.connect(shf).connect(shg).connect(dest); sh.start(); sfxOscillators.push(sh);
+}
+
+function startDose() {
+  const d = DOSES[currentDose];
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.3;
+  oscillators=[]; gainNodes=[]; sfxOscillators=[];
+
+  const layers = d.cocktail ? d.layers : [{freq:d.baseFreq, binaural:d.binauralHz}];
+  layers.forEach(l => {
+    const oL=audioCtx.createOscillator(), gL=audioCtx.createGain(), pL=audioCtx.createStereoPanner();
+    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.2)/layers.length; pL.pan.value=-1;
+    oL.connect(gL).connect(pL).connect(analyser).connect(audioCtx.destination); oL.start();
+    oscillators.push(oL); gainNodes.push(gL);
+    const oR=audioCtx.createOscillator(), gR=audioCtx.createGain(), pR=audioCtx.createStereoPanner();
+    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.2)/layers.length; pR.pan.value=1;
+    oR.connect(gR).connect(pR).connect(analyser).connect(audioCtx.destination); oR.start();
+    oscillators.push(oR); gainNodes.push(gR);
+  });
+
+  noiseSource=audioCtx.createBufferSource(); noiseSource.buffer=createNoiseBuffer(audioCtx); noiseSource.loop=true;
+  noiseGainNode=audioCtx.createGain(); noiseGainNode.gain.value=d.noiseGain*intensity;
+  const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=d.baseFreq||200; bp.Q.value=0.5;
+  noiseSource.connect(bp).connect(noiseGainNode).connect(analyser); noiseGainNode.connect(audioCtx.destination); noiseSource.start();
+
+  const sub=audioCtx.createOscillator(), subG=audioCtx.createGain();
+  sub.type='sine'; sub.frequency.value=d.binauralHz||30; subG.gain.value=intensity*0.03;
+  sub.connect(subG).connect(analyser); subG.connect(audioCtx.destination); sub.start();
+  oscillators.push(sub); gainNodes.push(subG);
+
+  createSfxLayer(audioCtx, audioCtx.destination);
+
+  isPlaying=true; sessionTime=0; abuseTriggered=false;
+  document.getElementById('masterBtn').textContent='STOP DOSE';
+  document.getElementById('masterBtn').classList.add('active');
+  document.getElementById('doseName').classList.add('active');
+  const icon = document.getElementById('doseIcon');
+  icon.classList.add('active');
+  if (d.cocktail) icon.classList.add('overdrive');
+  document.getElementById('waveformContainer').setAttribute('data-status','ACTIVE');
+
+  addLog('SYS',`${d.name} STARTED // ${d.cocktail?'MULTI-FREQ':d.binauralHz+'HZ '+d.type}`,'active');
+  if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
+  addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
+
+  if (timerSeconds>0) {
+    timerRemaining=timerSeconds;
+    timerInterval=setInterval(()=>{ timerRemaining--; updateTimerDisplay(); if(timerRemaining<=0){stopDose();addLog('SYS','SESSION COMPLETE.','active');} },1000);
+  }
+  sessionInterval=setInterval(()=>{sessionTime++;checkAbuseLevel();},1000);
+  let mi=0;
+  msgInterval=setInterval(()=>{ if(!abuseTriggered) addLog('NEURAL',d.messages[mi%d.messages.length],'active'); mi++; },12000);
+  drawWaveform();
+}
+
+function checkAbuseLevel() {
+  const d=DOSES[currentDose], ind=document.getElementById('abuseIndicator');
+  const score = d.cocktail ? 1 : (intensity*0.6)+(Math.min(sessionTime/300,1)*0.4);
+  if (score>0.9) {
+    ind.textContent='NEURAL OVERLOAD'; ind.className='abuse-indicator critical';
+    if(!abuseTriggered||sessionTime%15===0){addLog('WARN',d.abuse[Math.floor(Math.random()*d.abuse.length)],'critical');abuseTriggered=true;}
+  } else if(score>0.75){
+    ind.textContent='ELEVATED DOSAGE'; ind.className='abuse-indicator danger';
+    if(sessionTime%30===0) addLog('WARN',d.abuse[Math.floor(Math.random()*d.abuse.length)],'warn');
+  } else if(score>0.55){
+    ind.textContent='MODERATE'; ind.className='abuse-indicator warning';
+  } else { ind.textContent=''; ind.className='abuse-indicator'; }
+}
+
+function stopDose() {
+  if(audioCtx){audioCtx.close().catch(()=>{});audioCtx=null;}
+  oscillators=[];gainNodes=[];sfxOscillators=[];noiseSource=null;noiseGainNode=null;
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  if(msgInterval){clearInterval(msgInterval);msgInterval=null;}
+  if(sessionInterval){clearInterval(sessionInterval);sessionInterval=null;}
+  if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
+  isPlaying=false;
+  document.getElementById('masterBtn').textContent='START DOSE';
+  document.getElementById('masterBtn').classList.remove('active');
+  document.getElementById('doseName').classList.remove('active');
+  const icon=document.getElementById('doseIcon');
+  icon.classList.remove('active','overdrive');
+  document.getElementById('waveformContainer').setAttribute('data-status','STANDBY');
+  document.getElementById('abuseIndicator').textContent='';
+  document.getElementById('abuseIndicator').className='abuse-indicator';
+  addLog('SYS','DOSE STOPPED. BASELINE RESTORED.','active');
+  drawStaticWaveform();
+}
+
+// WAVEFORM (same noisy renderer)
+function drawWaveform() {
+  const c=document.getElementById('waveform'), ctx=c.getContext('2d');
+  c.width=c.offsetWidth*2; c.height=c.offsetHeight*2;
+  const bl=analyser.frequencyBinCount, td=new Uint8Array(bl), fd=new Uint8Array(bl);
+  const isCK=DOSES[currentDose].cocktail; let fc=0;
+  function draw() {
+    if(!isPlaying)return; animFrame=requestAnimationFrame(draw); fc++;
+    analyser.getByteTimeDomainData(td); analyser.getByteFrequencyData(fd);
+    ctx.fillStyle='rgba(10,10,10,0.12)'; ctx.fillRect(0,0,c.width,c.height);
+    drawGrid(ctx,c.width,c.height);
+    const bc=isCK?128:64, bw=c.width/bc;
+    ctx.fillStyle=`rgba(255,255,255,${isCK?0.05:0.03})`;
+    for(let i=0;i<bc;i++){const idx=Math.floor(i*bl/bc/4);const bh=(fd[idx]/255)*c.height*(isCK?0.8:0.6);ctx.fillRect(i*bw,c.height-bh,bw-1,bh);}
+    ctx.lineWidth=isCK?2:1.5; ctx.strokeStyle=`rgba(200,200,200,${isCK?0.9:0.7})`; ctx.shadowColor='#FFF'; ctx.shadowBlur=isCK?4:2;
+    ctx.beginPath(); const sw=c.width/bl; let x=0;
+    for(let i=0;i<bl;i++){const v=td[i]/128;const j=(Math.random()-0.5)*intensity*(isCK?20:12);const y=(v*c.height/2)+j;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);x+=sw;}
+    ctx.stroke(); ctx.shadowBlur=0;
+    if(fc%2===0){ctx.lineWidth=0.5;ctx.strokeStyle=`rgba(150,150,150,${isCK?0.25:0.15})`;ctx.beginPath();x=0;for(let i=0;i<bl;i++){const v=td[i]/128;const o=Math.sin(fc*0.02+i*0.01)*8*intensity;const y=(v*c.height/2)+o;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);x+=sw;}ctx.stroke();}
+    if(intensity>0.6){const sc=Math.floor((intensity-0.6)*(isCK?30:20));ctx.strokeStyle=`rgba(255,255,255,${(intensity-0.6)*0.3})`;ctx.lineWidth=0.5;for(let s=0;s<sc;s++){const sx=Math.random()*c.width,sy=c.height/2,sh=(Math.random()-0.5)*c.height*0.4*intensity;ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx+(Math.random()-0.5)*4,sy+sh);ctx.stroke();}}
+    if(intensity>0.8&&Math.random()>(isCK?0.85:0.92)){const gy=Math.random()*c.height;ctx.fillStyle=`rgba(255,255,255,${Math.random()*0.08})`;ctx.fillRect(0,gy,c.width,2+Math.random()*4);}
+  }
+  draw();
+}
+
+function drawGrid(ctx,w,h) {
+  ctx.strokeStyle='#111';ctx.lineWidth=0.5;
+  for(let i=0;i<w;i+=40){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,h);ctx.stroke();}
+  for(let i=0;i<h;i+=20){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(w,i);ctx.stroke();}
+  ctx.strokeStyle='#1A1A1A';ctx.beginPath();ctx.moveTo(0,h/2);ctx.lineTo(w,h/2);ctx.stroke();
+}
+
+function drawStaticWaveform() {
+  const c=document.getElementById('waveform'),ctx=c.getContext('2d');
+  c.width=c.offsetWidth*2;c.height=c.offsetHeight*2;
+  ctx.fillStyle='#0A0A0A';ctx.fillRect(0,0,c.width,c.height);
+  drawGrid(ctx,c.width,c.height);
+  ctx.strokeStyle='#1A1A1A';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,c.height/2);ctx.lineTo(c.width,c.height/2);ctx.stroke();
+}
+
+window.addEventListener('load', drawStaticWaveform);
+
+// SLIDER
+function startSlider(e){updateSlider(e);const m=ev=>updateSlider(ev);document.addEventListener('mousemove',m);document.addEventListener('mouseup',()=>document.removeEventListener('mousemove',m),{once:true});}
+function startSliderTouch(e){updateSliderTouch(e);const m=ev=>updateSliderTouch(ev);document.addEventListener('touchmove',m);document.addEventListener('touchend',()=>document.removeEventListener('touchmove',m),{once:true});}
+function updateSlider(e){const r=document.getElementById('sliderTrack').getBoundingClientRect();applyIntensity(Math.max(0.05,Math.min(1,(e.clientX-r.left)/r.width)));}
+function updateSliderTouch(e){const r=document.getElementById('sliderTrack').getBoundingClientRect();applyIntensity(Math.max(0.05,Math.min(1,(e.touches[0].clientX-r.left)/r.width)));}
+function applyIntensity(p){
+  intensity=p;document.getElementById('sliderFill').style.width=(p*100)+'%';document.getElementById('intensityVal').textContent=Math.round(p*100)+'%';
+  if(isPlaying){const d=DOSES[currentDose],l=d.cocktail?d.layers:[{freq:d.baseFreq,binaural:d.binauralHz}];
+  gainNodes.forEach(g=>{if(g&&g.gain)g.gain.setValueAtTime((intensity*0.2)/l.length,audioCtx.currentTime);});
+  if(noiseGainNode)noiseGainNode.gain.setValueAtTime(d.noiseGain*intensity,audioCtx.currentTime);checkAbuseLevel();}
+}
+
+function setTimer(m,b){document.querySelectorAll('.timer-preset').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');timerSeconds=m*60;timerRemaining=m*60;updateTimerDisplay();}
+function updateTimerDisplay(){if(timerSeconds===0){document.getElementById('timerDisplay').textContent='∞';return;}const m=Math.floor(timerRemaining/60),s=timerRemaining%60;document.getElementById('timerDisplay').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+
+function addLog(tag,msg,cls=''){
+  const log=document.getElementById('statusLog'),e=document.createElement('div');
+  e.className=`log-entry ${cls}`;e.innerHTML=`<span class="timestamp">[${tag}]</span> ${msg}`;
+  log.appendChild(e);log.scrollTop=log.scrollHeight;
+  const entries=log.querySelectorAll('.log-entry');if(entries.length>60)entries[0].remove();
+}
+
+// ============================================
+// AMBIENT NOISE (INDEPENDENT FROM DOSES)
+// ============================================
+let noiseCtx = null;
+let ambientNoiseSource = null;
+let ambientNoiseGain = null;
+let activeNoiseType = null;
+let noiseVolume = 0.4;
+
+function createWhiteNoiseBuffer(ctx) {
+  const bs = ctx.sampleRate * 2;
+  const buf = ctx.createBuffer(1, bs, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  for (let i = 0; i < bs; i++) d[i] = Math.random() * 2 - 1;
+  return buf;
+}
+
+function createPinkNoiseBuffer(ctx) {
+  // Pink noise: equal energy per octave (1/f spectrum)
+  const bs = ctx.sampleRate * 2;
+  const buf = ctx.createBuffer(1, bs, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  let b0=0, b1=0, b2=0, b3=0, b4=0, b5=0, b6=0;
+  for (let i = 0; i < bs; i++) {
+    const white = Math.random() * 2 - 1;
+    b0 = 0.99886 * b0 + white * 0.0555179;
+    b1 = 0.99332 * b1 + white * 0.0750759;
+    b2 = 0.96900 * b2 + white * 0.1538520;
+    b3 = 0.86650 * b3 + white * 0.3104856;
+    b4 = 0.55000 * b4 + white * 0.5329522;
+    b5 = -0.7616 * b5 - white * 0.0168980;
+    d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.11;
+    b6 = white * 0.115926;
+  }
+  return buf;
+}
+
+function createBrownNoiseBuffer(ctx) {
+  // Brown/Brownian noise: 1/f^2, very deep and warm
+  const bs = ctx.sampleRate * 2;
+  const buf = ctx.createBuffer(1, bs, ctx.sampleRate);
+  const d = buf.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < bs; i++) {
+    const white = Math.random() * 2 - 1;
+    d[i] = (last + (0.02 * white)) / 1.02;
+    last = d[i];
+    d[i] *= 3.5; // Boost
+  }
+  return buf;
+}
+
+function toggleNoise(type, btn) {
+  // If clicking the active noise type, turn it off
+  if (activeNoiseType === type) {
+    stopNoise();
+    return;
+  }
+
+  // Stop any existing noise first
+  if (activeNoiseType) stopNoise();
+
+  // Start new noise type
+  activeNoiseType = type;
+  document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  let buffer;
+  if (type === 'white') buffer = createWhiteNoiseBuffer(noiseCtx);
+  else if (type === 'pink') buffer = createPinkNoiseBuffer(noiseCtx);
+  else buffer = createBrownNoiseBuffer(noiseCtx);
+
+  ambientNoiseSource = noiseCtx.createBufferSource();
+  ambientNoiseSource.buffer = buffer;
+  ambientNoiseSource.loop = true;
+
+  ambientNoiseGain = noiseCtx.createGain();
+  ambientNoiseGain.gain.value = noiseVolume * 0.5;
+
+  // Shape the noise slightly
+  const eq = noiseCtx.createBiquadFilter();
+  if (type === 'white') {
+    eq.type = 'highshelf';
+    eq.frequency.value = 8000;
+    eq.gain.value = -6; // Tame harsh highs
+  } else if (type === 'pink') {
+    eq.type = 'peaking';
+    eq.frequency.value = 500;
+    eq.Q.value = 0.5;
+    eq.gain.value = 2;
+  } else {
+    eq.type = 'lowpass';
+    eq.frequency.value = 400; // Deep and warm
+    eq.Q.value = 0.7;
+  }
+
+  ambientNoiseSource.connect(eq).connect(ambientNoiseGain).connect(noiseCtx.destination);
+  ambientNoiseSource.start();
+
+  const labels = { white: 'WHITE NOISE', pink: 'PINK NOISE', brown: 'BROWN NOISE' };
+  const descs = {
+    white: 'FULL SPECTRUM // ALL FREQUENCIES EQUAL',
+    pink: 'NATURAL BALANCE // DEEPER WARMTH',
+    brown: 'DEEP RUMBLE // LOW FREQUENCY FOCUS'
+  };
+  addLog('NOISE', `${labels[type]} ACTIVE // ${descs[type]}`, 'active');
+}
+
+function stopNoise() {
+  if (noiseCtx) {
+    noiseCtx.close().catch(() => {});
+    noiseCtx = null;
+  }
+  ambientNoiseSource = null;
+  ambientNoiseGain = null;
+  const prevType = activeNoiseType;
+  activeNoiseType = null;
+  document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
+  if (prevType) addLog('NOISE', `${prevType.toUpperCase()} NOISE STOPPED`, 'active');
+}
+
+// Noise volume slider
+function startNoiseSlider(e) {
+  updateNoiseSlider(e);
+  const m = ev => updateNoiseSlider(ev);
+  document.addEventListener('mousemove', m);
+  document.addEventListener('mouseup', () => document.removeEventListener('mousemove', m), { once: true });
+}
+function startNoiseSliderTouch(e) {
+  updateNoiseSliderTouch(e);
+  const m = ev => updateNoiseSliderTouch(ev);
+  document.addEventListener('touchmove', m);
+  document.addEventListener('touchend', () => document.removeEventListener('touchmove', m), { once: true });
+}
+function updateNoiseSlider(e) {
+  const r = document.getElementById('noiseVolTrack').getBoundingClientRect();
+  applyNoiseVolume(Math.max(0.05, Math.min(1, (e.clientX - r.left) / r.width)));
+}
+function updateNoiseSliderTouch(e) {
+  const r = document.getElementById('noiseVolTrack').getBoundingClientRect();
+  applyNoiseVolume(Math.max(0.05, Math.min(1, (e.touches[0].clientX - r.left) / r.width)));
+}
+function applyNoiseVolume(pct) {
+  noiseVolume = pct;
+  document.getElementById('noiseVolFill').style.width = (pct * 100) + '%';
+  document.getElementById('noiseVolVal').textContent = Math.round(pct * 100) + '%';
+  if (ambientNoiseGain) {
+    ambientNoiseGain.gain.setValueAtTime(noiseVolume * 0.5, noiseCtx.currentTime);
+  }
+}
+</script>
+</body>
+</html>
