@@ -20,28 +20,46 @@
      --fs-xxl: 56px — caffeinate_d only (pixel font)
      ============================= */
   :root {
-    --fs-2xs: 9px;
-    --fs-xs: 11px;
-    --fs-sm: 13px;
+    --fs-2xs: 10px;
+    --fs-xs: 12px;
+    --fs-sm: 14px;
     --fs-md: 16px;
     --fs-lg: 26px;
     --fs-xl: 42px;
     --fs-xxl: 50px;
-    --white: #F0F0F0;
-    --dim: #A0A0A0;
+    --white: #E0E0E0;
+    --dim: #999;
     --dark: #1A1A1A;
     --black: #0A0A0A;
+    --sp-xs: 4px;
+    --sp-sm: 8px;
+    --sp-md: 16px;
+    --sp-lg: 24px;
+    --sp-xl: 48px;
   }
 
   body {
     background: var(--black);
     color: var(--white);
     font-family: 'Share Tech Mono', monospace;
-    font-weight: 500;
     overflow-x: hidden;
     min-height: 100vh;
     cursor: crosshair;
   }
+
+  html { scroll-behavior: smooth; }
+
+  /* Focus states for keyboard navigation */
+  button:focus-visible, input:focus-visible {
+    outline: 1px solid var(--white);
+    outline-offset: 2px;
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: #555; }
 
   body::after {
     content: '';
@@ -97,16 +115,15 @@
     margin-bottom: 48px;
   }
 
-  .intro-logo-cup { margin-bottom: 40px; opacity: 0.9; }
+  .intro-logo-cup { margin-bottom: 40px; opacity: 0.85; }
 
   .intro-title {
-    font-size: 40px;
+    font-size: 36px;
     letter-spacing: 16px;
-    color: #FFFFFF;
-    font-weight: 700;
+    color: var(--white);
     text-transform: uppercase;
     margin-bottom: 12px;
-    text-shadow: 0 0 60px rgba(255,255,255,0.2);
+    text-shadow: 0 0 60px rgba(255,255,255,0.1);
     text-align: center;
   }
 
@@ -123,7 +140,7 @@
   .intro-subtitle {
     font-size: var(--fs-xs);
     letter-spacing: 6px;
-    color: #888;
+    color: #555;
     text-transform: uppercase;
     margin-bottom: 48px;
     text-align: center;
@@ -138,7 +155,7 @@
   .intro-story p {
     font-size: var(--fs-sm);
     line-height: 2;
-    color: #777;
+    color: #555;
     letter-spacing: 1px;
     margin-bottom: 16px;
   }
@@ -199,7 +216,7 @@
   .age-label {
     font-size: var(--fs-xs);
     letter-spacing: 2px;
-    color: #999;
+    color: #555;
     cursor: pointer;
     user-select: none;
   }
@@ -247,7 +264,7 @@
   .intro-disclaimer {
     font-size: var(--fs-2xs);
     letter-spacing: 2px;
-    color: #666;
+    color: #555;
     text-transform: uppercase;
     text-align: center;
     line-height: 2;
@@ -305,7 +322,7 @@
   .brand-sub {
     font-size: var(--fs-xs);
     letter-spacing: 3px;
-    color: #777;
+    color: #444;
     margin-top: 2px;
   }
 
@@ -471,13 +488,13 @@
 
   .espresso-label { bottom: -4px; left: 0; }
 
-  /* RED BULL — cylinder can */
-  .redbull-body { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(12px); border-radius: 6px; }
-  .redbull-back { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(-12px); border-radius: 6px; }
-  .redbull-left { width: 24px; height: 100px; left: 46px; top: 30px; transform: rotateY(-90deg) translateZ(12px); border-radius: 6px; }
-  .redbull-right { width: 24px; height: 100px; left: 90px; top: 30px; transform: rotateY(90deg) translateZ(12px); border-radius: 6px; }
-  .redbull-top { width: 44px; height: 24px; left: 58px; top: 18px; transform: rotateX(90deg) translateZ(12px); border-radius: 50%; }
-  .redbull-bottom { width: 44px; height: 24px; left: 58px; top: 118px; transform: rotateX(-90deg) translateZ(12px); border-radius: 50%; }
+  /* RED BULL — tall thin can */
+  .redbull-body { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(12px); }
+  .redbull-back { width: 44px; height: 100px; left: 58px; top: 30px; transform: translateZ(-12px); }
+  .redbull-left { width: 24px; height: 100px; left: 46px; top: 30px; transform: rotateY(-90deg) translateZ(12px); }
+  .redbull-right { width: 24px; height: 100px; left: 90px; top: 30px; transform: rotateY(90deg) translateZ(12px); }
+  .redbull-top { width: 44px; height: 24px; left: 58px; top: 18px; transform: rotateX(90deg) translateZ(12px); }
+  .redbull-bottom { width: 44px; height: 24px; left: 58px; top: 118px; transform: rotateX(-90deg) translateZ(12px); }
   .redbull-stripe {
     width: 44px; height: 3px; left: 58px;
     background: rgba(255,255,255,0.08) !important;
@@ -792,10 +809,9 @@
   }
 
   .panel-title {
-    font-size: var(--fs-xs);
-    font-weight: 700;
+    font-size: var(--fs-2xs);
     letter-spacing: 4px;
-    color: #777;
+    color: #666;
     margin-bottom: 12px;
     text-transform: uppercase;
   }
@@ -807,10 +823,10 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 9px 12px;
+    padding: 12px 12px;
     background: transparent;
     border: 1px solid #141414;
-    color: #555;
+    color: #666;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
@@ -827,7 +843,7 @@
     background: rgba(255,255,255,0.02);
   }
 
-  .dose-hz { color: #2A2A2A; font-size: var(--fs-2xs); letter-spacing: 1px; }
+  .dose-hz { color: #555; font-size: var(--fs-2xs); letter-spacing: 1px; }
   .dose-btn.selected .dose-hz { color: #555; }
 
   .dose-btn.cocktail { border-style: dashed; margin-top: 4px; }
@@ -839,7 +855,7 @@
     display: flex;
     justify-content: space-between;
     font-size: var(--fs-2xs);
-    color: #333;
+    color: #666;
     letter-spacing: 2px;
     margin-bottom: 8px;
   }
@@ -862,7 +878,7 @@
     margin-top: 10px;
     font-size: var(--fs-2xs);
     letter-spacing: 2px;
-    color: #222;
+    color: #444;
     text-align: center;
     height: 14px;
     transition: color 0.3s ease;
@@ -873,15 +889,11 @@
   .abuse-indicator.critical { color: var(--white); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
   /* AMBIENT NOISE */
-  .noise-section {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid #333 !important;
-    border-left: 3px solid #666 !important;
-  }
+  .noise-section { background: rgba(255,255,255,0.01); }
 
   .noise-independent {
     font-size: var(--fs-2xs);
-    color: #2A2A2A;
+    color: #555;
     letter-spacing: 1px;
     margin-left: 4px;
   }
@@ -893,12 +905,11 @@
   }
 
   .noise-btn {
-    padding: 10px;
+    padding: 12px;
     background: transparent;
-    border: 1px solid #333;
-    color: #888;
+    border: 1px solid #1A1A1A;
+    color: #666;
     font-family: 'Share Tech Mono', monospace;
-    font-weight: 700;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
     cursor: pointer;
@@ -919,7 +930,7 @@
     margin-top: 8px;
     font-size: var(--fs-2xs);
     letter-spacing: 1px;
-    color: #222;
+    color: #444;
     text-align: center;
   }
 
@@ -939,10 +950,10 @@
   }
 
   .timer-preset {
-    padding: 7px;
+    padding: 10px;
     background: transparent;
     border: 1px solid #141414;
-    color: #555;
+    color: #666;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
@@ -963,25 +974,25 @@
 
   .log-entry {
     font-size: var(--fs-2xs);
-    color: #2A2A2A;
+    color: #444;
     letter-spacing: 1px;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
     line-height: 1.6;
   }
 
-  .log-entry.active { color: #555; }
-  .log-entry.warn { color: #777; }
-  .log-entry.critical { color: #AAA; }
-  .log-entry .timestamp { color: #1A1A1A; margin-right: 6px; }
-  .log-entry.active .timestamp { color: #333; }
-  .log-entry.warn .timestamp { color: #444; }
-  .log-entry.critical .timestamp { color: #666; }
+  .log-entry.active { color: #777; }
+  .log-entry.warn { color: #999; }
+  .log-entry.critical { color: #BBB; }
+  .log-entry .timestamp { color: #333; margin-right: 6px; }
+  .log-entry.active .timestamp { color: #555; }
+  .log-entry.warn .timestamp { color: #666; }
+  .log-entry.critical .timestamp { color: #888; }
 
   .disclaimer {
-    padding: 10px 18px;
-    border-top: 1px solid #333;
+    padding: var(--sp-md) 18px;
+    border-top: 1px solid #222;
     font-size: var(--fs-2xs);
-    color: #666;
+    color: #555;
     letter-spacing: 1px;
     line-height: 1.7;
     text-transform: uppercase;
@@ -1046,9 +1057,22 @@
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
     .dose-name { font-size: var(--fs-lg); letter-spacing: 6px; }
     .dose-name.pixel-font { font-size: 28px; }
-    .freq-core { padding: 20px; }
+    .freq-core { padding: 20px; min-height: auto; }
     .dose-icon-wrap { width: 120px; height: 120px; }
-    .intro-title { font-size: 26px; letter-spacing: 8px; }
+    .intro-title { font-size: 24px; letter-spacing: 8px; }
+    .freq-info { gap: 24px; }
+  }
+
+  @media (max-width: 480px) {
+    .intro-title { font-size: 20px; letter-spacing: 4px; }
+    .intro-story { padding: 0 8px; }
+    .intro-story p { line-height: 1.8; }
+    .freq-info { gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .header { flex-wrap: wrap; gap: 8px; }
+    .dose-name { font-size: 20px; letter-spacing: 4px; }
+    .dose-name.pixel-font { font-size: 22px; letter-spacing: 2px; }
+    .corner-tl, .corner-tr, .corner-bl, .corner-br { display: none; }
+    body { cursor: default; }
   }
 </style>
 </head>
@@ -1061,13 +1085,13 @@
   <div class="intro-corner-bl"></div>
   <div class="intro-corner-br"></div>
   <div class="intro-top-line">MASTERBLOX LABS // EXPERIMENTAL</div>
-  <svg class="intro-logo-cup" width="96" height="96" viewBox="0 0 32 32" fill="none">
-    <rect x="8" y="4" width="16" height="2" fill="#CCC"/><rect x="6" y="6" width="2" height="2" fill="#CCC"/>
-    <rect x="24" y="6" width="2" height="2" fill="#CCC"/><rect x="6" y="8" width="20" height="2" fill="#CCC"/>
-    <rect x="6" y="10" width="2" height="12" fill="#CCC"/><rect x="24" y="10" width="2" height="12" fill="#CCC"/>
-    <rect x="26" y="12" width="2" height="6" fill="#CCC"/><rect x="28" y="12" width="2" height="2" fill="#CCC"/>
-    <rect x="28" y="16" width="2" height="2" fill="#CCC"/><rect x="6" y="22" width="20" height="2" fill="#CCC"/>
-    <rect x="8" y="24" width="16" height="2" fill="#CCC"/><rect x="4" y="26" width="24" height="2" fill="#CCC"/>
+  <svg class="intro-logo-cup" width="80" height="80" viewBox="0 0 32 32" fill="none">
+    <rect x="8" y="4" width="16" height="2" fill="#999"/><rect x="6" y="6" width="2" height="2" fill="#999"/>
+    <rect x="24" y="6" width="2" height="2" fill="#999"/><rect x="6" y="8" width="20" height="2" fill="#999"/>
+    <rect x="6" y="10" width="2" height="12" fill="#999"/><rect x="24" y="10" width="2" height="12" fill="#999"/>
+    <rect x="26" y="12" width="2" height="6" fill="#999"/><rect x="28" y="12" width="2" height="2" fill="#999"/>
+    <rect x="28" y="16" width="2" height="2" fill="#999"/><rect x="6" y="22" width="20" height="2" fill="#999"/>
+    <rect x="8" y="24" width="16" height="2" fill="#999"/><rect x="4" y="26" width="24" height="2" fill="#999"/>
   </svg>
   <div class="intro-title">CAFFEINATE<span class="intro-cursor">_</span></div>
   <div class="intro-subtitle">Neural Frequency Terminal</div>
@@ -1166,7 +1190,7 @@
       </div>
 
       <div class="panel-section noise-section">
-        <div class="panel-title">WHITE NOISE <span class="noise-independent">(INDEPENDENT — STACK OR USE SOLO)</span></div>
+        <div class="panel-title">AMBIENT NOISE <span class="noise-independent">(INDEPENDENT)</span></div>
         <div class="noise-types">
           <button class="noise-btn" data-noise="white" onclick="toggleNoise('white',this)">WHITE</button>
           <button class="noise-btn" data-noise="pink" onclick="toggleNoise('pink',this)">PINK</button>
@@ -1218,9 +1242,17 @@
 // SOUND FX SYSTEM
 const fxAudio = new Audio('FX.mp4');
 fxAudio.volume = 0.5;
+let uiSoundCtx = null;
+
+function getUiSoundCtx() {
+  if (!uiSoundCtx || uiSoundCtx.state === 'closed') {
+    uiSoundCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return uiSoundCtx;
+}
 
 function playClickSound() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = getUiSoundCtx();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'square';
@@ -1229,11 +1261,10 @@ function playClickSound() {
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
   osc.connect(gain).connect(ctx.destination);
   osc.start(); osc.stop(ctx.currentTime + 0.08);
-  setTimeout(() => ctx.close(), 200);
 }
 
 function playHoverSound() {
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = getUiSoundCtx();
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'sine';
@@ -1242,7 +1273,6 @@ function playHoverSound() {
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
   osc.connect(gain).connect(ctx.destination);
   osc.start(); osc.stop(ctx.currentTime + 0.04);
-  setTimeout(() => ctx.close(), 150);
 }
 
 window.addEventListener('DOMContentLoaded', () => {
