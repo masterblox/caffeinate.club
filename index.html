@@ -2,8 +2,26 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>CAFFEINATE_ // NEURAL FREQUENCY TERMINAL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CAFFEINATE_ // Neural Frequency Terminal</title>
+<meta name="description" content="Binaural frequency terminal for coders. Real frequencies. Real focus. The only boost you need at 3AM when the deadline is real and the coffee ran out.">
+<meta name="theme-color" content="#0A0A0A">
+
+<!-- OG / Social -->
+<meta property="og:title" content="CAFFEINATE_ // Neural Frequency Terminal">
+<meta property="og:description" content="Binaural frequencies tuned for focus, wakefulness, and shipping code at 3AM. Like the macOS command — but for your brain.">
+<meta property="og:url" content="https://caffeinate.club">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://caffeinate.club/og.png">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CAFFEINATE_ // Neural Frequency Terminal">
+<meta name="twitter:description" content="Binaural frequencies tuned for focus, wakefulness, and shipping code at 3AM.">
+<meta name="twitter:image" content="https://caffeinate.club/og.png">
+
+<!-- Favicon (inline SVG as data URI — 8-bit coffee cup) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='8' y='4' width='16' height='2' fill='%23E0E0E0'/><rect x='6' y='6' width='2' height='2' fill='%23E0E0E0'/><rect x='24' y='6' width='2' height='2' fill='%23E0E0E0'/><rect x='6' y='8' width='20' height='2' fill='%23E0E0E0'/><rect x='6' y='10' width='2' height='12' fill='%23E0E0E0'/><rect x='24' y='10' width='2' height='12' fill='%23E0E0E0'/><rect x='26' y='12' width='2' height='6' fill='%23E0E0E0'/><rect x='28' y='12' width='2' height='2' fill='%23E0E0E0'/><rect x='28' y='16' width='2' height='2' fill='%23E0E0E0'/><rect x='6' y='22' width='20' height='2' fill='%23E0E0E0'/><rect x='8' y='24' width='16' height='2' fill='%23E0E0E0'/><rect x='4' y='26' width='24' height='2' fill='%23E0E0E0'/></svg>">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Press+Start+2P&display=swap');
 
@@ -20,22 +38,17 @@
      --fs-xxl: 56px — caffeinate_d only (pixel font)
      ============================= */
   :root {
-    --fs-2xs: clamp(7px, 1.5vw, 8px);
-    --fs-xs: clamp(9px, 2vw, 10px);
-    --fs-sm: clamp(11px, 2.5vw, 12px);
-    --fs-md: clamp(13px, 3vw, 14px);
-    --fs-lg: clamp(20px, 5vw, 24px);
-    --fs-xl: clamp(28px, 8vw, 40px);
-    --fs-xxl: clamp(32px, 9vw, 48px);
+    --fs-2xs: 7px;
+    --fs-xs: 9px;
+    --fs-sm: 11px;
+    --fs-md: 14px;
+    --fs-lg: 24px;
+    --fs-xl: 40px;
+    --fs-xxl: 48px;
     --white: #E0E0E0;
-    --dim: #999;
+    --dim: #808080;
     --dark: #1A1A1A;
     --black: #0A0A0A;
-    --sp-xs: 4px;
-    --sp-sm: 8px;
-    --sp-md: 16px;
-    --sp-lg: 24px;
-    --sp-xl: 48px;
   }
 
   body {
@@ -44,24 +57,8 @@
     font-family: 'Share Tech Mono', monospace;
     overflow-x: hidden;
     min-height: 100vh;
-    -webkit-text-size-adjust: 100%;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='none'%3E%3Crect x='8' y='4' width='12' height='2' fill='%23ccc'/%3E%3Crect x='6' y='6' width='2' height='2' fill='%23ccc'/%3E%3Crect x='20' y='6' width='2' height='2' fill='%23ccc'/%3E%3Crect x='6' y='8' width='16' height='2' fill='%23999'/%3E%3Crect x='6' y='10' width='2' height='10' fill='%23ccc'/%3E%3Crect x='20' y='10' width='2' height='10' fill='%23ccc'/%3E%3Crect x='22' y='12' width='2' height='2' fill='%23999'/%3E%3Crect x='24' y='12' width='2' height='6' fill='%23999'/%3E%3Crect x='22' y='18' width='2' height='2' fill='%23999'/%3E%3Crect x='6' y='20' width='16' height='2' fill='%23ccc'/%3E%3Crect x='8' y='22' width='12' height='2' fill='%23999'/%3E%3Crect x='10' y='2' width='2' height='2' fill='%23666'/%3E%3Crect x='14' y='1' width='2' height='3' fill='%23666'/%3E%3Crect x='18' y='2' width='2' height='2' fill='%23666'/%3E%3C/svg%3E") 14 12, crosshair;
+    cursor: crosshair;
   }
-
-  html { scroll-behavior: smooth; }
-
-  /* Focus states for keyboard navigation */
-  button:focus-visible, input:focus-visible {
-    outline: 1px solid var(--white);
-    outline-offset: 2px;
-  }
-
-  /* Scrollbar styling */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--black); }
-  ::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
-  ::-webkit-scrollbar-thumb:hover { background: #555; }
 
   body::after {
     content: '';
@@ -76,7 +73,16 @@
     z-index: 9999;
   }
 
-  .crt-wrap { }
+  @keyframes flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.8; }
+    94% { opacity: 1; }
+    96% { opacity: 0.9; }
+    97% { opacity: 1; }
+  }
+
+  .crt-wrap { animation: flicker 8s infinite; }
 
   /* ===================== */
   /* INTRO / SPLASH        */
@@ -108,7 +114,7 @@
     margin-bottom: 48px;
   }
 
-  .intro-logo-cup { margin-bottom: 40px; opacity: 0.85; }
+  .intro-logo-cup { margin-bottom: 40px; opacity: 0.6; }
 
   .intro-title {
     font-size: 36px;
@@ -140,53 +146,38 @@
   }
 
   .intro-story {
-    max-width: 640px;
-    text-align: left;
+    max-width: 520px;
+    text-align: center;
     margin-bottom: 48px;
   }
 
   .intro-story p {
     font-size: var(--fs-sm);
-    line-height: 1.9;
+    line-height: 2;
     color: #555;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     margin-bottom: 16px;
   }
 
-  .intro-story .highlight {
-    color: #BBB;
-    text-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 24px rgba(255,255,255,0.08), 0 0 40px rgba(255,255,255,0.03);
-    transition: text-shadow 0.3s ease, color 0.3s ease;
-  }
-  .intro-story .highlight:hover {
-    color: #EEE;
-    text-shadow: 0 0 14px rgba(255,255,255,0.4), 0 0 32px rgba(255,255,255,0.15), 0 0 48px rgba(255,255,255,0.06);
-  }
-  .intro-story .era-ref {
-    color: #999;
-    border-bottom: 1px solid #444;
-    padding-bottom: 1px;
-    text-shadow: 0 0 6px rgba(255,255,255,0.1);
-  }
+  .intro-story .highlight { color: #888; }
+  .intro-story .era-ref { color: #666; border-bottom: 1px solid #333; padding-bottom: 1px; }
 
   /* AGE GATE */
   .age-gate {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 16px;
+    gap: 12px;
     margin-bottom: 32px;
-    padding: 16px 24px;
-    border: 1px solid #333;
-    flex-wrap: wrap;
+    padding: 14px 20px;
+    border: 1px solid #222;
   }
 
   .age-checkbox {
     appearance: none;
     -webkit-appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 1px solid #555;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #444;
     background: transparent;
     cursor: pointer;
     position: relative;
@@ -217,20 +208,20 @@
   }
 
   .intro-enter {
-    height: 40px;
-    padding: 0 20px;
+    width: 240px;
+    height: 52px;
     background: transparent;
     border: 1px solid #222;
     color: #333;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-sm);
-    letter-spacing: 4px;
+    letter-spacing: 6px;
     cursor: not-allowed;
     text-transform: uppercase;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
-    margin-left: auto;
+    margin-bottom: 24px;
   }
 
   .intro-enter.enabled {
@@ -259,7 +250,7 @@
   .intro-disclaimer {
     font-size: var(--fs-2xs);
     letter-spacing: 2px;
-    color: #555;
+    color: #222;
     text-transform: uppercase;
     text-align: center;
     line-height: 2;
@@ -324,26 +315,11 @@
   .header-right {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 20px;
     font-size: var(--fs-xs);
     color: var(--dim);
     letter-spacing: 2px;
   }
-
-  .sfx-toggle {
-    background: transparent;
-    border: 1px solid #333;
-    color: var(--dim);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: var(--fs-2xs);
-    letter-spacing: 2px;
-    padding: 4px 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-  }
-  .sfx-toggle:hover { border-color: #555; color: var(--white); }
-  .sfx-toggle.muted { color: #444; border-color: #1A1A1A; }
 
   .live-dot {
     width: 6px; height: 6px;
@@ -361,7 +337,7 @@
   .main {
     display: grid;
     grid-template-columns: 1fr 300px;
-    height: calc(100vh - 53px);
+    min-height: calc(100vh - 53px);
   }
 
   .freq-core {
@@ -371,8 +347,6 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    overflow: hidden;
-    max-height: calc(100vh - 53px);
   }
 
   /* ===================== */
@@ -424,7 +398,8 @@
   }
 
   .dose-icon.active .face {
-    border-color: #444;
+    border-color: #555;
+    box-shadow: 0 0 20px rgba(255,255,255,0.03);
   }
 
   .dose-icon.active.overdrive .face {
@@ -812,7 +787,6 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    max-height: calc(100vh - 53px);
   }
 
   .panel-section {
@@ -823,7 +797,7 @@
   .panel-title {
     font-size: var(--fs-2xs);
     letter-spacing: 4px;
-    color: #666;
+    color: #333;
     margin-bottom: 12px;
     text-transform: uppercase;
   }
@@ -835,10 +809,10 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    padding: 12px 12px;
+    padding: 9px 12px;
     background: transparent;
     border: 1px solid #141414;
-    color: #666;
+    color: #555;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
@@ -855,7 +829,7 @@
     background: rgba(255,255,255,0.02);
   }
 
-  .dose-hz { color: #555; font-size: var(--fs-2xs); letter-spacing: 1px; }
+  .dose-hz { color: #2A2A2A; font-size: var(--fs-2xs); letter-spacing: 1px; }
   .dose-btn.selected .dose-hz { color: #555; }
 
   .dose-btn.cocktail { border-style: dashed; margin-top: 4px; }
@@ -867,7 +841,7 @@
     display: flex;
     justify-content: space-between;
     font-size: var(--fs-2xs);
-    color: #666;
+    color: #333;
     letter-spacing: 2px;
     margin-bottom: 8px;
   }
@@ -890,7 +864,7 @@
     margin-top: 10px;
     font-size: var(--fs-2xs);
     letter-spacing: 2px;
-    color: #444;
+    color: #222;
     text-align: center;
     height: 14px;
     transition: color 0.3s ease;
@@ -901,26 +875,11 @@
   .abuse-indicator.critical { color: var(--white); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
   /* AMBIENT NOISE */
-  .noise-section {
-    background: rgba(255,255,255,0.01);
-    position: relative;
-  }
-  .noise-section::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 128px 128px;
-    pointer-events: none;
-    opacity: 0.6;
-    z-index: 0;
-  }
-  .noise-section > * { position: relative; z-index: 1; }
+  .noise-section { background: rgba(255,255,255,0.01); }
 
   .noise-independent {
     font-size: var(--fs-2xs);
-    color: #555;
+    color: #2A2A2A;
     letter-spacing: 1px;
     margin-left: 4px;
   }
@@ -932,10 +891,10 @@
   }
 
   .noise-btn {
-    padding: 12px;
+    padding: 8px;
     background: transparent;
     border: 1px solid #1A1A1A;
-    color: #666;
+    color: #444;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
@@ -957,7 +916,7 @@
     margin-top: 8px;
     font-size: var(--fs-2xs);
     letter-spacing: 1px;
-    color: #444;
+    color: #222;
     text-align: center;
   }
 
@@ -977,10 +936,10 @@
   }
 
   .timer-preset {
-    padding: 10px;
+    padding: 7px;
     background: transparent;
     border: 1px solid #141414;
-    color: #666;
+    color: #555;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-xs);
     letter-spacing: 2px;
@@ -1001,25 +960,25 @@
 
   .log-entry {
     font-size: var(--fs-2xs);
-    color: #444;
+    color: #2A2A2A;
     letter-spacing: 1px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     line-height: 1.6;
   }
 
-  .log-entry.active { color: #777; }
-  .log-entry.warn { color: #999; }
-  .log-entry.critical { color: #BBB; }
-  .log-entry .timestamp { color: #333; margin-right: 6px; }
-  .log-entry.active .timestamp { color: #555; }
-  .log-entry.warn .timestamp { color: #666; }
-  .log-entry.critical .timestamp { color: #888; }
+  .log-entry.active { color: #555; }
+  .log-entry.warn { color: #777; }
+  .log-entry.critical { color: #AAA; }
+  .log-entry .timestamp { color: #1A1A1A; margin-right: 6px; }
+  .log-entry.active .timestamp { color: #333; }
+  .log-entry.warn .timestamp { color: #444; }
+  .log-entry.critical .timestamp { color: #666; }
 
   .disclaimer {
-    padding: var(--sp-md) 18px;
-    border-top: 1px solid #222;
+    padding: 10px 18px;
+    border-top: 1px solid #141414;
     font-size: var(--fs-2xs);
-    color: #555;
+    color: #222;
     letter-spacing: 1px;
     line-height: 1.7;
     text-transform: uppercase;
@@ -1033,310 +992,18 @@
   .corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
   .corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
 
-  /* CAFFEINATE_D EXCLUSIVE EFFECTS */
-  #matrixCanvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    z-index: 1;
-    pointer-events: none;
-    display: none;
-  }
-  body.caffeinated-party #matrixCanvas { display: block; }
-
-  .crt-wrap { position: relative; z-index: 2; }
-
-  @keyframes caffd-glitch {
-    0% { transform: translate(0, 0); }
-    10% { transform: translate(-2px, 1px); }
-    20% { transform: translate(3px, -1px); }
-    30% { transform: translate(-1px, -2px); }
-    40% { transform: translate(2px, 2px); }
-    50% { transform: translate(-3px, 0px); }
-    60% { transform: translate(1px, -2px); }
-    70% { transform: translate(-2px, 3px); }
-    80% { transform: translate(3px, -1px); }
-    90% { transform: translate(-1px, 2px); }
-    100% { transform: translate(0, 0); }
-  }
-
-  body.caffeinated-party .dose-name {
-    animation: caffd-glitch 0.1s linear infinite;
-    text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
-  }
-
-  body.caffeinated-party .main {
-    filter: blur(0.3px);
-    transform: scaleY(1.002);
-    transition: filter 2s ease, transform 2s ease;
-  }
-
-  /* SESSION STATS */
-  .session-stats {
-    font-size: var(--fs-2xs);
-    letter-spacing: 1px;
-    transition: color 0.5s ease;
-  }
-
-  /* POST-DOSE AREA */
-  .post-dose-area {
-    margin-top: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 580px;
-  }
-  .post-dose-btns {
-    display: flex;
-    gap: 8px;
-  }
-  .post-dose-btn {
-    padding: 8px 16px;
-    background: transparent;
-    border: 1px solid #333;
-    color: #666;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: var(--fs-2xs);
-    letter-spacing: 2px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-  }
-  .post-dose-btn:hover { border-color: #555; color: var(--white); }
-  .neural-sig-wrap {
-    width: 100%;
-    max-width: 580px;
-    opacity: 1;
-    transition: opacity 2s ease;
-  }
-  .neural-sig-wrap.fading { opacity: 0; }
-  .neural-sig-label {
-    font-size: var(--fs-2xs);
-    letter-spacing: 2px;
-    color: #333;
-    margin-bottom: 6px;
-    text-transform: uppercase;
-  }
-  .neural-sig-wrap canvas {
-    width: 100%;
-    height: 80px;
-    border: 1px solid #1A1A1A;
-    display: block;
-  }
-
-  /* KONAMI KERNEL PANIC */
-  @keyframes kp-shake {
-    0% { transform: translate(0,0); }
-    10% { transform: translate(-5px, 3px); }
-    20% { transform: translate(5px, -3px); }
-    30% { transform: translate(-3px, -5px); }
-    40% { transform: translate(3px, 5px); }
-    50% { transform: translate(-5px, -2px); }
-    60% { transform: translate(5px, 2px); }
-    70% { transform: translate(-2px, 5px); }
-    80% { transform: translate(2px, -5px); }
-    90% { transform: translate(-3px, 3px); }
-    100% { transform: translate(0,0); }
-  }
-  @keyframes kp-invert {
-    0%, 90% { filter: none; }
-    92% { filter: invert(1); }
-    94% { filter: none; }
-    96% { filter: invert(1) hue-rotate(180deg); }
-    98% { filter: none; }
-  }
-  body.kernel-panic .crt-wrap {
-    animation: kp-shake 0.08s linear infinite, kp-invert 2s linear infinite;
-  }
-  body.kernel-panic::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.06) 1px, rgba(255,255,255,0.06) 2px);
-    animation: kp-scanline 0.3s linear infinite;
-    pointer-events: none;
-    z-index: 9998;
-  }
-  @keyframes kp-scanline {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 100%; }
-  }
-  body.kernel-panic .dose-name {
-    animation: kp-shake 0.05s linear infinite;
-    text-shadow: 3px 0 #ff0000, -3px 0 #00ffff, 0 3px #ff00ff;
-  }
-  #konamiFlash {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 10001;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background: var(--black);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: var(--fs-lg);
-    color: var(--white);
-    letter-spacing: 8px;
-    text-transform: uppercase;
-  }
-  #konamiFlash.active { display: flex; }
-
-  /* ===================== */
-  /* TABLET (≤ 768px)      */
-  /* ===================== */
-  @media (max-width: 768px) {
-    .main {
-      grid-template-columns: 1fr;
-      height: auto;
-      min-height: calc(100vh - 53px);
-    }
-    .right-panel {
-      border-left: none;
-      border-top: 1px solid #1A1A1A;
-      max-height: none;
-    }
-    .freq-core {
-      padding: 20px 16px;
-      min-height: auto;
-      overflow: visible;
-      max-height: none;
-    }
-    .dose-name { letter-spacing: 6px; }
-    .dose-name.pixel-font { font-size: clamp(24px, 7vw, 32px); letter-spacing: 4px; }
-    .dose-icon-wrap { width: 120px; height: 120px; margin-bottom: 20px; }
-    .intro-title { font-size: clamp(20px, 5vw, 28px); letter-spacing: 8px; }
-    .intro-screen { padding: 24px 16px; }
-    .intro-top-line { letter-spacing: 3px; margin-bottom: 32px; }
-    .intro-subtitle { letter-spacing: 3px; margin-bottom: 32px; }
-    .intro-story { margin-bottom: 32px; }
-    .freq-info { gap: 24px; }
-    .waveform-container { max-width: 100%; }
-    .post-dose-area { max-width: 100%; }
-    .neural-sig-wrap { max-width: 100%; }
-
-    /* Touch targets — 44px minimum */
-    .dose-btn { min-height: 44px; padding: 12px; }
-    .noise-btn { min-height: 44px; padding: 12px; }
-    .timer-preset { min-height: 44px; padding: 12px; }
-    .master-btn { height: 52px; width: 100%; max-width: 320px; }
-    .sfx-toggle { min-height: 44px; min-width: 44px; padding: 8px 14px; }
-    .intro-enter { min-height: 48px; padding: 0 24px; }
-    .age-checkbox { width: 28px; height: 28px; }
-    .post-dose-btn { min-height: 44px; padding: 10px 18px; }
-    .slider-track { height: 28px; }
-  }
-
-  /* ===================== */
-  /* MOBILE (≤ 480px)      */
-  /* ===================== */
-  @media (max-width: 480px) {
-    body { cursor: default; }
-    .corner-tl, .corner-tr, .corner-bl, .corner-br { display: none; }
-    .intro-corner-tl, .intro-corner-tr, .intro-corner-bl, .intro-corner-br { display: none; }
-
-    .header {
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 10px 12px;
-    }
-    .header-right { gap: 10px; }
-    .brand-name { letter-spacing: 3px; }
-    .brand-sub { display: none; }
-
-    .freq-core { padding: 16px 12px; }
-    .dose-icon-wrap { width: 100px; height: 100px; margin-bottom: 16px; }
-    .dose-label { letter-spacing: 4px; }
-    .dose-name { letter-spacing: 4px; }
-    .dose-name.pixel-font { font-size: clamp(20px, 6vw, 26px); letter-spacing: 2px; }
-    .dose-desc { letter-spacing: 2px; margin-bottom: 20px; }
-    .freq-info { gap: 16px; flex-wrap: wrap; justify-content: center; }
-    .waveform-container { height: 90px; margin-bottom: 16px; }
-
-    .intro-screen { padding: 20px 12px; }
-    .intro-title { letter-spacing: 4px; }
-    .intro-subtitle { letter-spacing: 2px; }
-    .intro-story { padding: 0 4px; }
-    .intro-story p { line-height: 1.8; }
-    .intro-disclaimer { max-width: 100%; }
-    .age-gate { padding: 12px 16px; gap: 12px; justify-content: center; }
-    .age-label { letter-spacing: 1px; }
-    .intro-enter { margin-left: 0; width: 100%; }
-    .age-checkbox:checked::after { top: 4px; left: 8px; width: 7px; height: 12px; }
-
-    .panel-section { padding: 14px 12px; }
-    .status-log { padding: 14px 12px; }
-    .disclaimer { padding: var(--sp-sm) 12px; }
-
-    .master-btn { max-width: 100%; width: 100%; }
-    .post-dose-btns { flex-wrap: wrap; justify-content: center; }
-    .noise-types { grid-template-columns: repeat(3, 1fr); gap: 3px; }
-    .timer-presets { grid-template-columns: repeat(3, 1fr); gap: 3px; }
-  }
-
-  /* ===================== */
-  /* SMALL MOBILE (≤ 360px) */
-  /* ===================== */
-  @media (max-width: 360px) {
-    .intro-title { letter-spacing: 2px; }
-    .dose-icon-wrap { width: 80px; height: 80px; margin-bottom: 12px; }
-    .dose-name { letter-spacing: 2px; }
-    .dose-name.pixel-font { font-size: 18px; letter-spacing: 1px; }
-    .freq-info { gap: 12px; }
-    .freq-val { letter-spacing: 1px; }
-    .timer-presets { grid-template-columns: repeat(3, 1fr); }
-  }
-
-  /* Touch device overrides */
-  @media (hover: none) and (pointer: coarse) {
-    body { cursor: default; }
-    /* Reset hover to match default state on touch */
-    .dose-btn:hover { border-color: #141414; color: #666; }
-    .dose-btn.selected:hover { border-color: #555; color: var(--white); }
-    .noise-btn:hover { border-color: #1A1A1A; color: #666; }
-    .noise-btn.active:hover { border-color: var(--white); color: var(--white); }
-    .timer-preset:hover { border-color: #141414; color: #666; }
-    .timer-preset.selected:hover { border-color: #555; color: var(--white); }
-    .master-btn:hover { border-color: #333; box-shadow: none; }
-    .sfx-toggle:hover { border-color: #333; color: var(--dim); }
-    .post-dose-btn:hover { border-color: #333; color: #666; }
-    .intro-enter.enabled:hover { border-color: #444; box-shadow: none; background: transparent; }
-    .intro-enter.enabled:hover::after { left: -100%; }
-
-    /* Active states for touch feedback */
-    .dose-btn:active { border-color: #444; color: var(--white); }
-    .noise-btn:active { border-color: #444; color: var(--white); }
-    .timer-preset:active { border-color: #444; color: var(--white); }
-    .master-btn:active { border-color: var(--white); box-shadow: 0 0 20px rgba(255,255,255,0.08); }
-    .sfx-toggle:active { border-color: #555; color: var(--white); }
-    .post-dose-btn:active { border-color: #555; color: var(--white); }
-    .intro-enter.enabled:active { border-color: var(--white); background: rgba(255,255,255,0.03); }
-
-    /* Prevent 300ms tap delay */
-    button { touch-action: manipulation; }
-    input { touch-action: manipulation; }
-  }
-
-  /* Reduced motion support */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-    .dose-icon.active { animation: none; }
-    .dose-icon.active.overdrive { animation: none; }
-    body.caffeinated-party .dose-name { animation: none; }
-    body.kernel-panic .crt-wrap { animation: none; }
+  @media (max-width: 860px) {
+    .main { grid-template-columns: 1fr; }
+    .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
+    .dose-name { font-size: var(--fs-lg); letter-spacing: 6px; }
+    .dose-name.pixel-font { font-size: 28px; }
+    .freq-core { padding: 20px; }
+    .dose-icon-wrap { width: 120px; height: 120px; }
+    .intro-title { font-size: 22px; letter-spacing: 8px; }
   }
 </style>
 </head>
 <body>
-
-<canvas id="matrixCanvas"></canvas>
-
-<div id="konamiFlash">YOU FOUND IT</div>
 
 <!-- INTRO -->
 <div class="intro-screen" id="introScreen">
@@ -1345,26 +1012,26 @@
   <div class="intro-corner-bl"></div>
   <div class="intro-corner-br"></div>
   <div class="intro-top-line">MASTERBLOX LABS // EXPERIMENTAL</div>
-  <svg class="intro-logo-cup" width="80" height="80" viewBox="0 0 32 32" fill="none">
-    <rect x="8" y="4" width="16" height="2" fill="#999"/><rect x="6" y="6" width="2" height="2" fill="#999"/>
-    <rect x="24" y="6" width="2" height="2" fill="#999"/><rect x="6" y="8" width="20" height="2" fill="#999"/>
-    <rect x="6" y="10" width="2" height="12" fill="#999"/><rect x="24" y="10" width="2" height="12" fill="#999"/>
-    <rect x="26" y="12" width="2" height="6" fill="#999"/><rect x="28" y="12" width="2" height="2" fill="#999"/>
-    <rect x="28" y="16" width="2" height="2" fill="#999"/><rect x="6" y="22" width="20" height="2" fill="#999"/>
-    <rect x="8" y="24" width="16" height="2" fill="#999"/><rect x="4" y="26" width="24" height="2" fill="#999"/>
+  <svg class="intro-logo-cup" width="64" height="64" viewBox="0 0 32 32" fill="none">
+    <rect x="8" y="4" width="16" height="2" fill="#555"/><rect x="6" y="6" width="2" height="2" fill="#555"/>
+    <rect x="24" y="6" width="2" height="2" fill="#555"/><rect x="6" y="8" width="20" height="2" fill="#555"/>
+    <rect x="6" y="10" width="2" height="12" fill="#555"/><rect x="24" y="10" width="2" height="12" fill="#555"/>
+    <rect x="26" y="12" width="2" height="6" fill="#555"/><rect x="28" y="12" width="2" height="2" fill="#555"/>
+    <rect x="28" y="16" width="2" height="2" fill="#555"/><rect x="6" y="22" width="20" height="2" fill="#555"/>
+    <rect x="8" y="24" width="16" height="2" fill="#555"/><rect x="4" y="26" width="24" height="2" fill="#555"/>
   </svg>
   <div class="intro-title">CAFFEINATE<span class="intro-cursor">_</span></div>
   <div class="intro-subtitle">Neural Frequency Terminal</div>
   <div class="intro-story">
-    <p>In the <span class="era-ref">early 2000s</span>, a strange subculture spread through forums, Limewire, and file-sharing networks. Kids would lock themselves in dark rooms with headphones, load up <span class="highlight">obscure frequency programs</span>, and let <span class="highlight">layered sound waves</span> alter their state of mind. Schools panicked. Parents had no idea. The internet called it <span class="highlight">brain hacking</span>. If you remember this, you already know.</p>
-    <p>The science was always real. <span class="highlight">Two slightly different frequencies</span>, one in each ear, create a phantom third frequency your brain synchronizes to — <span class="highlight">binaural entrainment</span>, discovered in 1839, studied for its effects on focus, relaxation, and altered brainwave states. The delivery method was just ahead of its time.</p>
-    <p>This is <span class="highlight">caffeinate_</span> — the 2026 reboot. A neural frequency terminal for the ones who stayed up coding while the world slept. Like the command that keeps your machine from sleeping, this keeps <span class="highlight">you</span> from sleeping. No pills. No powders. Just frequencies, headphones, and the deadline that won't move.</p>
+    <p>In the <span class="era-ref">early internet era</span>, a strange subculture emerged on forums and file-sharing networks: <span class="highlight">frequency terminals</span>. Users would plug in headphones, load obscure audio programs, and let <span class="highlight">layered sound frequencies</span> alter their state of mind. It was raw, low-fi, and felt like hacking your own brain.</p>
+    <p>The science behind it is real. <span class="highlight">Two slightly different frequencies</span>, one in each ear, create a phantom third frequency your brain synchronizes to — a phenomenon called <span class="highlight">binaural entrainment</span>, discovered in 1839 and studied for its effects on focus, relaxation, and brainwave states.</p>
+    <p>This is <span class="highlight">caffeinate_</span> — a neural frequency terminal for the modern coder. Like the command that keeps your machine awake, this keeps <span class="highlight">you</span> awake. Just sound frequencies, headphones, and willpower. The only boost you need at 3AM when the deadline is real and the coffee ran out.</p>
   </div>
   <div class="age-gate">
     <input type="checkbox" class="age-checkbox" id="ageCheck" onchange="toggleAgeGate()">
-    <label class="age-label" for="ageCheck">I CONFIRM I AM 18+</label>
-    <button class="intro-enter" id="introEnter" onclick="enterTerminal()" disabled>ENTER_</button>
+    <label class="age-label" for="ageCheck">I CONFIRM I AM 18 YEARS OR OLDER</label>
   </div>
+  <button class="intro-enter" id="introEnter" onclick="enterTerminal()" disabled>ENTER TERMINAL</button>
   <div class="intro-disclaimer">
     Headphones required for binaural effect. This is not medical advice.
     All content is digital audio frequencies only. Caffeinate_ is inspired
@@ -1393,8 +1060,6 @@
       </div>
     </div>
     <div class="header-right">
-      <span class="session-stats" id="sessionStats"></span>
-      <button class="sfx-toggle" id="sfxToggle" onclick="toggleSfx()">SFX ON</button>
       <span><span class="live-dot"></span> FREQ ACTIVE</span>
       <span id="clock">00:00:00</span>
     </div>
@@ -1422,22 +1087,21 @@
       </div>
 
       <button class="master-btn" id="masterBtn" onclick="toggleDose()">START DOSE</button>
-      <div class="post-dose-area" id="postDoseArea" style="display:none"></div>
     </div>
 
     <div class="right-panel">
       <div class="panel-section">
         <div class="panel-title">SELECT DOSE</div>
         <div class="dose-grid">
-          <button class="dose-btn selected" data-dose="espresso" data-hover-hz="800" onclick="selectDose(this)">ESPRESSO <span class="dose-hz">40HZ γ</span></button>
-          <button class="dose-btn" data-dose="redbull" data-hover-hz="900" onclick="selectDose(this)">RED BULL <span class="dose-hz">18HZ β</span></button>
-          <button class="dose-btn" data-dose="coldbrew" data-hover-hz="700" onclick="selectDose(this)">COLD BREW <span class="dose-hz">25HZ β</span></button>
-          <button class="dose-btn" data-dose="yerba" data-hover-hz="600" onclick="selectDose(this)">YERBA MATE <span class="dose-hz">12HZ α</span></button>
-          <button class="dose-btn" data-dose="copium" data-hover-hz="500" onclick="selectDose(this)">COPIUM <span class="dose-hz">6HZ θ</span></button>
-          <button class="dose-btn" data-dose="sudo" data-hover-hz="1000" onclick="selectDose(this)">sudo rm -sleep <span class="dose-hz">50HZ γ+</span></button>
-          <button class="dose-btn" data-dose="stackoverflow" data-hover-hz="850" onclick="selectDose(this)">STACK OVERFLOW <span class="dose-hz">35HZ γ</span></button>
-          <button class="dose-btn" data-dose="workslocal" data-hover-hz="750" onclick="selectDose(this)">WORKS ON MY MACHINE <span class="dose-hz">22HZ β</span></button>
-          <button class="dose-btn cocktail" data-dose="caffeinated" data-hover-hz="1200" onclick="selectDose(this)">caffeinate_d <span class="dose-hz">∞ HZ ALL</span></button>
+          <button class="dose-btn selected" data-dose="espresso" onclick="selectDose(this)">ESPRESSO <span class="dose-hz">40HZ γ</span></button>
+          <button class="dose-btn" data-dose="redbull" onclick="selectDose(this)">RED BULL <span class="dose-hz">18HZ β</span></button>
+          <button class="dose-btn" data-dose="coldbrew" onclick="selectDose(this)">COLD BREW <span class="dose-hz">25HZ β</span></button>
+          <button class="dose-btn" data-dose="yerba" onclick="selectDose(this)">YERBA MATE <span class="dose-hz">12HZ α</span></button>
+          <button class="dose-btn" data-dose="copium" onclick="selectDose(this)">COPIUM <span class="dose-hz">6HZ θ</span></button>
+          <button class="dose-btn" data-dose="sudo" onclick="selectDose(this)">sudo rm -sleep <span class="dose-hz">50HZ γ+</span></button>
+          <button class="dose-btn" data-dose="stackoverflow" onclick="selectDose(this)">STACK OVERFLOW <span class="dose-hz">35HZ γ</span></button>
+          <button class="dose-btn" data-dose="workslocal" onclick="selectDose(this)">WORKS ON MY MACHINE <span class="dose-hz">22HZ β</span></button>
+          <button class="dose-btn cocktail" data-dose="caffeinated" onclick="selectDose(this)">caffeinate_d <span class="dose-hz">∞ HZ ALL</span></button>
         </div>
       </div>
 
@@ -1502,112 +1166,6 @@
 // CAFFEINATE_ v0.6
 // ============================================
 
-// SOUND FX SYSTEM
-let sfxEnabled = true;
-let uiSoundCtx = null;
-
-function getUiSoundCtx() {
-  if (!uiSoundCtx || uiSoundCtx.state === 'closed') {
-    uiSoundCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (uiSoundCtx.state === 'suspended') uiSoundCtx.resume();
-  return uiSoundCtx;
-}
-
-function toggleSfx() {
-  sfxEnabled = !sfxEnabled;
-  const btn = document.getElementById('sfxToggle');
-  btn.textContent = sfxEnabled ? 'SFX ON' : 'SFX OFF';
-  btn.classList.toggle('muted', !sfxEnabled);
-}
-
-function playClickSound() {
-  if (!sfxEnabled) return;
-  const ctx = getUiSoundCtx();
-  const t = ctx.currentTime;
-  // Sci-fi blip: short sine sweep down
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(1400, t);
-  osc.frequency.exponentialRampToValueAtTime(400, t + 0.06);
-  gain.gain.setValueAtTime(0.06, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(t); osc.stop(t + 0.1);
-}
-
-function playHoverSound() {
-  if (!sfxEnabled) return;
-  const ctx = getUiSoundCtx();
-  const t = ctx.currentTime;
-  // Subtle sci-fi tick: very quiet high sine
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = 2400;
-  gain.gain.setValueAtTime(0.015, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(t); osc.stop(t + 0.03);
-}
-
-function playEnterSound() {
-  if (!sfxEnabled) return;
-  const ctx = getUiSoundCtx();
-  const t = ctx.currentTime;
-  // Sci-fi boot sequence: ascending tones
-  [0, 0.08, 0.16, 0.28].forEach((delay, i) => {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.value = 300 + (i * 200);
-    gain.gain.setValueAtTime(0.04, t + delay);
-    gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.12);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(t + delay); osc.stop(t + delay + 0.12);
-  });
-}
-
-function playDoseHoverSound(hz) {
-  if (!sfxEnabled) return;
-  const ctx = getUiSoundCtx();
-  const t = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = hz;
-  gain.gain.setValueAtTime(0.03, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(t); osc.stop(t + 0.05);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', playClickSound);
-    // Dose buttons get per-dose pitch, others get default hover
-    if (btn.dataset.hoverHz) {
-      btn.addEventListener('mouseenter', () => playDoseHoverSound(parseInt(btn.dataset.hoverHz)));
-    } else {
-      btn.addEventListener('mouseenter', playHoverSound);
-    }
-  });
-});
-
-// Mobile audio fix: pre-create and warm up AudioContexts on first user gesture
-function warmUpAudio() {
-  // Create the main audio context early so it's ready when needed
-  if (!audioCtx || audioCtx.state === 'closed') {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  if (noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
-  if (uiSoundCtx && uiSoundCtx.state === 'suspended') uiSoundCtx.resume();
-}
-document.addEventListener('touchstart', warmUpAudio, { once: true });
-document.addEventListener('click', warmUpAudio, { once: true });
-
 // AGE GATE
 function toggleAgeGate() {
   const btn = document.getElementById('introEnter');
@@ -1618,19 +1176,8 @@ function toggleAgeGate() {
 
 function enterTerminal() {
   if (!document.getElementById('ageCheck').checked) return;
-  warmUpAudio();
-  playEnterSound();
   document.getElementById('introScreen').classList.add('hidden');
-  setTimeout(() => {
-    document.getElementById('introScreen').style.display = 'none';
-    // Time-of-day dose suggestion
-    const hr = new Date().getHours();
-    if (hr >= 0 && hr < 6) addLog('SYS', 'LATE NIGHT OPERATOR DETECTED // SUGGESTED: caffeinate_d', 'warn');
-    else if (hr < 10) addLog('SYS', 'MORNING SESSION // SUGGESTED: ESPRESSO', 'active');
-    else if (hr < 15) addLog('SYS', 'MIDDAY FOCUS // SUGGESTED: COLD BREW', 'active');
-    else if (hr < 19) addLog('SYS', 'AFTERNOON DRIFT // SUGGESTED: YERBA MATE', 'active');
-    else addLog('SYS', 'EVENING OPS // SUGGESTED: RED BULL', 'active');
-  }, 800);
+  setTimeout(() => document.getElementById('introScreen').style.display = 'none', 800);
 }
 
 // 3D ICON HTML TEMPLATES
@@ -1821,50 +1368,36 @@ function createSfxLayer(ctx, dest) {
   sh.connect(shf).connect(shg).connect(dest); sh.start(); sfxOscillators.push(sh);
 }
 
-function getOrCreateAudioCtx() {
-  if (!audioCtx || audioCtx.state === 'closed') {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  return audioCtx;
-}
-
 function startDose() {
   const d = DOSES[currentDose];
-  getOrCreateAudioCtx();
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.3;
   oscillators=[]; gainNodes=[]; sfxOscillators=[];
-
-  // Connect analyser to destination once
-  analyser.connect(audioCtx.destination);
 
   const layers = d.cocktail ? d.layers : [{freq:d.baseFreq, binaural:d.binauralHz}];
   layers.forEach(l => {
     const oL=audioCtx.createOscillator(), gL=audioCtx.createGain(), pL=audioCtx.createStereoPanner();
-    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.25)/layers.length; pL.pan.value=-1;
-    oL.connect(gL).connect(pL).connect(analyser); oL.start();
+    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.2)/layers.length; pL.pan.value=-1;
+    oL.connect(gL).connect(pL).connect(analyser).connect(audioCtx.destination); oL.start();
     oscillators.push(oL); gainNodes.push(gL);
     const oR=audioCtx.createOscillator(), gR=audioCtx.createGain(), pR=audioCtx.createStereoPanner();
-    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.25)/layers.length; pR.pan.value=1;
-    oR.connect(gR).connect(pR).connect(analyser); oR.start();
+    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.2)/layers.length; pR.pan.value=1;
+    oR.connect(gR).connect(pR).connect(analyser).connect(audioCtx.destination); oR.start();
     oscillators.push(oR); gainNodes.push(gR);
   });
 
   noiseSource=audioCtx.createBufferSource(); noiseSource.buffer=createNoiseBuffer(audioCtx); noiseSource.loop=true;
   noiseGainNode=audioCtx.createGain(); noiseGainNode.gain.value=d.noiseGain*intensity;
   const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=d.baseFreq||200; bp.Q.value=0.5;
-  noiseSource.connect(bp).connect(noiseGainNode).connect(analyser); noiseSource.start();
+  noiseSource.connect(bp).connect(noiseGainNode).connect(analyser); noiseGainNode.connect(audioCtx.destination); noiseSource.start();
 
   const sub=audioCtx.createOscillator(), subG=audioCtx.createGain();
-  sub.type='sine'; sub.frequency.value=d.binauralHz||30; subG.gain.value=intensity*0.04;
-  sub.connect(subG).connect(analyser); sub.start();
+  sub.type='sine'; sub.frequency.value=d.binauralHz||30; subG.gain.value=intensity*0.03;
+  sub.connect(subG).connect(analyser); subG.connect(audioCtx.destination); sub.start();
   oscillators.push(sub); gainNodes.push(subG);
 
-  createSfxLayer(audioCtx, analyser);
+  createSfxLayer(audioCtx, audioCtx.destination);
 
-  // Hide any previous post-dose UI
-  document.getElementById('postDoseArea').style.display = 'none';
-  document.getElementById('postDoseArea').innerHTML = '';
   isPlaying=true; sessionTime=0; abuseTriggered=false;
   document.getElementById('masterBtn').textContent='STOP DOSE';
   document.getElementById('masterBtn').classList.add('active');
@@ -1874,20 +1407,15 @@ function startDose() {
   if (d.cocktail) icon.classList.add('overdrive');
   document.getElementById('waveformContainer').setAttribute('data-status','ACTIVE');
 
-  if (d.cocktail) { document.body.classList.add('caffeinated-party'); startBinaryRain(); }
-
   addLog('SYS',`${d.name} STARTED // ${d.cocktail?'MULTI-FREQ':d.binauralHz+'HZ '+d.type}`,'active');
   if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
   addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
-
-  // Combo stack hint if noise is already active
-  if (activeNoiseType) logComboHint(currentDose, activeNoiseType);
 
   if (timerSeconds>0) {
     timerRemaining=timerSeconds;
     timerInterval=setInterval(()=>{ timerRemaining--; updateTimerDisplay(); if(timerRemaining<=0){stopDose();addLog('SYS','SESSION COMPLETE.','active');} },1000);
   }
-  sessionInterval=setInterval(()=>{sessionTime++;checkAbuseLevel();incrementExposure();},1000);
+  sessionInterval=setInterval(()=>{sessionTime++;checkAbuseLevel();},1000);
   let mi=0;
   msgInterval=setInterval(()=>{ if(!abuseTriggered) addLog('NEURAL',d.messages[mi%d.messages.length],'active'); mi++; },12000);
   drawWaveform();
@@ -1908,23 +1436,13 @@ function checkAbuseLevel() {
 }
 
 function stopDose() {
-  // Capture waveform before killing audio
-  const sigData = captureWaveformSignature();
-  const stoppedDose = currentDose;
-  const stoppedSessionTime = sessionTime;
-
-  oscillators.forEach(o=>{try{o.stop();}catch(e){}});
-  sfxOscillators.forEach(o=>{try{o.stop();}catch(e){}});
-  if(noiseSource){try{noiseSource.stop();}catch(e){}}
-  if(analyser){try{analyser.disconnect();}catch(e){}}
+  if(audioCtx){audioCtx.close().catch(()=>{});audioCtx=null;}
   oscillators=[];gainNodes=[];sfxOscillators=[];noiseSource=null;noiseGainNode=null;
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   if(msgInterval){clearInterval(msgInterval);msgInterval=null;}
   if(sessionInterval){clearInterval(sessionInterval);sessionInterval=null;}
   if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
   isPlaying=false;
-  document.body.classList.remove('caffeinated-party');
-  stopBinaryRain();
   document.getElementById('masterBtn').textContent='START DOSE';
   document.getElementById('masterBtn').classList.remove('active');
   document.getElementById('doseName').classList.remove('active');
@@ -1933,12 +1451,8 @@ function stopDose() {
   document.getElementById('waveformContainer').setAttribute('data-status','STANDBY');
   document.getElementById('abuseIndicator').textContent='';
   document.getElementById('abuseIndicator').className='abuse-indicator';
-  lastCombo = '';
   addLog('SYS','DOSE STOPPED. BASELINE RESTORED.','active');
   drawStaticWaveform();
-
-  // Show post-dose UI (card + signature)
-  showPostDoseUI(stoppedDose, stoppedSessionTime, sigData);
 }
 
 // WAVEFORM (same noisy renderer)
@@ -1991,7 +1505,7 @@ function updateSliderTouch(e){const r=document.getElementById('sliderTrack').get
 function applyIntensity(p){
   intensity=p;document.getElementById('sliderFill').style.width=(p*100)+'%';document.getElementById('intensityVal').textContent=Math.round(p*100)+'%';
   if(isPlaying){const d=DOSES[currentDose],l=d.cocktail?d.layers:[{freq:d.baseFreq,binaural:d.binauralHz}];
-  gainNodes.forEach(g=>{if(g&&g.gain)g.gain.setValueAtTime((intensity*0.25)/l.length,audioCtx.currentTime);});
+  gainNodes.forEach(g=>{if(g&&g.gain)g.gain.setValueAtTime((intensity*0.2)/l.length,audioCtx.currentTime);});
   if(noiseGainNode)noiseGainNode.gain.setValueAtTime(d.noiseGain*intensity,audioCtx.currentTime);checkAbuseLevel();}
 }
 
@@ -2003,30 +1517,6 @@ function addLog(tag,msg,cls=''){
   e.className=`log-entry ${cls}`;e.innerHTML=`<span class="timestamp">[${tag}]</span> ${msg}`;
   log.appendChild(e);log.scrollTop=log.scrollHeight;
   const entries=log.querySelectorAll('.log-entry');if(entries.length>60)entries[0].remove();
-}
-
-// ============================================
-// COMBO STACK HINTS
-// ============================================
-let lastCombo = '';
-function logComboHint(doseKey, noiseType) {
-  const combo = doseKey + '+' + noiseType;
-  if (combo === lastCombo) return; // Don't repeat same combo
-  lastCombo = combo;
-  const d = DOSES[doseKey];
-  if (d && d.cocktail) {
-    addLog('SYS', 'COMBO: caffeinate_d + ' + noiseType.toUpperCase() + ' NOISE // YOU ABSOLUTE MANIAC', 'warn');
-  } else if (doseKey === 'espresso' && noiseType === 'brown') {
-    addLog('SYS', 'COMBO: ESPRESSO + BROWN NOISE // DEEP FOCUS STACK DETECTED', 'active');
-  } else if (doseKey === 'redbull' && noiseType === 'white') {
-    addLog('SYS', 'COMBO: RED BULL + WHITE NOISE // HYPERDRIVE CONFIGURATION', 'active');
-  } else if (doseKey === 'coldbrew' && noiseType === 'pink') {
-    addLog('SYS', 'COMBO: COLD BREW + PINK NOISE // FLOW STATE PROTOCOL', 'active');
-  } else if (doseKey === 'yerba' && noiseType === 'brown') {
-    addLog('SYS', 'COMBO: YERBA MATE + BROWN NOISE // ZEN CODER MODE', 'active');
-  } else {
-    addLog('SYS', 'COMBO DETECTED // CUSTOM STACK ACTIVE', 'active');
-  }
 }
 
 // ============================================
@@ -2096,10 +1586,7 @@ function toggleNoise(type, btn) {
   document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  if (!noiseCtx || noiseCtx.state === 'closed') {
-    noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (noiseCtx.state === 'suspended') noiseCtx.resume();
+  noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
 
   let buffer;
   if (type === 'white') buffer = createWhiteNoiseBuffer(noiseCtx);
@@ -2140,20 +1627,18 @@ function toggleNoise(type, btn) {
     brown: 'DEEP RUMBLE // LOW FREQUENCY FOCUS'
   };
   addLog('NOISE', `${labels[type]} ACTIVE // ${descs[type]}`, 'active');
-
-  // Combo stack hint
-  if (isPlaying) logComboHint(currentDose, type);
 }
 
 function stopNoise() {
-  if (ambientNoiseSource) { try { ambientNoiseSource.stop(); } catch(e) {} }
-  if (ambientNoiseGain) { try { ambientNoiseGain.disconnect(); } catch(e) {} }
+  if (noiseCtx) {
+    noiseCtx.close().catch(() => {});
+    noiseCtx = null;
+  }
   ambientNoiseSource = null;
   ambientNoiseGain = null;
   const prevType = activeNoiseType;
   activeNoiseType = null;
   document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
-  lastCombo = '';
   if (prevType) addLog('NOISE', `${prevType.toUpperCase()} NOISE STOPPED`, 'active');
 }
 
@@ -2185,427 +1670,6 @@ function applyNoiseVolume(pct) {
   if (ambientNoiseGain) {
     ambientNoiseGain.gain.setValueAtTime(noiseVolume * 0.5, noiseCtx.currentTime);
   }
-}
-
-// ============================================
-// BINARY RAIN (caffeinate_d exclusive)
-// ============================================
-let rainAnimFrame = null;
-
-function startBinaryRain() {
-  const canvas = document.getElementById('matrixCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  const fontSize = 14;
-  const columns = Math.floor(canvas.width / fontSize);
-  const drops = new Array(columns).fill(0);
-  const speeds = new Array(columns).fill(0).map(() => 0.3 + Math.random() * 0.7);
-
-  function draw() {
-    // Fade trail
-    ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.font = fontSize + 'px "Share Tech Mono", monospace';
-
-    for (let i = 0; i < columns; i++) {
-      const char = Math.random() > 0.5 ? '1' : '0';
-      const y = drops[i] * fontSize;
-      // Opacity fades as it falls — brighter at top, ghostly at bottom
-      const progress = y / canvas.height;
-      const alpha = Math.max(0.01, 0.06 - progress * 0.04);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-      ctx.fillText(char, i * fontSize, y);
-
-      if (y > canvas.height && Math.random() > 0.98) {
-        drops[i] = 0;
-      }
-      drops[i] += speeds[i];
-    }
-
-    rainAnimFrame = requestAnimationFrame(draw);
-  }
-
-  // Handle resize
-  canvas._resizeHandler = () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  };
-  window.addEventListener('resize', canvas._resizeHandler);
-
-  draw();
-}
-
-function stopBinaryRain() {
-  if (rainAnimFrame) { cancelAnimationFrame(rainAnimFrame); rainAnimFrame = null; }
-  const canvas = document.getElementById('matrixCanvas');
-  if (canvas._resizeHandler) {
-    window.removeEventListener('resize', canvas._resizeHandler);
-    canvas._resizeHandler = null;
-  }
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
-
-// ============================================
-// FEATURE 3: SESSION COUNTER + ADDICTION
-// ============================================
-const STORAGE_SESSIONS = 'caffeinate_sessions';
-const STORAGE_SECONDS = 'caffeinate_seconds';
-const STORAGE_FIRST = 'caffeinate_first_visit';
-
-function initSessionTracker() {
-  if (!localStorage.getItem(STORAGE_FIRST)) {
-    localStorage.setItem(STORAGE_FIRST, new Date().toISOString());
-  }
-  let sessions = parseInt(localStorage.getItem(STORAGE_SESSIONS) || '0', 10);
-  sessions++;
-  localStorage.setItem(STORAGE_SESSIONS, sessions);
-  updateSessionDisplay();
-
-  // Welcome back message for addicts
-  const totalSec = parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
-  if (totalSec >= 18000) { // 5hr+
-    setTimeout(() => addLog('SYS', 'WELCOME BACK, OPERATOR. WE MISSED YOU.', 'warn'), 1500);
-  }
-}
-
-function incrementExposure() {
-  let totalSec = parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
-  totalSec++;
-  localStorage.setItem(STORAGE_SECONDS, totalSec);
-  updateSessionDisplay();
-}
-
-function getSessionCount() {
-  return parseInt(localStorage.getItem(STORAGE_SESSIONS) || '1', 10);
-}
-
-function getTotalSeconds() {
-  return parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
-}
-
-function formatExposure(sec) {
-  const h = Math.floor(sec / 3600);
-  const m = Math.floor((sec % 3600) / 60);
-  return String(h).padStart(2, '0') + 'H ' + String(m).padStart(2, '0') + 'M';
-}
-
-function updateSessionDisplay() {
-  const el = document.getElementById('sessionStats');
-  const sessions = getSessionCount();
-  const totalSec = getTotalSeconds();
-  el.textContent = 'SESSION: ' + String(sessions).padStart(3, '0') + ' // EXPOSURE: ' + formatExposure(totalSec);
-
-  // Addiction tier coloring
-  const totalMin = totalSec / 60;
-  if (totalMin < 10) el.style.color = '#333';
-  else if (totalMin < 60) el.style.color = '#555';
-  else if (totalMin < 300) {
-    el.style.color = '#777';
-    document.querySelectorAll('.corner-tl,.corner-tr,.corner-bl,.corner-br').forEach(c => {
-      c.style.borderColor = '#333';
-      c.style.boxShadow = '0 0 6px rgba(255,255,255,0.05)';
-    });
-  } else {
-    el.style.color = '#999';
-    document.querySelectorAll('.corner-tl,.corner-tr,.corner-bl,.corner-br').forEach(c => {
-      c.style.borderColor = '#444';
-      c.style.boxShadow = '0 0 10px rgba(255,255,255,0.08)';
-    });
-  }
-}
-
-// Init on load
-initSessionTracker();
-
-// ============================================
-// FEATURE 5: NEURAL SIGNATURE WAVEFORM CAPTURE
-// ============================================
-function captureWaveformSignature() {
-  const src = document.getElementById('waveform');
-  if (!src || src.width === 0) return null;
-  try {
-    const cap = document.createElement('canvas');
-    cap.width = src.width;
-    cap.height = src.height;
-    cap.getContext('2d').drawImage(src, 0, 0);
-    return cap;
-  } catch(e) { return null; }
-}
-
-// ============================================
-// FEATURE 4 + 5: POST-DOSE UI
-// ============================================
-let postDoseTimeout = null;
-let sigFadeTimeout = null;
-
-function showPostDoseUI(doseKey, doseSessionTime, sigCanvas) {
-  const area = document.getElementById('postDoseArea');
-  area.innerHTML = '';
-  area.style.display = 'flex';
-
-  const d = DOSES[doseKey];
-  const sessionNum = getSessionCount();
-
-  // Buttons row
-  const btns = document.createElement('div');
-  btns.className = 'post-dose-btns';
-
-  const cardBtn = document.createElement('button');
-  cardBtn.className = 'post-dose-btn';
-  cardBtn.textContent = 'GENERATE DOSE CARD';
-  cardBtn.onclick = () => generateDoseCard(doseKey, doseSessionTime, sessionNum);
-  btns.appendChild(cardBtn);
-
-  const copyBtn = document.createElement('button');
-  copyBtn.className = 'post-dose-btn';
-  copyBtn.textContent = 'COPY LINK';
-  copyBtn.onclick = () => {
-    navigator.clipboard.writeText('caffeinate.club').then(() => {
-      copyBtn.textContent = 'COPIED_';
-      setTimeout(() => { copyBtn.textContent = 'COPY LINK'; }, 2000);
-    });
-  };
-  btns.appendChild(copyBtn);
-
-  area.appendChild(btns);
-
-  // Neural signature
-  if (sigCanvas) {
-    const wrap = document.createElement('div');
-    wrap.className = 'neural-sig-wrap';
-    const label = document.createElement('div');
-    label.className = 'neural-sig-label';
-    label.textContent = 'YOUR NEURAL SIGNATURE // SESSION #' + String(sessionNum).padStart(3, '0');
-    wrap.appendChild(label);
-
-    const display = document.createElement('canvas');
-    display.width = sigCanvas.width;
-    display.height = sigCanvas.height;
-    display.getContext('2d').drawImage(sigCanvas, 0, 0);
-    wrap.appendChild(display);
-
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'post-dose-btn';
-    saveBtn.style.marginTop = '6px';
-    saveBtn.textContent = 'SAVE SIGNATURE';
-    saveBtn.onclick = () => {
-      display.toBlob(blob => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'caffeinate-signature-' + doseKey + '-' + Date.now() + '.png';
-        a.click();
-        URL.revokeObjectURL(a.href);
-      });
-    };
-    wrap.appendChild(saveBtn);
-    area.appendChild(wrap);
-
-    // Fade out after 15s
-    sigFadeTimeout = setTimeout(() => {
-      wrap.classList.add('fading');
-      setTimeout(() => wrap.remove(), 2000);
-    }, 15000);
-  }
-
-  // Auto-hide buttons after 10s
-  if (postDoseTimeout) clearTimeout(postDoseTimeout);
-  postDoseTimeout = setTimeout(() => {
-    btns.style.transition = 'opacity 1s ease';
-    btns.style.opacity = '0';
-    setTimeout(() => btns.remove(), 1000);
-  }, 10000);
-}
-
-function generateDoseCard(doseKey, doseSessionTime, sessionNum) {
-  const d = DOSES[doseKey];
-  const c = document.createElement('canvas');
-  c.width = 1200; c.height = 630;
-  const ctx = c.getContext('2d');
-
-  // Background
-  ctx.fillStyle = '#0A0A0A';
-  ctx.fillRect(0, 0, 1200, 630);
-
-  // Corner brackets
-  ctx.strokeStyle = '#222';
-  ctx.lineWidth = 2;
-  const bk = 30;
-  ctx.beginPath();
-  ctx.moveTo(20, 20 + bk); ctx.lineTo(20, 20); ctx.lineTo(20 + bk, 20);
-  ctx.moveTo(1180 - bk, 20); ctx.lineTo(1180, 20); ctx.lineTo(1180, 20 + bk);
-  ctx.moveTo(1180, 610 - bk); ctx.lineTo(1180, 610); ctx.lineTo(1180 - bk, 610);
-  ctx.moveTo(20 + bk, 610); ctx.lineTo(20, 610); ctx.lineTo(20, 610 - bk);
-  ctx.stroke();
-
-  // Scanline overlay
-  ctx.fillStyle = 'rgba(255,255,255,0.008)';
-  for (let y = 0; y < 630; y += 4) ctx.fillRect(0, y, 1200, 2);
-
-  // Logo
-  ctx.font = '18px "Share Tech Mono", monospace';
-  ctx.fillStyle = '#555';
-  ctx.textAlign = 'center';
-  ctx.letterSpacing = '6px';
-  ctx.fillText('CAFFEINATE_', 600, 80);
-
-  // "DOSE ADMINISTERED"
-  ctx.font = '12px "Share Tech Mono", monospace';
-  ctx.fillStyle = '#333';
-  ctx.fillText('DOSE ADMINISTERED', 600, 130);
-
-  // Dose name
-  ctx.font = d.pixelFont ? '42px "Press Start 2P", monospace' : '48px "Share Tech Mono", monospace';
-  ctx.fillStyle = '#E0E0E0';
-  ctx.fillText(d.name, 600, 240);
-
-  // Frequency info
-  ctx.font = '14px "Share Tech Mono", monospace';
-  ctx.fillStyle = '#666';
-  if (d.cocktail) {
-    ctx.fillText('FREQUENCY: MULTI-LAYER // BINAURAL: ALL BANDS ∞', 600, 310);
-  } else {
-    ctx.fillText('FREQUENCY: ' + d.baseFreq + 'Hz / ' + (d.baseFreq + d.binauralHz) + 'Hz // BINAURAL: ' + d.binauralHz + 'Hz ' + d.type, 600, 310);
-  }
-
-  // Duration
-  const dm = Math.floor(doseSessionTime / 60);
-  const ds = doseSessionTime % 60;
-  const dh = Math.floor(doseSessionTime / 3600);
-  const durStr = String(dh).padStart(2,'0') + ':' + String(dm % 60).padStart(2,'0') + ':' + String(ds).padStart(2,'0');
-  ctx.fillStyle = '#555';
-  ctx.fillText('DURATION: ' + durStr, 600, 370);
-
-  // Session number
-  ctx.fillText('SESSION: #' + String(sessionNum).padStart(3, '0'), 600, 410);
-
-  // Footer
-  ctx.font = '11px "Share Tech Mono", monospace';
-  ctx.fillStyle = '#333';
-  ctx.fillText('caffeinate.club', 600, 570);
-
-  // Download
-  c.toBlob(blob => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'caffeinate-dose-' + doseKey + '-' + Date.now() + '.png';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-}
-
-// ============================================
-// FEATURE 2: KONAMI CODE EASTER EGG
-// ============================================
-const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-let konamiIdx = 0;
-let konamiActive = false;
-
-document.addEventListener('keydown', (e) => {
-  if (konamiActive) return;
-  const expected = KONAMI[konamiIdx];
-  if (e.key === expected || e.key.toLowerCase() === expected) {
-    konamiIdx++;
-    if (konamiIdx >= KONAMI.length) {
-      konamiIdx = 0;
-      triggerKernelPanic();
-    }
-  } else {
-    konamiIdx = 0;
-  }
-});
-
-function triggerKernelPanic() {
-  if (konamiActive || isPlaying) return;
-  konamiActive = true;
-
-  // Flash "YOU FOUND IT"
-  const flash = document.getElementById('konamiFlash');
-  flash.classList.add('active');
-  setTimeout(() => flash.classList.remove('active'), 1500);
-
-  // After flash, start chaos
-  setTimeout(() => {
-    // Start all 8 frequencies simultaneously
-    getOrCreateAudioCtx();
-    analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048;
-    analyser.connect(audioCtx.destination);
-    oscillators = []; gainNodes = [];
-
-    const allDoses = ['espresso','redbull','coldbrew','yerba','copium','sudo','stackoverflow','workslocal'];
-    allDoses.forEach(dk => {
-      const dd = DOSES[dk];
-      const oL = audioCtx.createOscillator(), gL = audioCtx.createGain(), pL = audioCtx.createStereoPanner();
-      oL.type = 'sine'; oL.frequency.value = dd.baseFreq; gL.gain.value = 0.02; pL.pan.value = -1;
-      oL.connect(gL).connect(pL).connect(analyser); oL.start();
-      oscillators.push(oL); gainNodes.push(gL);
-      const oR = audioCtx.createOscillator(), gR = audioCtx.createGain(), pR = audioCtx.createStereoPanner();
-      oR.type = 'sine'; oR.frequency.value = dd.baseFreq + dd.binauralHz; gR.gain.value = 0.02; pR.pan.value = 1;
-      oR.connect(gR).connect(pR).connect(analyser); oR.start();
-      oscillators.push(oR); gainNodes.push(gR);
-    });
-
-    isPlaying = true;
-    document.body.classList.add('kernel-panic');
-    document.getElementById('masterBtn').textContent = 'KERNEL PANIC';
-    document.getElementById('masterBtn').classList.add('active');
-    document.getElementById('waveformContainer').setAttribute('data-status', 'PANIC');
-
-    addLog('CRITICAL', '>>> KERNEL PANIC: ALL FREQUENCIES ACTIVE <<<', 'critical');
-
-    // Rapid name cycling
-    const doseNames = Object.values(DOSES).map(d => d.name);
-    let nameIdx = 0;
-    const nameEl = document.getElementById('doseName');
-    const nameCycle = setInterval(() => {
-      nameEl.textContent = doseNames[nameIdx % doseNames.length];
-      nameIdx++;
-    }, 100);
-
-    // Flood error messages
-    const panicMsgs = [
-      'STACK OVERFLOW IN NEURAL CORTEX',
-      'SEGFAULT AT 0xDEADBEEF',
-      'FREQUENCY COLLISION DETECTED',
-      'BRAINWAVE BUFFER OVERFLOW',
-      'CONSCIOUSNESS.EXE HAS STOPPED',
-      'ATTEMPTING ROLLBACK... FAILED',
-      'DOPAMINE LEVELS: NaN',
-      'MEMORY LEAK IN HIPPOCAMPUS',
-      'KERNEL MODULE: sleep.ko CORRUPTED',
-      'ALL WATCHDOGS UNRESPONSIVE',
-      'EMERGENCY: CTRL+C DISABLED',
-      'RECURSIVE THOUGHT LOOP DETECTED'
-    ];
-    const msgFlood = setInterval(() => {
-      addLog('PANIC', panicMsgs[Math.floor(Math.random() * panicMsgs.length)], 'critical');
-    }, 500);
-
-    drawWaveform();
-
-    // Auto-stop after 30s
-    setTimeout(() => {
-      clearInterval(nameCycle);
-      clearInterval(msgFlood);
-      document.body.classList.remove('kernel-panic');
-      oscillators.forEach(o=>{try{o.stop();}catch(e){}});
-      if(analyser){try{analyser.disconnect();}catch(e){}}
-      oscillators = []; gainNodes = [];
-      if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
-      isPlaying = false;
-      nameEl.textContent = DOSES[currentDose].name;
-      document.getElementById('masterBtn').textContent = 'START DOSE';
-      document.getElementById('masterBtn').classList.remove('active');
-      document.getElementById('waveformContainer').setAttribute('data-status', 'STANDBY');
-      addLog('CRITICAL', 'SYSTEM OVERLOAD // EMERGENCY SHUTDOWN', 'critical');
-      addLog('SYS', 'BASELINE RESTORED. DO NOT REPEAT.', 'warn');
-      drawStaticWaveform();
-      konamiActive = false;
-    }, 30000);
-  }, 1500);
 }
 </script>
 </body>
