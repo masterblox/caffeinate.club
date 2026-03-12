@@ -995,6 +995,52 @@
   .corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
   .corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
 
+  /* CAFFEINATE_D GLITCH PARTY MODE */
+  @keyframes glitch-shake {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-3px, 2px); }
+    20% { transform: translate(3px, -2px); }
+    30% { transform: translate(-2px, -3px); }
+    40% { transform: translate(2px, 3px); }
+    50% { transform: translate(-3px, -1px); }
+    60% { transform: translate(3px, 1px); }
+    70% { transform: translate(-1px, 3px); }
+    80% { transform: translate(1px, -3px); }
+    90% { transform: translate(-2px, 2px); }
+    100% { transform: translate(0,0); }
+  }
+  @keyframes glitch-color {
+    0% { filter: hue-rotate(0deg); }
+    25% { filter: hue-rotate(90deg) brightness(1.3); }
+    50% { filter: hue-rotate(180deg) brightness(1.1); }
+    75% { filter: hue-rotate(270deg) brightness(1.4); }
+    100% { filter: hue-rotate(360deg); }
+  }
+  @keyframes glitch-scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+  }
+  body.caffeinated-party .crt-wrap {
+    animation: glitch-shake 0.15s linear infinite, glitch-color 3s linear infinite;
+  }
+  body.caffeinated-party::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 1px,
+      rgba(255,255,255,0.03) 1px,
+      rgba(255,255,255,0.03) 2px
+    );
+    animation: glitch-scanline 0.5s linear infinite;
+    pointer-events: none;
+    z-index: 9998;
+  }
+  body.caffeinated-party .header {
+    border-color: #555;
+    box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  }
+
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; }
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
@@ -1002,7 +1048,7 @@
     .dose-name.pixel-font { font-size: 28px; }
     .freq-core { padding: 20px; }
     .dose-icon-wrap { width: 120px; height: 120px; }
-    .intro-title { font-size: 22px; letter-spacing: 8px; }
+    .intro-title { font-size: 26px; letter-spacing: 8px; }
   }
 </style>
 </head>
@@ -1120,7 +1166,7 @@
       </div>
 
       <div class="panel-section noise-section">
-        <div class="panel-title">AMBIENT NOISE <span class="noise-independent">(INDEPENDENT)</span></div>
+        <div class="panel-title">WHITE NOISE <span class="noise-independent">(INDEPENDENT — STACK OR USE SOLO)</span></div>
         <div class="noise-types">
           <button class="noise-btn" data-noise="white" onclick="toggleNoise('white',this)">WHITE</button>
           <button class="noise-btn" data-noise="pink" onclick="toggleNoise('pink',this)">PINK</button>
@@ -1169,6 +1215,43 @@
 // CAFFEINATE_ v0.6
 // ============================================
 
+// SOUND FX SYSTEM
+const fxAudio = new Audio('FX.mp4');
+fxAudio.volume = 0.5;
+
+function playClickSound() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.value = 800;
+  gain.gain.value = 0.08;
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime + 0.08);
+  setTimeout(() => ctx.close(), 200);
+}
+
+function playHoverSound() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = 1200;
+  gain.gain.value = 0.03;
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(); osc.stop(ctx.currentTime + 0.04);
+  setTimeout(() => ctx.close(), 150);
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', playClickSound);
+    btn.addEventListener('mouseenter', playHoverSound);
+  });
+});
+
 // AGE GATE
 function toggleAgeGate() {
   const btn = document.getElementById('introEnter');
@@ -1179,6 +1262,8 @@ function toggleAgeGate() {
 
 function enterTerminal() {
   if (!document.getElementById('ageCheck').checked) return;
+  fxAudio.currentTime = 0;
+  fxAudio.play().catch(() => {});
   document.getElementById('introScreen').classList.add('hidden');
   setTimeout(() => document.getElementById('introScreen').style.display = 'none', 800);
 }
@@ -1339,6 +1424,8 @@ function selectDose(btn) {
     document.getElementById('freqB').textContent = d.binauralHz + ' HZ';
   }
 
+  document.body.classList.toggle('caffeinated-party', d.cocktail && isPlaying);
+
   if (isPlaying) { stopDose(); setTimeout(startDose, 200); }
 }
 
@@ -1410,6 +1497,8 @@ function startDose() {
   if (d.cocktail) icon.classList.add('overdrive');
   document.getElementById('waveformContainer').setAttribute('data-status','ACTIVE');
 
+  if (d.cocktail) document.body.classList.add('caffeinated-party');
+
   addLog('SYS',`${d.name} STARTED // ${d.cocktail?'MULTI-FREQ':d.binauralHz+'HZ '+d.type}`,'active');
   if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
   addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
@@ -1446,6 +1535,7 @@ function stopDose() {
   if(sessionInterval){clearInterval(sessionInterval);sessionInterval=null;}
   if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
   isPlaying=false;
+  document.body.classList.remove('caffeinated-party');
   document.getElementById('masterBtn').textContent='START DOSE';
   document.getElementById('masterBtn').classList.remove('active');
   document.getElementById('doseName').classList.remove('active');
