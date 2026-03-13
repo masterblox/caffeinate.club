@@ -1468,6 +1468,14 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Mobile audio fix: resume all AudioContexts on first user gesture (iOS/Android requirement)
+document.addEventListener('touchstart', function resumeAllAudioContexts() {
+  document.removeEventListener('touchstart', resumeAllAudioContexts);
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  if (noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
+  if (uiSoundCtx && uiSoundCtx.state === 'suspended') uiSoundCtx.resume();
+}, { once: true });
+
 // AGE GATE
 function toggleAgeGate() {
   const btn = document.getElementById('introEnter');
