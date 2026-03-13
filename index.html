@@ -1069,50 +1069,6 @@
     transition: filter 2s ease, transform 2s ease;
   }
 
-  /* BOOT SCREEN */
-  #bootScreen {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: var(--black);
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-  }
-  #bootScreen.active { display: flex; }
-  #bootScreen::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px);
-    pointer-events: none;
-    animation: boot-flicker 4s linear infinite;
-  }
-  @keyframes boot-flicker {
-    0%, 100% { opacity: 1; }
-    92% { opacity: 1; }
-    93% { opacity: 0.7; }
-    94% { opacity: 1; }
-    96% { opacity: 0.85; }
-    97% { opacity: 1; }
-  }
-  .boot-content {
-    max-width: 500px;
-    width: 100%;
-    padding: 40px;
-    position: relative;
-    z-index: 1;
-  }
-  .boot-line {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: var(--fs-sm);
-    color: #444;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    white-space: pre;
-    min-height: 1.6em;
-  }
-
   /* SESSION STATS */
   .session-stats {
     font-size: var(--fs-2xs);
@@ -1252,10 +1208,6 @@
 <body>
 
 <canvas id="matrixCanvas"></canvas>
-
-<div id="bootScreen">
-  <div class="boot-content" id="bootContent"></div>
-</div>
 
 <div id="konamiFlash">YOU FOUND IT</div>
 
@@ -1530,64 +1482,14 @@ function enterTerminal() {
   document.getElementById('introScreen').classList.add('hidden');
   setTimeout(() => {
     document.getElementById('introScreen').style.display = 'none';
-    runBootSequence();
+    // Time-of-day dose suggestion
+    const hr = new Date().getHours();
+    if (hr >= 0 && hr < 6) addLog('SYS', 'LATE NIGHT OPERATOR DETECTED // SUGGESTED: caffeinate_d', 'warn');
+    else if (hr < 10) addLog('SYS', 'MORNING SESSION // SUGGESTED: ESPRESSO', 'active');
+    else if (hr < 15) addLog('SYS', 'MIDDAY FOCUS // SUGGESTED: COLD BREW', 'active');
+    else if (hr < 19) addLog('SYS', 'AFTERNOON DRIFT // SUGGESTED: YERBA MATE', 'active');
+    else addLog('SYS', 'EVENING OPS // SUGGESTED: RED BULL', 'active');
   }, 800);
-}
-
-function runBootSequence() {
-  const boot = document.getElementById('bootScreen');
-  const content = document.getElementById('bootContent');
-  boot.classList.add('active');
-  content.innerHTML = '';
-
-  const lines = [
-    '[SYS] INITIALIZING CAFFEINATE_ v2.6.0',
-    '[SYS] LOADING NEURAL DRIVERS...',
-    '[SYS] CALIBRATING BINAURAL ENGINE...',
-    '[SYS] FREQUENCY ARRAY ONLINE',
-    '[SYS] HEADPHONE DETECTION: STANDBY',
-    '[SYS] ALL SYSTEMS NOMINAL',
-    '[>>>>>>>>>>>>>>>>>>>>] 100%',
-    '[SYS] WELCOME, OPERATOR_'
-  ];
-
-  let lineIdx = 0;
-  function typeLine() {
-    if (lineIdx >= lines.length) {
-      setTimeout(() => {
-        boot.style.transition = 'opacity 0.6s ease';
-        boot.style.opacity = '0';
-        setTimeout(() => {
-          boot.classList.remove('active'); boot.style.opacity = ''; boot.style.transition = '';
-          // Time-of-day dose suggestion
-          const hr = new Date().getHours();
-          if (hr >= 0 && hr < 6) addLog('SYS', 'LATE NIGHT OPERATOR DETECTED // SUGGESTED: caffeinate_d', 'warn');
-          else if (hr < 10) addLog('SYS', 'MORNING SESSION // SUGGESTED: ESPRESSO', 'active');
-          else if (hr < 15) addLog('SYS', 'MIDDAY FOCUS // SUGGESTED: COLD BREW', 'active');
-          else if (hr < 19) addLog('SYS', 'AFTERNOON DRIFT // SUGGESTED: YERBA MATE', 'active');
-          else addLog('SYS', 'EVENING OPS // SUGGESTED: RED BULL', 'active');
-        }, 600);
-      }, 800);
-      return;
-    }
-    const div = document.createElement('div');
-    div.className = 'boot-line';
-    content.appendChild(div);
-    const text = lines[lineIdx];
-    let charIdx = 0;
-    function typeChar() {
-      if (charIdx < text.length) {
-        div.textContent += text[charIdx];
-        charIdx++;
-        setTimeout(typeChar, 30);
-      } else {
-        lineIdx++;
-        setTimeout(typeLine, 400);
-      }
-    }
-    typeChar();
-  }
-  typeLine();
 }
 
 // 3D ICON HTML TEMPLATES
