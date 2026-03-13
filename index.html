@@ -20,13 +20,13 @@
      --fs-xxl: 56px — caffeinate_d only (pixel font)
      ============================= */
   :root {
-    --fs-2xs: 10px;
-    --fs-xs: 12px;
-    --fs-sm: 14px;
-    --fs-md: 16px;
-    --fs-lg: 26px;
-    --fs-xl: 42px;
-    --fs-xxl: 50px;
+    --fs-2xs: 7px;
+    --fs-xs: 9px;
+    --fs-sm: 11px;
+    --fs-md: 14px;
+    --fs-lg: 24px;
+    --fs-xl: 40px;
+    --fs-xxl: 48px;
     --white: #E0E0E0;
     --dim: #999;
     --dark: #1A1A1A;
@@ -162,13 +162,13 @@
   }
 
   .intro-story .highlight {
-    color: #AAA;
-    text-shadow: 0 0 8px rgba(255,255,255,0.15), 0 0 20px rgba(255,255,255,0.05);
+    color: #BBB;
+    text-shadow: 0 0 10px rgba(255,255,255,0.2), 0 0 24px rgba(255,255,255,0.08), 0 0 40px rgba(255,255,255,0.03);
     transition: text-shadow 0.3s ease, color 0.3s ease;
   }
   .intro-story .highlight:hover {
-    color: #DDD;
-    text-shadow: 0 0 12px rgba(255,255,255,0.3), 0 0 30px rgba(255,255,255,0.1);
+    color: #EEE;
+    text-shadow: 0 0 14px rgba(255,255,255,0.4), 0 0 32px rgba(255,255,255,0.15), 0 0 48px rgba(255,255,255,0.06);
   }
   .intro-story .era-ref {
     color: #999;
@@ -909,7 +909,22 @@
   .abuse-indicator.critical { color: var(--white); text-shadow: 0 0 10px rgba(255,255,255,0.3); }
 
   /* AMBIENT NOISE */
-  .noise-section { background: rgba(255,255,255,0.01); }
+  .noise-section {
+    background: rgba(255,255,255,0.01);
+    position: relative;
+  }
+  .noise-section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
+    pointer-events: none;
+    opacity: 0.6;
+    z-index: 0;
+  }
+  .noise-section > * { position: relative; z-index: 1; }
 
   .noise-independent {
     font-size: var(--fs-2xs);
@@ -1279,6 +1294,7 @@ function getUiSoundCtx() {
   if (!uiSoundCtx || uiSoundCtx.state === 'closed') {
     uiSoundCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
+  if (uiSoundCtx.state === 'suspended') uiSoundCtx.resume();
   return uiSoundCtx;
 }
 
@@ -1552,32 +1568,37 @@ function createSfxLayer(ctx, dest) {
 function startDose() {
   const d = DOSES[currentDose];
   audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  // Resume AudioContext — required by browser autoplay policy
+  if (audioCtx.state === 'suspended') audioCtx.resume();
   analyser = audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.3;
   oscillators=[]; gainNodes=[]; sfxOscillators=[];
+
+  // Connect analyser to destination once
+  analyser.connect(audioCtx.destination);
 
   const layers = d.cocktail ? d.layers : [{freq:d.baseFreq, binaural:d.binauralHz}];
   layers.forEach(l => {
     const oL=audioCtx.createOscillator(), gL=audioCtx.createGain(), pL=audioCtx.createStereoPanner();
-    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.2)/layers.length; pL.pan.value=-1;
-    oL.connect(gL).connect(pL).connect(analyser).connect(audioCtx.destination); oL.start();
+    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.25)/layers.length; pL.pan.value=-1;
+    oL.connect(gL).connect(pL).connect(analyser); oL.start();
     oscillators.push(oL); gainNodes.push(gL);
     const oR=audioCtx.createOscillator(), gR=audioCtx.createGain(), pR=audioCtx.createStereoPanner();
-    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.2)/layers.length; pR.pan.value=1;
-    oR.connect(gR).connect(pR).connect(analyser).connect(audioCtx.destination); oR.start();
+    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.25)/layers.length; pR.pan.value=1;
+    oR.connect(gR).connect(pR).connect(analyser); oR.start();
     oscillators.push(oR); gainNodes.push(gR);
   });
 
   noiseSource=audioCtx.createBufferSource(); noiseSource.buffer=createNoiseBuffer(audioCtx); noiseSource.loop=true;
   noiseGainNode=audioCtx.createGain(); noiseGainNode.gain.value=d.noiseGain*intensity;
   const bp=audioCtx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=d.baseFreq||200; bp.Q.value=0.5;
-  noiseSource.connect(bp).connect(noiseGainNode).connect(analyser); noiseGainNode.connect(audioCtx.destination); noiseSource.start();
+  noiseSource.connect(bp).connect(noiseGainNode).connect(analyser); noiseSource.start();
 
   const sub=audioCtx.createOscillator(), subG=audioCtx.createGain();
-  sub.type='sine'; sub.frequency.value=d.binauralHz||30; subG.gain.value=intensity*0.03;
-  sub.connect(subG).connect(analyser); subG.connect(audioCtx.destination); sub.start();
+  sub.type='sine'; sub.frequency.value=d.binauralHz||30; subG.gain.value=intensity*0.04;
+  sub.connect(subG).connect(analyser); sub.start();
   oscillators.push(sub); gainNodes.push(subG);
 
-  createSfxLayer(audioCtx, audioCtx.destination);
+  createSfxLayer(audioCtx, analyser);
 
   isPlaying=true; sessionTime=0; abuseTriggered=false;
   document.getElementById('masterBtn').textContent='STOP DOSE';
@@ -1689,7 +1710,7 @@ function updateSliderTouch(e){const r=document.getElementById('sliderTrack').get
 function applyIntensity(p){
   intensity=p;document.getElementById('sliderFill').style.width=(p*100)+'%';document.getElementById('intensityVal').textContent=Math.round(p*100)+'%';
   if(isPlaying){const d=DOSES[currentDose],l=d.cocktail?d.layers:[{freq:d.baseFreq,binaural:d.binauralHz}];
-  gainNodes.forEach(g=>{if(g&&g.gain)g.gain.setValueAtTime((intensity*0.2)/l.length,audioCtx.currentTime);});
+  gainNodes.forEach(g=>{if(g&&g.gain)g.gain.setValueAtTime((intensity*0.25)/l.length,audioCtx.currentTime);});
   if(noiseGainNode)noiseGainNode.gain.setValueAtTime(d.noiseGain*intensity,audioCtx.currentTime);checkAbuseLevel();}
 }
 
@@ -1771,6 +1792,7 @@ function toggleNoise(type, btn) {
   btn.classList.add('active');
 
   noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (noiseCtx.state === 'suspended') noiseCtx.resume();
 
   let buffer;
   if (type === 'white') buffer = createWhiteNoiseBuffer(noiseCtx);
