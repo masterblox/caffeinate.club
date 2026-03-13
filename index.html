@@ -1031,6 +1031,44 @@
   .corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
   .corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
 
+  /* CAFFEINATE_D EXCLUSIVE EFFECTS */
+  #matrixCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    display: none;
+  }
+  body.caffeinated-party #matrixCanvas { display: block; }
+
+  .crt-wrap { position: relative; z-index: 2; }
+
+  @keyframes caffd-glitch {
+    0% { transform: translate(0, 0); }
+    10% { transform: translate(-2px, 1px); }
+    20% { transform: translate(3px, -1px); }
+    30% { transform: translate(-1px, -2px); }
+    40% { transform: translate(2px, 2px); }
+    50% { transform: translate(-3px, 0px); }
+    60% { transform: translate(1px, -2px); }
+    70% { transform: translate(-2px, 3px); }
+    80% { transform: translate(3px, -1px); }
+    90% { transform: translate(-1px, 2px); }
+    100% { transform: translate(0, 0); }
+  }
+
+  body.caffeinated-party .dose-name {
+    animation: caffd-glitch 0.1s linear infinite;
+    text-shadow: 2px 0 #ff0000, -2px 0 #00ffff;
+  }
+
+  body.caffeinated-party .main {
+    filter: blur(0.3px);
+    transform: scaleY(1.002);
+    transition: filter 2s ease, transform 2s ease;
+  }
+
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; height: auto; }
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; max-height: none; }
@@ -1056,6 +1094,8 @@
 </style>
 </head>
 <body>
+
+<canvas id="matrixCanvas"></canvas>
 
 <!-- INTRO -->
 <div class="intro-screen" id="introScreen">
@@ -1540,6 +1580,8 @@ function startDose() {
   if (d.cocktail) icon.classList.add('overdrive');
   document.getElementById('waveformContainer').setAttribute('data-status','ACTIVE');
 
+  if (d.cocktail) { document.body.classList.add('caffeinated-party'); startBinaryRain(); }
+
   addLog('SYS',`${d.name} STARTED // ${d.cocktail?'MULTI-FREQ':d.binauralHz+'HZ '+d.type}`,'active');
   if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
   addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
@@ -1576,6 +1618,8 @@ function stopDose() {
   if(sessionInterval){clearInterval(sessionInterval);sessionInterval=null;}
   if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
   isPlaying=false;
+  document.body.classList.remove('caffeinated-party');
+  stopBinaryRain();
   document.getElementById('masterBtn').textContent='START DOSE';
   document.getElementById('masterBtn').classList.remove('active');
   document.getElementById('doseName').classList.remove('active');
@@ -1804,6 +1848,68 @@ function applyNoiseVolume(pct) {
   if (ambientNoiseGain) {
     ambientNoiseGain.gain.setValueAtTime(noiseVolume * 0.5, noiseCtx.currentTime);
   }
+}
+
+// ============================================
+// BINARY RAIN (caffeinate_d exclusive)
+// ============================================
+let rainAnimFrame = null;
+
+function startBinaryRain() {
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const fontSize = 14;
+  const columns = Math.floor(canvas.width / fontSize);
+  const drops = new Array(columns).fill(0);
+  const speeds = new Array(columns).fill(0).map(() => 0.3 + Math.random() * 0.7);
+
+  function draw() {
+    // Fade trail
+    ctx.fillStyle = 'rgba(10, 10, 10, 0.08)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = fontSize + 'px "Share Tech Mono", monospace';
+
+    for (let i = 0; i < columns; i++) {
+      const char = Math.random() > 0.5 ? '1' : '0';
+      const y = drops[i] * fontSize;
+      // Opacity fades as it falls — brighter at top, ghostly at bottom
+      const progress = y / canvas.height;
+      const alpha = Math.max(0.01, 0.06 - progress * 0.04);
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+      ctx.fillText(char, i * fontSize, y);
+
+      if (y > canvas.height && Math.random() > 0.98) {
+        drops[i] = 0;
+      }
+      drops[i] += speeds[i];
+    }
+
+    rainAnimFrame = requestAnimationFrame(draw);
+  }
+
+  // Handle resize
+  canvas._resizeHandler = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  window.addEventListener('resize', canvas._resizeHandler);
+
+  draw();
+}
+
+function stopBinaryRain() {
+  if (rainAnimFrame) { cancelAnimationFrame(rainAnimFrame); rainAnimFrame = null; }
+  const canvas = document.getElementById('matrixCanvas');
+  if (canvas._resizeHandler) {
+    window.removeEventListener('resize', canvas._resizeHandler);
+    canvas._resizeHandler = null;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 </script>
 </body>
