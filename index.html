@@ -1350,15 +1350,15 @@
       <div class="panel-section">
         <div class="panel-title">SELECT DOSE</div>
         <div class="dose-grid">
-          <button class="dose-btn selected" data-dose="espresso" onclick="selectDose(this)">ESPRESSO <span class="dose-hz">40HZ γ</span></button>
-          <button class="dose-btn" data-dose="redbull" onclick="selectDose(this)">RED BULL <span class="dose-hz">18HZ β</span></button>
-          <button class="dose-btn" data-dose="coldbrew" onclick="selectDose(this)">COLD BREW <span class="dose-hz">25HZ β</span></button>
-          <button class="dose-btn" data-dose="yerba" onclick="selectDose(this)">YERBA MATE <span class="dose-hz">12HZ α</span></button>
-          <button class="dose-btn" data-dose="copium" onclick="selectDose(this)">COPIUM <span class="dose-hz">6HZ θ</span></button>
-          <button class="dose-btn" data-dose="sudo" onclick="selectDose(this)">sudo rm -sleep <span class="dose-hz">50HZ γ+</span></button>
-          <button class="dose-btn" data-dose="stackoverflow" onclick="selectDose(this)">STACK OVERFLOW <span class="dose-hz">35HZ γ</span></button>
-          <button class="dose-btn" data-dose="workslocal" onclick="selectDose(this)">WORKS ON MY MACHINE <span class="dose-hz">22HZ β</span></button>
-          <button class="dose-btn cocktail" data-dose="caffeinated" onclick="selectDose(this)">caffeinate_d <span class="dose-hz">∞ HZ ALL</span></button>
+          <button class="dose-btn selected" data-dose="espresso" data-hover-hz="800" onclick="selectDose(this)">ESPRESSO <span class="dose-hz">40HZ γ</span></button>
+          <button class="dose-btn" data-dose="redbull" data-hover-hz="900" onclick="selectDose(this)">RED BULL <span class="dose-hz">18HZ β</span></button>
+          <button class="dose-btn" data-dose="coldbrew" data-hover-hz="700" onclick="selectDose(this)">COLD BREW <span class="dose-hz">25HZ β</span></button>
+          <button class="dose-btn" data-dose="yerba" data-hover-hz="600" onclick="selectDose(this)">YERBA MATE <span class="dose-hz">12HZ α</span></button>
+          <button class="dose-btn" data-dose="copium" data-hover-hz="500" onclick="selectDose(this)">COPIUM <span class="dose-hz">6HZ θ</span></button>
+          <button class="dose-btn" data-dose="sudo" data-hover-hz="1000" onclick="selectDose(this)">sudo rm -sleep <span class="dose-hz">50HZ γ+</span></button>
+          <button class="dose-btn" data-dose="stackoverflow" data-hover-hz="850" onclick="selectDose(this)">STACK OVERFLOW <span class="dose-hz">35HZ γ</span></button>
+          <button class="dose-btn" data-dose="workslocal" data-hover-hz="750" onclick="selectDose(this)">WORKS ON MY MACHINE <span class="dose-hz">22HZ β</span></button>
+          <button class="dose-btn cocktail" data-dose="caffeinated" data-hover-hz="1200" onclick="selectDose(this)">caffeinate_d <span class="dose-hz">∞ HZ ALL</span></button>
         </div>
       </div>
 
@@ -1490,10 +1490,29 @@ function playEnterSound() {
   });
 }
 
+function playDoseHoverSound(hz) {
+  if (!sfxEnabled) return;
+  const ctx = getUiSoundCtx();
+  const t = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.value = hz;
+  gain.gain.setValueAtTime(0.03, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(t); osc.stop(t + 0.05);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', playClickSound);
-    btn.addEventListener('mouseenter', playHoverSound);
+    // Dose buttons get per-dose pitch, others get default hover
+    if (btn.dataset.hoverHz) {
+      btn.addEventListener('mouseenter', () => playDoseHoverSound(parseInt(btn.dataset.hoverHz)));
+    } else {
+      btn.addEventListener('mouseenter', playHoverSound);
+    }
   });
 });
 
@@ -1538,7 +1557,16 @@ function runBootSequence() {
       setTimeout(() => {
         boot.style.transition = 'opacity 0.6s ease';
         boot.style.opacity = '0';
-        setTimeout(() => { boot.classList.remove('active'); boot.style.opacity = ''; boot.style.transition = ''; }, 600);
+        setTimeout(() => {
+          boot.classList.remove('active'); boot.style.opacity = ''; boot.style.transition = '';
+          // Time-of-day dose suggestion
+          const hr = new Date().getHours();
+          if (hr >= 0 && hr < 6) addLog('SYS', 'LATE NIGHT OPERATOR DETECTED // SUGGESTED: caffeinate_d', 'warn');
+          else if (hr < 10) addLog('SYS', 'MORNING SESSION // SUGGESTED: ESPRESSO', 'active');
+          else if (hr < 15) addLog('SYS', 'MIDDAY FOCUS // SUGGESTED: COLD BREW', 'active');
+          else if (hr < 19) addLog('SYS', 'AFTERNOON DRIFT // SUGGESTED: YERBA MATE', 'active');
+          else addLog('SYS', 'EVENING OPS // SUGGESTED: RED BULL', 'active');
+        }, 600);
       }, 800);
       return;
     }
@@ -1803,6 +1831,9 @@ function startDose() {
   if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
   addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
 
+  // Combo stack hint if noise is already active
+  if (activeNoiseType) logComboHint(currentDose, activeNoiseType);
+
   if (timerSeconds>0) {
     timerRemaining=timerSeconds;
     timerInterval=setInterval(()=>{ timerRemaining--; updateTimerDisplay(); if(timerRemaining<=0){stopDose();addLog('SYS','SESSION COMPLETE.','active');} },1000);
@@ -1850,6 +1881,7 @@ function stopDose() {
   document.getElementById('waveformContainer').setAttribute('data-status','STANDBY');
   document.getElementById('abuseIndicator').textContent='';
   document.getElementById('abuseIndicator').className='abuse-indicator';
+  lastCombo = '';
   addLog('SYS','DOSE STOPPED. BASELINE RESTORED.','active');
   drawStaticWaveform();
 
@@ -1919,6 +1951,30 @@ function addLog(tag,msg,cls=''){
   e.className=`log-entry ${cls}`;e.innerHTML=`<span class="timestamp">[${tag}]</span> ${msg}`;
   log.appendChild(e);log.scrollTop=log.scrollHeight;
   const entries=log.querySelectorAll('.log-entry');if(entries.length>60)entries[0].remove();
+}
+
+// ============================================
+// COMBO STACK HINTS
+// ============================================
+let lastCombo = '';
+function logComboHint(doseKey, noiseType) {
+  const combo = doseKey + '+' + noiseType;
+  if (combo === lastCombo) return; // Don't repeat same combo
+  lastCombo = combo;
+  const d = DOSES[doseKey];
+  if (d && d.cocktail) {
+    addLog('SYS', 'COMBO: caffeinate_d + ' + noiseType.toUpperCase() + ' NOISE // YOU ABSOLUTE MANIAC', 'warn');
+  } else if (doseKey === 'espresso' && noiseType === 'brown') {
+    addLog('SYS', 'COMBO: ESPRESSO + BROWN NOISE // DEEP FOCUS STACK DETECTED', 'active');
+  } else if (doseKey === 'redbull' && noiseType === 'white') {
+    addLog('SYS', 'COMBO: RED BULL + WHITE NOISE // HYPERDRIVE CONFIGURATION', 'active');
+  } else if (doseKey === 'coldbrew' && noiseType === 'pink') {
+    addLog('SYS', 'COMBO: COLD BREW + PINK NOISE // FLOW STATE PROTOCOL', 'active');
+  } else if (doseKey === 'yerba' && noiseType === 'brown') {
+    addLog('SYS', 'COMBO: YERBA MATE + BROWN NOISE // ZEN CODER MODE', 'active');
+  } else {
+    addLog('SYS', 'COMBO DETECTED // CUSTOM STACK ACTIVE', 'active');
+  }
 }
 
 // ============================================
@@ -2030,6 +2086,9 @@ function toggleNoise(type, btn) {
     brown: 'DEEP RUMBLE // LOW FREQUENCY FOCUS'
   };
   addLog('NOISE', `${labels[type]} ACTIVE // ${descs[type]}`, 'active');
+
+  // Combo stack hint
+  if (isPlaying) logComboHint(currentDose, type);
 }
 
 function stopNoise() {
@@ -2042,6 +2101,7 @@ function stopNoise() {
   const prevType = activeNoiseType;
   activeNoiseType = null;
   document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
+  lastCombo = '';
   if (prevType) addLog('NOISE', `${prevType.toUpperCase()} NOISE STOPPED`, 'active');
 }
 
