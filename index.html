@@ -74,17 +74,7 @@
     z-index: 9999;
   }
 
-  @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    92% { opacity: 1; }
-    93% { opacity: 0.8; }
-    94% { opacity: 1; }
-    96% { opacity: 0.9; }
-    97% { opacity: 1; }
-  }
-
   .crt-wrap { }
-  body.caffeinated-party .crt-wrap { animation: flicker 8s infinite; }
 
   /* ===================== */
   /* INTRO / SPLASH        */
@@ -148,7 +138,7 @@
   }
 
   .intro-story {
-    max-width: 720px;
+    max-width: 640px;
     text-align: left;
     margin-bottom: 48px;
   }
@@ -159,7 +149,6 @@
     color: #555;
     letter-spacing: 0.5px;
     margin-bottom: 16px;
-    text-align: justify;
   }
 
   .intro-story .highlight {
@@ -1042,75 +1031,6 @@
   .corner-bl { bottom: 4px; left: 4px; border-bottom: 1px solid #1A1A1A; border-left: 1px solid #1A1A1A; }
   .corner-br { bottom: 4px; right: 4px; border-bottom: 1px solid #1A1A1A; border-right: 1px solid #1A1A1A; }
 
-  /* CAFFEINATE_D GLITCH PARTY MODE */
-  @keyframes glitch-shake {
-    0% { transform: translate(0,0); }
-    10% { transform: translate(-3px, 2px); }
-    20% { transform: translate(3px, -2px); }
-    30% { transform: translate(-2px, -3px); }
-    40% { transform: translate(2px, 3px); }
-    50% { transform: translate(-3px, -1px); }
-    60% { transform: translate(3px, 1px); }
-    70% { transform: translate(-1px, 3px); }
-    80% { transform: translate(1px, -3px); }
-    90% { transform: translate(-2px, 2px); }
-    100% { transform: translate(0,0); }
-  }
-  @keyframes glitch-color {
-    0% { filter: hue-rotate(0deg); }
-    25% { filter: hue-rotate(90deg) brightness(1.3); }
-    50% { filter: hue-rotate(180deg) brightness(1.1); }
-    75% { filter: hue-rotate(270deg) brightness(1.4); }
-    100% { filter: hue-rotate(360deg); }
-  }
-  @keyframes glitch-scanline {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 100%; }
-  }
-  body.caffeinated-party .crt-wrap {
-    animation: glitch-shake 0.15s linear infinite, glitch-color 3s linear infinite;
-  }
-  body.caffeinated-party::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: repeating-linear-gradient(
-      0deg, transparent, transparent 1px,
-      rgba(255,255,255,0.03) 1px,
-      rgba(255,255,255,0.03) 2px
-    );
-    animation: glitch-scanline 0.5s linear infinite;
-    pointer-events: none;
-    z-index: 9998;
-  }
-  body.caffeinated-party .header {
-    border-color: #555;
-    box-shadow: 0 0 20px rgba(255,255,255,0.1);
-  }
-  body.caffeinated-party .dose-name {
-    animation: glitch-shake 0.1s linear infinite;
-    text-shadow: 0 0 20px rgba(255,255,255,0.5), 3px 0 #ff0040, -3px 0 #00ff88;
-  }
-  body.caffeinated-party .waveform-container {
-    box-shadow: 0 0 30px rgba(255,255,255,0.08);
-    border-color: #555;
-  }
-  body.caffeinated-party .freq-val {
-    animation: glitch-shake 0.2s linear infinite;
-  }
-
-  /* MATRIX BINARY RAIN — caffeinate_d only */
-  #matrixRain {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  body.caffeinated-party #matrixRain { opacity: 1; }
-
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; height: auto; }
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; max-height: none; }
@@ -1136,8 +1056,6 @@
 </style>
 </head>
 <body>
-
-<canvas id="matrixRain"></canvas>
 
 <!-- INTRO -->
 <div class="intro-screen" id="introScreen">
@@ -1340,64 +1258,32 @@ function playHoverSound() {
   if (!sfxEnabled) return;
   const ctx = getUiSoundCtx();
   const t = ctx.currentTime;
-  // Sci-fi tick: sharp high-freq transient ~50ms
+  // Subtle sci-fi tick: very quiet high sine
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
-  osc.type = 'triangle';
-  osc.frequency.setValueAtTime(3800, t);
-  osc.frequency.exponentialRampToValueAtTime(1800, t + 0.04);
-  gain.gain.setValueAtTime(0.025, t);
-  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+  osc.type = 'sine';
+  osc.frequency.value = 2400;
+  gain.gain.setValueAtTime(0.015, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
   osc.connect(gain).connect(ctx.destination);
-  osc.start(t); osc.stop(t + 0.05);
+  osc.start(t); osc.stop(t + 0.03);
 }
 
 function playEnterSound() {
   if (!sfxEnabled) return;
   const ctx = getUiSoundCtx();
   const t = ctx.currentTime;
-  // Sci-fi metallic whoosh: swept oscillator + noise burst ~300ms
-  const sweep = ctx.createOscillator();
-  const sweepGain = ctx.createGain();
-  sweep.type = 'sawtooth';
-  sweep.frequency.setValueAtTime(80, t);
-  sweep.frequency.exponentialRampToValueAtTime(2400, t + 0.15);
-  sweep.frequency.exponentialRampToValueAtTime(600, t + 0.3);
-  sweepGain.gain.setValueAtTime(0.06, t);
-  sweepGain.gain.linearRampToValueAtTime(0.08, t + 0.08);
-  sweepGain.gain.exponentialRampToValueAtTime(0.001, t + 0.3);
-  const sweepFilter = ctx.createBiquadFilter();
-  sweepFilter.type = 'bandpass';
-  sweepFilter.frequency.setValueAtTime(400, t);
-  sweepFilter.frequency.exponentialRampToValueAtTime(3000, t + 0.15);
-  sweepFilter.frequency.exponentialRampToValueAtTime(800, t + 0.3);
-  sweepFilter.Q.value = 2;
-  sweep.connect(sweepFilter).connect(sweepGain).connect(ctx.destination);
-  sweep.start(t); sweep.stop(t + 0.35);
-  // Noise burst for metallic texture
-  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 0.3, ctx.sampleRate);
-  const nd = noiseBuf.getChannelData(0);
-  for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
-  const noiseSrc = ctx.createBufferSource();
-  noiseSrc.buffer = noiseBuf;
-  const noiseGn = ctx.createGain();
-  noiseGn.gain.setValueAtTime(0.04, t);
-  noiseGn.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
-  const noiseFlt = ctx.createBiquadFilter();
-  noiseFlt.type = 'bandpass';
-  noiseFlt.frequency.value = 4000;
-  noiseFlt.Q.value = 1.5;
-  noiseSrc.connect(noiseFlt).connect(noiseGn).connect(ctx.destination);
-  noiseSrc.start(t); noiseSrc.stop(t + 0.3);
-  // Sub impact
-  const sub = ctx.createOscillator();
-  const subGain = ctx.createGain();
-  sub.type = 'sine';
-  sub.frequency.value = 60;
-  subGain.gain.setValueAtTime(0.08, t);
-  subGain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
-  sub.connect(subGain).connect(ctx.destination);
-  sub.start(t); sub.stop(t + 0.25);
+  // Sci-fi boot sequence: ascending tones
+  [0, 0.08, 0.16, 0.28].forEach((delay, i) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 300 + (i * 200);
+    gain.gain.setValueAtTime(0.04, t + delay);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.12);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t + delay); osc.stop(t + delay + 0.12);
+  });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -1578,10 +1464,6 @@ function selectDose(btn) {
     document.getElementById('freqB').textContent = d.binauralHz + ' HZ';
   }
 
-  const isParty = d.cocktail && isPlaying;
-  document.body.classList.toggle('caffeinated-party', isParty);
-  if (isParty) startMatrix(); else stopMatrix();
-
   if (isPlaying) { stopDose(); setTimeout(startDose, 200); }
 }
 
@@ -1658,11 +1540,6 @@ function startDose() {
   if (d.cocktail) icon.classList.add('overdrive');
   document.getElementById('waveformContainer').setAttribute('data-status','ACTIVE');
 
-  if (d.cocktail) {
-    document.body.classList.add('caffeinated-party');
-    startMatrix();
-  }
-
   addLog('SYS',`${d.name} STARTED // ${d.cocktail?'MULTI-FREQ':d.binauralHz+'HZ '+d.type}`,'active');
   if (d.cocktail) addLog('WARN','caffeinate -d: DISPLAY WILL NOT SLEEP','warn');
   addLog('SYS','HEADPHONES ON. LIGHTS OFF. SHIP CODE.','active');
@@ -1699,8 +1576,6 @@ function stopDose() {
   if(sessionInterval){clearInterval(sessionInterval);sessionInterval=null;}
   if(animFrame){cancelAnimationFrame(animFrame);animFrame=null;}
   isPlaying=false;
-  document.body.classList.remove('caffeinated-party');
-  stopMatrix();
   document.getElementById('masterBtn').textContent='START DOSE';
   document.getElementById('masterBtn').classList.remove('active');
   document.getElementById('doseName').classList.remove('active');
@@ -1930,63 +1805,6 @@ function applyNoiseVolume(pct) {
     ambientNoiseGain.gain.setValueAtTime(noiseVolume * 0.5, noiseCtx.currentTime);
   }
 }
-
-// ============================================
-// MATRIX BINARY RAIN (caffeinate_d party only)
-// ============================================
-let matrixAnimFrame = null;
-const matrixCanvas = document.getElementById('matrixRain');
-const matrixCtx = matrixCanvas.getContext('2d');
-let matrixColumns = [];
-let matrixColCount = 0;
-
-function initMatrix() {
-  matrixCanvas.width = window.innerWidth;
-  matrixCanvas.height = window.innerHeight;
-  const colW = 14;
-  matrixColCount = Math.floor(matrixCanvas.width / colW);
-  matrixColumns = [];
-  for (let i = 0; i < matrixColCount; i++) {
-    matrixColumns.push(Math.random() * matrixCanvas.height);
-  }
-}
-
-function drawMatrix() {
-  matrixAnimFrame = requestAnimationFrame(drawMatrix);
-  // Fade trail
-  matrixCtx.fillStyle = 'rgba(10, 10, 10, 0.06)';
-  matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-  matrixCtx.font = '12px Share Tech Mono, monospace';
-  matrixCtx.fillStyle = 'rgba(0, 255, 0, 0.06)';
-  const colW = 14;
-  for (let i = 0; i < matrixColCount; i++) {
-    const char = Math.random() > 0.5 ? '1' : '0';
-    const x = i * colW;
-    const y = matrixColumns[i];
-    matrixCtx.fillText(char, x, y);
-    if (matrixColumns[i] > matrixCanvas.height && Math.random() > 0.98) {
-      matrixColumns[i] = 0;
-    }
-    matrixColumns[i] += 10 + Math.random() * 6;
-  }
-}
-
-function startMatrix() {
-  initMatrix();
-  if (!matrixAnimFrame) drawMatrix();
-}
-
-function stopMatrix() {
-  if (matrixAnimFrame) {
-    cancelAnimationFrame(matrixAnimFrame);
-    matrixAnimFrame = null;
-  }
-  matrixCtx.clearRect(0, 0, matrixCanvas.width, matrixCanvas.height);
-}
-
-window.addEventListener('resize', () => {
-  if (document.body.classList.contains('caffeinated-party')) initMatrix();
-});
 </script>
 </body>
 </html>
