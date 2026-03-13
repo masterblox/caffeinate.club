@@ -148,16 +148,16 @@
   }
 
   .intro-story {
-    max-width: 520px;
-    text-align: center;
+    max-width: 640px;
+    text-align: left;
     margin-bottom: 48px;
   }
 
   .intro-story p {
     font-size: var(--fs-sm);
-    line-height: 2;
+    line-height: 1.9;
     color: #555;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     margin-bottom: 16px;
   }
 
@@ -186,6 +186,7 @@
     margin-bottom: 32px;
     padding: 16px 24px;
     border: 1px solid #333;
+    flex-wrap: wrap;
   }
 
   .age-checkbox {
@@ -224,20 +225,20 @@
   }
 
   .intro-enter {
-    width: 240px;
-    height: 52px;
+    height: 40px;
+    padding: 0 20px;
     background: transparent;
     border: 1px solid #222;
     color: #333;
     font-family: 'Share Tech Mono', monospace;
     font-size: var(--fs-sm);
-    letter-spacing: 6px;
+    letter-spacing: 4px;
     cursor: not-allowed;
     text-transform: uppercase;
     transition: all 0.4s ease;
     position: relative;
     overflow: hidden;
-    margin-bottom: 24px;
+    margin-left: auto;
   }
 
   .intro-enter.enabled {
@@ -369,7 +370,6 @@
     display: grid;
     grid-template-columns: 1fr 300px;
     height: calc(100vh - 53px);
-    overflow: hidden;
   }
 
   .freq-core {
@@ -380,6 +380,7 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    max-height: calc(100vh - 53px);
   }
 
   /* ===================== */
@@ -404,7 +405,7 @@
   }
 
   .dose-icon.active {
-    animation: icon-rotate 8s linear infinite;
+    /* No animation for normal doses */
   }
 
   .dose-icon.active.overdrive {
@@ -431,8 +432,7 @@
   }
 
   .dose-icon.active .face {
-    border-color: #555;
-    box-shadow: 0 0 20px rgba(255,255,255,0.03);
+    border-color: #444;
   }
 
   .dose-icon.active.overdrive .face {
@@ -820,6 +820,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    max-height: calc(100vh - 53px);
   }
 
   .panel-section {
@@ -1083,13 +1084,11 @@
   }
 
   @media (max-width: 860px) {
-    .main { grid-template-columns: 1fr; }
-    .right-panel { border-left: none; border-top: 1px solid #1A1A1A; }
+    .main { grid-template-columns: 1fr; height: auto; }
+    .right-panel { border-left: none; border-top: 1px solid #1A1A1A; max-height: none; }
+    .freq-core { padding: 20px; min-height: auto; overflow: visible; max-height: none; }
     .dose-name { font-size: var(--fs-lg); letter-spacing: 6px; }
     .dose-name.pixel-font { font-size: 28px; }
-    .main { height: auto; overflow: visible; }
-    .freq-core { padding: 20px; min-height: auto; overflow: visible; }
-    .right-panel { max-height: none; }
     .dose-icon-wrap { width: 120px; height: 120px; }
     .intro-title { font-size: 24px; letter-spacing: 8px; }
     .freq-info { gap: 24px; }
@@ -1134,9 +1133,9 @@
   </div>
   <div class="age-gate">
     <input type="checkbox" class="age-checkbox" id="ageCheck" onchange="toggleAgeGate()">
-    <label class="age-label" for="ageCheck">I CONFIRM I AM 18 YEARS OR OLDER</label>
+    <label class="age-label" for="ageCheck">I CONFIRM I AM 18+</label>
+    <button class="intro-enter" id="introEnter" onclick="enterTerminal()" disabled>ENTER_</button>
   </div>
-  <button class="intro-enter" id="introEnter" onclick="enterTerminal()" disabled>ENTER TERMINAL</button>
   <div class="intro-disclaimer">
     Headphones required for binaural effect. This is not medical advice.
     All content is digital audio frequencies only. Caffeinate_ is inspired
