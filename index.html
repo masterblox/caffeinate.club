@@ -1595,13 +1595,18 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-// Mobile audio fix: resume all AudioContexts on first user gesture (iOS/Android requirement)
-document.addEventListener('touchstart', function resumeAllAudioContexts() {
-  document.removeEventListener('touchstart', resumeAllAudioContexts);
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+// Mobile audio fix: pre-create and warm up AudioContexts on first user gesture
+function warmUpAudio() {
+  // Create the main audio context early so it's ready when needed
+  if (!audioCtx || audioCtx.state === 'closed') {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
   if (noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
   if (uiSoundCtx && uiSoundCtx.state === 'suspended') uiSoundCtx.resume();
-}, { once: true });
+}
+document.addEventListener('touchstart', warmUpAudio, { once: true });
+document.addEventListener('click', warmUpAudio, { once: true });
 
 // AGE GATE
 function toggleAgeGate() {
@@ -1613,6 +1618,7 @@ function toggleAgeGate() {
 
 function enterTerminal() {
   if (!document.getElementById('ageCheck').checked) return;
+  warmUpAudio();
   playEnterSound();
   document.getElementById('introScreen').classList.add('hidden');
   setTimeout(() => {
@@ -1815,11 +1821,17 @@ function createSfxLayer(ctx, dest) {
   sh.connect(shf).connect(shg).connect(dest); sh.start(); sfxOscillators.push(sh);
 }
 
+function getOrCreateAudioCtx() {
+  if (!audioCtx || audioCtx.state === 'closed') {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
 function startDose() {
   const d = DOSES[currentDose];
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  // Resume AudioContext — required by browser autoplay policy
-  if (audioCtx.state === 'suspended') audioCtx.resume();
+  getOrCreateAudioCtx();
   analyser = audioCtx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.3;
   oscillators=[]; gainNodes=[]; sfxOscillators=[];
 
@@ -1901,7 +1913,10 @@ function stopDose() {
   const stoppedDose = currentDose;
   const stoppedSessionTime = sessionTime;
 
-  if(audioCtx){audioCtx.close().catch(()=>{});audioCtx=null;}
+  oscillators.forEach(o=>{try{o.stop();}catch(e){}});
+  sfxOscillators.forEach(o=>{try{o.stop();}catch(e){}});
+  if(noiseSource){try{noiseSource.stop();}catch(e){}}
+  if(analyser){try{analyser.disconnect();}catch(e){}}
   oscillators=[];gainNodes=[];sfxOscillators=[];noiseSource=null;noiseGainNode=null;
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   if(msgInterval){clearInterval(msgInterval);msgInterval=null;}
@@ -2081,7 +2096,9 @@ function toggleNoise(type, btn) {
   document.querySelectorAll('.noise-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (!noiseCtx || noiseCtx.state === 'closed') {
+    noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
   if (noiseCtx.state === 'suspended') noiseCtx.resume();
 
   let buffer;
@@ -2129,10 +2146,8 @@ function toggleNoise(type, btn) {
 }
 
 function stopNoise() {
-  if (noiseCtx) {
-    noiseCtx.close().catch(() => {});
-    noiseCtx = null;
-  }
+  if (ambientNoiseSource) { try { ambientNoiseSource.stop(); } catch(e) {} }
+  if (ambientNoiseGain) { try { ambientNoiseGain.disconnect(); } catch(e) {} }
   ambientNoiseSource = null;
   ambientNoiseGain = null;
   const prevType = activeNoiseType;
@@ -2515,8 +2530,7 @@ function triggerKernelPanic() {
   // After flash, start chaos
   setTimeout(() => {
     // Start all 8 frequencies simultaneously
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+    getOrCreateAudioCtx();
     analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048;
     analyser.connect(audioCtx.destination);
     oscillators = []; gainNodes = [];
@@ -2577,7 +2591,8 @@ function triggerKernelPanic() {
       clearInterval(nameCycle);
       clearInterval(msgFlood);
       document.body.classList.remove('kernel-panic');
-      if (audioCtx) { audioCtx.close().catch(() => {}); audioCtx = null; }
+      oscillators.forEach(o=>{try{o.stop();}catch(e){}});
+      if(analyser){try{analyser.disconnect();}catch(e){}}
       oscillators = []; gainNodes = [];
       if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
       isPlaying = false;
