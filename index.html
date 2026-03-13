@@ -1069,6 +1069,162 @@
     transition: filter 2s ease, transform 2s ease;
   }
 
+  /* BOOT SCREEN */
+  #bootScreen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: var(--black);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  #bootScreen.active { display: flex; }
+  #bootScreen::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.01) 2px, rgba(255,255,255,0.01) 4px);
+    pointer-events: none;
+    animation: boot-flicker 4s linear infinite;
+  }
+  @keyframes boot-flicker {
+    0%, 100% { opacity: 1; }
+    92% { opacity: 1; }
+    93% { opacity: 0.7; }
+    94% { opacity: 1; }
+    96% { opacity: 0.85; }
+    97% { opacity: 1; }
+  }
+  .boot-content {
+    max-width: 500px;
+    width: 100%;
+    padding: 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .boot-line {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-sm);
+    color: #444;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    white-space: pre;
+    min-height: 1.6em;
+  }
+
+  /* SESSION STATS */
+  .session-stats {
+    font-size: var(--fs-2xs);
+    letter-spacing: 1px;
+    transition: color 0.5s ease;
+  }
+
+  /* POST-DOSE AREA */
+  .post-dose-area {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 580px;
+  }
+  .post-dose-btns {
+    display: flex;
+    gap: 8px;
+  }
+  .post-dose-btn {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid #333;
+    color: #666;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+  .post-dose-btn:hover { border-color: #555; color: var(--white); }
+  .neural-sig-wrap {
+    width: 100%;
+    max-width: 580px;
+    opacity: 1;
+    transition: opacity 2s ease;
+  }
+  .neural-sig-wrap.fading { opacity: 0; }
+  .neural-sig-label {
+    font-size: var(--fs-2xs);
+    letter-spacing: 2px;
+    color: #333;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+  }
+  .neural-sig-wrap canvas {
+    width: 100%;
+    height: 80px;
+    border: 1px solid #1A1A1A;
+    display: block;
+  }
+
+  /* KONAMI KERNEL PANIC */
+  @keyframes kp-shake {
+    0% { transform: translate(0,0); }
+    10% { transform: translate(-5px, 3px); }
+    20% { transform: translate(5px, -3px); }
+    30% { transform: translate(-3px, -5px); }
+    40% { transform: translate(3px, 5px); }
+    50% { transform: translate(-5px, -2px); }
+    60% { transform: translate(5px, 2px); }
+    70% { transform: translate(-2px, 5px); }
+    80% { transform: translate(2px, -5px); }
+    90% { transform: translate(-3px, 3px); }
+    100% { transform: translate(0,0); }
+  }
+  @keyframes kp-invert {
+    0%, 90% { filter: none; }
+    92% { filter: invert(1); }
+    94% { filter: none; }
+    96% { filter: invert(1) hue-rotate(180deg); }
+    98% { filter: none; }
+  }
+  body.kernel-panic .crt-wrap {
+    animation: kp-shake 0.08s linear infinite, kp-invert 2s linear infinite;
+  }
+  body.kernel-panic::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.06) 1px, rgba(255,255,255,0.06) 2px);
+    animation: kp-scanline 0.3s linear infinite;
+    pointer-events: none;
+    z-index: 9998;
+  }
+  @keyframes kp-scanline {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 100%; }
+  }
+  body.kernel-panic .dose-name {
+    animation: kp-shake 0.05s linear infinite;
+    text-shadow: 3px 0 #ff0000, -3px 0 #00ffff, 0 3px #ff00ff;
+  }
+  #konamiFlash {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: var(--fs-lg);
+    color: var(--white);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+  }
+  #konamiFlash.active { display: flex; }
+
   @media (max-width: 860px) {
     .main { grid-template-columns: 1fr; height: auto; }
     .right-panel { border-left: none; border-top: 1px solid #1A1A1A; max-height: none; }
@@ -1096,6 +1252,12 @@
 <body>
 
 <canvas id="matrixCanvas"></canvas>
+
+<div id="bootScreen">
+  <div class="boot-content" id="bootContent"></div>
+</div>
+
+<div id="konamiFlash">YOU FOUND IT</div>
 
 <!-- INTRO -->
 <div class="intro-screen" id="introScreen">
@@ -1152,6 +1314,7 @@
       </div>
     </div>
     <div class="header-right">
+      <span class="session-stats" id="sessionStats"></span>
       <button class="sfx-toggle" id="sfxToggle" onclick="toggleSfx()">SFX ON</button>
       <span><span class="live-dot"></span> FREQ ACTIVE</span>
       <span id="clock">00:00:00</span>
@@ -1180,6 +1343,7 @@
       </div>
 
       <button class="master-btn" id="masterBtn" onclick="toggleDose()">START DOSE</button>
+      <div class="post-dose-area" id="postDoseArea" style="display:none"></div>
     </div>
 
     <div class="right-panel">
@@ -1345,7 +1509,57 @@ function enterTerminal() {
   if (!document.getElementById('ageCheck').checked) return;
   playEnterSound();
   document.getElementById('introScreen').classList.add('hidden');
-  setTimeout(() => document.getElementById('introScreen').style.display = 'none', 800);
+  setTimeout(() => {
+    document.getElementById('introScreen').style.display = 'none';
+    runBootSequence();
+  }, 800);
+}
+
+function runBootSequence() {
+  const boot = document.getElementById('bootScreen');
+  const content = document.getElementById('bootContent');
+  boot.classList.add('active');
+  content.innerHTML = '';
+
+  const lines = [
+    '[SYS] INITIALIZING CAFFEINATE_ v2.6.0',
+    '[SYS] LOADING NEURAL DRIVERS...',
+    '[SYS] CALIBRATING BINAURAL ENGINE...',
+    '[SYS] FREQUENCY ARRAY ONLINE',
+    '[SYS] HEADPHONE DETECTION: STANDBY',
+    '[SYS] ALL SYSTEMS NOMINAL',
+    '[>>>>>>>>>>>>>>>>>>>>] 100%',
+    '[SYS] WELCOME, OPERATOR_'
+  ];
+
+  let lineIdx = 0;
+  function typeLine() {
+    if (lineIdx >= lines.length) {
+      setTimeout(() => {
+        boot.style.transition = 'opacity 0.6s ease';
+        boot.style.opacity = '0';
+        setTimeout(() => { boot.classList.remove('active'); boot.style.opacity = ''; boot.style.transition = ''; }, 600);
+      }, 800);
+      return;
+    }
+    const div = document.createElement('div');
+    div.className = 'boot-line';
+    content.appendChild(div);
+    const text = lines[lineIdx];
+    let charIdx = 0;
+    function typeChar() {
+      if (charIdx < text.length) {
+        div.textContent += text[charIdx];
+        charIdx++;
+        setTimeout(typeChar, 30);
+      } else {
+        lineIdx++;
+        setTimeout(typeLine, 400);
+      }
+    }
+    typeChar();
+  }
+  typeLine();
 }
 
 // 3D ICON HTML TEMPLATES
@@ -1571,6 +1785,9 @@ function startDose() {
 
   createSfxLayer(audioCtx, analyser);
 
+  // Hide any previous post-dose UI
+  document.getElementById('postDoseArea').style.display = 'none';
+  document.getElementById('postDoseArea').innerHTML = '';
   isPlaying=true; sessionTime=0; abuseTriggered=false;
   document.getElementById('masterBtn').textContent='STOP DOSE';
   document.getElementById('masterBtn').classList.add('active');
@@ -1590,7 +1807,7 @@ function startDose() {
     timerRemaining=timerSeconds;
     timerInterval=setInterval(()=>{ timerRemaining--; updateTimerDisplay(); if(timerRemaining<=0){stopDose();addLog('SYS','SESSION COMPLETE.','active');} },1000);
   }
-  sessionInterval=setInterval(()=>{sessionTime++;checkAbuseLevel();},1000);
+  sessionInterval=setInterval(()=>{sessionTime++;checkAbuseLevel();incrementExposure();},1000);
   let mi=0;
   msgInterval=setInterval(()=>{ if(!abuseTriggered) addLog('NEURAL',d.messages[mi%d.messages.length],'active'); mi++; },12000);
   drawWaveform();
@@ -1611,6 +1828,11 @@ function checkAbuseLevel() {
 }
 
 function stopDose() {
+  // Capture waveform before killing audio
+  const sigData = captureWaveformSignature();
+  const stoppedDose = currentDose;
+  const stoppedSessionTime = sessionTime;
+
   if(audioCtx){audioCtx.close().catch(()=>{});audioCtx=null;}
   oscillators=[];gainNodes=[];sfxOscillators=[];noiseSource=null;noiseGainNode=null;
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
@@ -1630,6 +1852,9 @@ function stopDose() {
   document.getElementById('abuseIndicator').className='abuse-indicator';
   addLog('SYS','DOSE STOPPED. BASELINE RESTORED.','active');
   drawStaticWaveform();
+
+  // Show post-dose UI (card + signature)
+  showPostDoseUI(stoppedDose, stoppedSessionTime, sigData);
 }
 
 // WAVEFORM (same noisy renderer)
@@ -1910,6 +2135,365 @@ function stopBinaryRain() {
   }
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// ============================================
+// FEATURE 3: SESSION COUNTER + ADDICTION
+// ============================================
+const STORAGE_SESSIONS = 'caffeinate_sessions';
+const STORAGE_SECONDS = 'caffeinate_seconds';
+const STORAGE_FIRST = 'caffeinate_first_visit';
+
+function initSessionTracker() {
+  if (!localStorage.getItem(STORAGE_FIRST)) {
+    localStorage.setItem(STORAGE_FIRST, new Date().toISOString());
+  }
+  let sessions = parseInt(localStorage.getItem(STORAGE_SESSIONS) || '0', 10);
+  sessions++;
+  localStorage.setItem(STORAGE_SESSIONS, sessions);
+  updateSessionDisplay();
+
+  // Welcome back message for addicts
+  const totalSec = parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
+  if (totalSec >= 18000) { // 5hr+
+    setTimeout(() => addLog('SYS', 'WELCOME BACK, OPERATOR. WE MISSED YOU.', 'warn'), 1500);
+  }
+}
+
+function incrementExposure() {
+  let totalSec = parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
+  totalSec++;
+  localStorage.setItem(STORAGE_SECONDS, totalSec);
+  updateSessionDisplay();
+}
+
+function getSessionCount() {
+  return parseInt(localStorage.getItem(STORAGE_SESSIONS) || '1', 10);
+}
+
+function getTotalSeconds() {
+  return parseInt(localStorage.getItem(STORAGE_SECONDS) || '0', 10);
+}
+
+function formatExposure(sec) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  return String(h).padStart(2, '0') + 'H ' + String(m).padStart(2, '0') + 'M';
+}
+
+function updateSessionDisplay() {
+  const el = document.getElementById('sessionStats');
+  const sessions = getSessionCount();
+  const totalSec = getTotalSeconds();
+  el.textContent = 'SESSION: ' + String(sessions).padStart(3, '0') + ' // EXPOSURE: ' + formatExposure(totalSec);
+
+  // Addiction tier coloring
+  const totalMin = totalSec / 60;
+  if (totalMin < 10) el.style.color = '#333';
+  else if (totalMin < 60) el.style.color = '#555';
+  else if (totalMin < 300) {
+    el.style.color = '#777';
+    document.querySelectorAll('.corner-tl,.corner-tr,.corner-bl,.corner-br').forEach(c => {
+      c.style.borderColor = '#333';
+      c.style.boxShadow = '0 0 6px rgba(255,255,255,0.05)';
+    });
+  } else {
+    el.style.color = '#999';
+    document.querySelectorAll('.corner-tl,.corner-tr,.corner-bl,.corner-br').forEach(c => {
+      c.style.borderColor = '#444';
+      c.style.boxShadow = '0 0 10px rgba(255,255,255,0.08)';
+    });
+  }
+}
+
+// Init on load
+initSessionTracker();
+
+// ============================================
+// FEATURE 5: NEURAL SIGNATURE WAVEFORM CAPTURE
+// ============================================
+function captureWaveformSignature() {
+  const src = document.getElementById('waveform');
+  if (!src || src.width === 0) return null;
+  try {
+    const cap = document.createElement('canvas');
+    cap.width = src.width;
+    cap.height = src.height;
+    cap.getContext('2d').drawImage(src, 0, 0);
+    return cap;
+  } catch(e) { return null; }
+}
+
+// ============================================
+// FEATURE 4 + 5: POST-DOSE UI
+// ============================================
+let postDoseTimeout = null;
+let sigFadeTimeout = null;
+
+function showPostDoseUI(doseKey, doseSessionTime, sigCanvas) {
+  const area = document.getElementById('postDoseArea');
+  area.innerHTML = '';
+  area.style.display = 'flex';
+
+  const d = DOSES[doseKey];
+  const sessionNum = getSessionCount();
+
+  // Buttons row
+  const btns = document.createElement('div');
+  btns.className = 'post-dose-btns';
+
+  const cardBtn = document.createElement('button');
+  cardBtn.className = 'post-dose-btn';
+  cardBtn.textContent = 'GENERATE DOSE CARD';
+  cardBtn.onclick = () => generateDoseCard(doseKey, doseSessionTime, sessionNum);
+  btns.appendChild(cardBtn);
+
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'post-dose-btn';
+  copyBtn.textContent = 'COPY LINK';
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText('caffeinate.club').then(() => {
+      copyBtn.textContent = 'COPIED_';
+      setTimeout(() => { copyBtn.textContent = 'COPY LINK'; }, 2000);
+    });
+  };
+  btns.appendChild(copyBtn);
+
+  area.appendChild(btns);
+
+  // Neural signature
+  if (sigCanvas) {
+    const wrap = document.createElement('div');
+    wrap.className = 'neural-sig-wrap';
+    const label = document.createElement('div');
+    label.className = 'neural-sig-label';
+    label.textContent = 'YOUR NEURAL SIGNATURE // SESSION #' + String(sessionNum).padStart(3, '0');
+    wrap.appendChild(label);
+
+    const display = document.createElement('canvas');
+    display.width = sigCanvas.width;
+    display.height = sigCanvas.height;
+    display.getContext('2d').drawImage(sigCanvas, 0, 0);
+    wrap.appendChild(display);
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'post-dose-btn';
+    saveBtn.style.marginTop = '6px';
+    saveBtn.textContent = 'SAVE SIGNATURE';
+    saveBtn.onclick = () => {
+      display.toBlob(blob => {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'caffeinate-signature-' + doseKey + '-' + Date.now() + '.png';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      });
+    };
+    wrap.appendChild(saveBtn);
+    area.appendChild(wrap);
+
+    // Fade out after 15s
+    sigFadeTimeout = setTimeout(() => {
+      wrap.classList.add('fading');
+      setTimeout(() => wrap.remove(), 2000);
+    }, 15000);
+  }
+
+  // Auto-hide buttons after 10s
+  if (postDoseTimeout) clearTimeout(postDoseTimeout);
+  postDoseTimeout = setTimeout(() => {
+    btns.style.transition = 'opacity 1s ease';
+    btns.style.opacity = '0';
+    setTimeout(() => btns.remove(), 1000);
+  }, 10000);
+}
+
+function generateDoseCard(doseKey, doseSessionTime, sessionNum) {
+  const d = DOSES[doseKey];
+  const c = document.createElement('canvas');
+  c.width = 1200; c.height = 630;
+  const ctx = c.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#0A0A0A';
+  ctx.fillRect(0, 0, 1200, 630);
+
+  // Corner brackets
+  ctx.strokeStyle = '#222';
+  ctx.lineWidth = 2;
+  const bk = 30;
+  ctx.beginPath();
+  ctx.moveTo(20, 20 + bk); ctx.lineTo(20, 20); ctx.lineTo(20 + bk, 20);
+  ctx.moveTo(1180 - bk, 20); ctx.lineTo(1180, 20); ctx.lineTo(1180, 20 + bk);
+  ctx.moveTo(1180, 610 - bk); ctx.lineTo(1180, 610); ctx.lineTo(1180 - bk, 610);
+  ctx.moveTo(20 + bk, 610); ctx.lineTo(20, 610); ctx.lineTo(20, 610 - bk);
+  ctx.stroke();
+
+  // Scanline overlay
+  ctx.fillStyle = 'rgba(255,255,255,0.008)';
+  for (let y = 0; y < 630; y += 4) ctx.fillRect(0, y, 1200, 2);
+
+  // Logo
+  ctx.font = '18px "Share Tech Mono", monospace';
+  ctx.fillStyle = '#555';
+  ctx.textAlign = 'center';
+  ctx.letterSpacing = '6px';
+  ctx.fillText('CAFFEINATE_', 600, 80);
+
+  // "DOSE ADMINISTERED"
+  ctx.font = '12px "Share Tech Mono", monospace';
+  ctx.fillStyle = '#333';
+  ctx.fillText('DOSE ADMINISTERED', 600, 130);
+
+  // Dose name
+  ctx.font = d.pixelFont ? '42px "Press Start 2P", monospace' : '48px "Share Tech Mono", monospace';
+  ctx.fillStyle = '#E0E0E0';
+  ctx.fillText(d.name, 600, 240);
+
+  // Frequency info
+  ctx.font = '14px "Share Tech Mono", monospace';
+  ctx.fillStyle = '#666';
+  if (d.cocktail) {
+    ctx.fillText('FREQUENCY: MULTI-LAYER // BINAURAL: ALL BANDS ∞', 600, 310);
+  } else {
+    ctx.fillText('FREQUENCY: ' + d.baseFreq + 'Hz / ' + (d.baseFreq + d.binauralHz) + 'Hz // BINAURAL: ' + d.binauralHz + 'Hz ' + d.type, 600, 310);
+  }
+
+  // Duration
+  const dm = Math.floor(doseSessionTime / 60);
+  const ds = doseSessionTime % 60;
+  const dh = Math.floor(doseSessionTime / 3600);
+  const durStr = String(dh).padStart(2,'0') + ':' + String(dm % 60).padStart(2,'0') + ':' + String(ds).padStart(2,'0');
+  ctx.fillStyle = '#555';
+  ctx.fillText('DURATION: ' + durStr, 600, 370);
+
+  // Session number
+  ctx.fillText('SESSION: #' + String(sessionNum).padStart(3, '0'), 600, 410);
+
+  // Footer
+  ctx.font = '11px "Share Tech Mono", monospace';
+  ctx.fillStyle = '#333';
+  ctx.fillText('caffeinate.club', 600, 570);
+
+  // Download
+  c.toBlob(blob => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'caffeinate-dose-' + doseKey + '-' + Date.now() + '.png';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+}
+
+// ============================================
+// FEATURE 2: KONAMI CODE EASTER EGG
+// ============================================
+const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+let konamiIdx = 0;
+let konamiActive = false;
+
+document.addEventListener('keydown', (e) => {
+  if (konamiActive) return;
+  const expected = KONAMI[konamiIdx];
+  if (e.key === expected || e.key.toLowerCase() === expected) {
+    konamiIdx++;
+    if (konamiIdx >= KONAMI.length) {
+      konamiIdx = 0;
+      triggerKernelPanic();
+    }
+  } else {
+    konamiIdx = 0;
+  }
+});
+
+function triggerKernelPanic() {
+  if (konamiActive || isPlaying) return;
+  konamiActive = true;
+
+  // Flash "YOU FOUND IT"
+  const flash = document.getElementById('konamiFlash');
+  flash.classList.add('active');
+  setTimeout(() => flash.classList.remove('active'), 1500);
+
+  // After flash, start chaos
+  setTimeout(() => {
+    // Start all 8 frequencies simultaneously
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    analyser = audioCtx.createAnalyser(); analyser.fftSize = 2048;
+    analyser.connect(audioCtx.destination);
+    oscillators = []; gainNodes = [];
+
+    const allDoses = ['espresso','redbull','coldbrew','yerba','copium','sudo','stackoverflow','workslocal'];
+    allDoses.forEach(dk => {
+      const dd = DOSES[dk];
+      const oL = audioCtx.createOscillator(), gL = audioCtx.createGain(), pL = audioCtx.createStereoPanner();
+      oL.type = 'sine'; oL.frequency.value = dd.baseFreq; gL.gain.value = 0.02; pL.pan.value = -1;
+      oL.connect(gL).connect(pL).connect(analyser); oL.start();
+      oscillators.push(oL); gainNodes.push(gL);
+      const oR = audioCtx.createOscillator(), gR = audioCtx.createGain(), pR = audioCtx.createStereoPanner();
+      oR.type = 'sine'; oR.frequency.value = dd.baseFreq + dd.binauralHz; gR.gain.value = 0.02; pR.pan.value = 1;
+      oR.connect(gR).connect(pR).connect(analyser); oR.start();
+      oscillators.push(oR); gainNodes.push(gR);
+    });
+
+    isPlaying = true;
+    document.body.classList.add('kernel-panic');
+    document.getElementById('masterBtn').textContent = 'KERNEL PANIC';
+    document.getElementById('masterBtn').classList.add('active');
+    document.getElementById('waveformContainer').setAttribute('data-status', 'PANIC');
+
+    addLog('CRITICAL', '>>> KERNEL PANIC: ALL FREQUENCIES ACTIVE <<<', 'critical');
+
+    // Rapid name cycling
+    const doseNames = Object.values(DOSES).map(d => d.name);
+    let nameIdx = 0;
+    const nameEl = document.getElementById('doseName');
+    const nameCycle = setInterval(() => {
+      nameEl.textContent = doseNames[nameIdx % doseNames.length];
+      nameIdx++;
+    }, 100);
+
+    // Flood error messages
+    const panicMsgs = [
+      'STACK OVERFLOW IN NEURAL CORTEX',
+      'SEGFAULT AT 0xDEADBEEF',
+      'FREQUENCY COLLISION DETECTED',
+      'BRAINWAVE BUFFER OVERFLOW',
+      'CONSCIOUSNESS.EXE HAS STOPPED',
+      'ATTEMPTING ROLLBACK... FAILED',
+      'DOPAMINE LEVELS: NaN',
+      'MEMORY LEAK IN HIPPOCAMPUS',
+      'KERNEL MODULE: sleep.ko CORRUPTED',
+      'ALL WATCHDOGS UNRESPONSIVE',
+      'EMERGENCY: CTRL+C DISABLED',
+      'RECURSIVE THOUGHT LOOP DETECTED'
+    ];
+    const msgFlood = setInterval(() => {
+      addLog('PANIC', panicMsgs[Math.floor(Math.random() * panicMsgs.length)], 'critical');
+    }, 500);
+
+    drawWaveform();
+
+    // Auto-stop after 30s
+    setTimeout(() => {
+      clearInterval(nameCycle);
+      clearInterval(msgFlood);
+      document.body.classList.remove('kernel-panic');
+      if (audioCtx) { audioCtx.close().catch(() => {}); audioCtx = null; }
+      oscillators = []; gainNodes = [];
+      if (animFrame) { cancelAnimationFrame(animFrame); animFrame = null; }
+      isPlaying = false;
+      nameEl.textContent = DOSES[currentDose].name;
+      document.getElementById('masterBtn').textContent = 'START DOSE';
+      document.getElementById('masterBtn').classList.remove('active');
+      document.getElementById('waveformContainer').setAttribute('data-status', 'STANDBY');
+      addLog('CRITICAL', 'SYSTEM OVERLOAD // EMERGENCY SHUTDOWN', 'critical');
+      addLog('SYS', 'BASELINE RESTORED. DO NOT REPEAT.', 'warn');
+      drawStaticWaveform();
+      konamiActive = false;
+    }, 30000);
+  }, 1500);
 }
 </script>
 </body>
