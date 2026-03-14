@@ -1100,14 +1100,15 @@
       min-height: 44px;
     }
 
-    /* 5. 3D icon scale down + prevent overlap with dose label */
+    /* 5. 3D icon — scale down, keep 160x160 geometry intact */
     .dose-icon-wrap {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 12px;
+      width: 160px;
+      height: 160px;
+      transform: scale(0.55);
+      margin-bottom: -20px;
     }
     .dose-label {
-      margin-top: 8px;
+      margin-top: 4px;
     }
 
     /* 6. Dose name responsive */
@@ -1229,7 +1230,7 @@
 
   /* Extra small screens (iPhone SE, etc) */
   @media (max-width: 400px) {
-    .dose-icon-wrap { width: 80px; height: 80px; }
+    .dose-icon-wrap { transform: scale(0.45); margin-bottom: -28px; }
     .dose-name { font-size: clamp(18px, 5vw, 28px); letter-spacing: 4px; }
     .freq-val { font-size: var(--fs-md); }
     .header { padding: 8px 12px; }
