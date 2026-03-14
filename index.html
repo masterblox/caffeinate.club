@@ -1088,6 +1088,7 @@
     /* 4. Dose list — horizontal scroll */
     .dose-grid {
       display: flex;
+      flex-direction: row;
       overflow-x: auto;
       gap: 8px;
       -webkit-overflow-scrolling: touch;
@@ -1099,11 +1100,14 @@
       min-height: 44px;
     }
 
-    /* 5. 3D icon scale down */
+    /* 5. 3D icon scale down + prevent overlap with dose label */
     .dose-icon-wrap {
       width: 100px;
       height: 100px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+    }
+    .dose-label {
+      margin-top: 8px;
     }
 
     /* 6. Dose name responsive */
