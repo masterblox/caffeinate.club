@@ -1408,14 +1408,12 @@ function getAudioCtx() {
   if (!audioCtx) {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
-  }
   return audioCtx;
 }
 
 function playClickSound() {
   const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') { ctx.resume(); }
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
   osc.type = 'square';
@@ -1427,15 +1425,18 @@ function playClickSound() {
 }
 
 function playHoverSound() {
-  const ctx = getAudioCtx();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = 1200;
-  gain.gain.value = 0.03;
-  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(); osc.stop(ctx.currentTime + 0.04);
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') return; // don't try hover sounds on suspended ctx
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = 1200;
+    gain.gain.value = 0.03;
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + 0.04);
+  } catch(e) {}
 }
 
 // Attach sounds to all buttons after DOM load
@@ -1653,22 +1654,28 @@ function createSfxLayer(ctx, dest) {
   sh.connect(shf).connect(shg).connect(dest); sh.start(); sfxOscillators.push(sh);
 }
 
-function startDose() {
+async function startDose() {
   const d = DOSES[currentDose];
   const ctx = getAudioCtx();
+  // MUST await resume before creating oscillators — mobile Safari blocks otherwise
+  if (ctx.state === 'suspended') { try { await ctx.resume(); } catch(e) {} }
   analyser = ctx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=0.3;
   oscillators=[]; gainNodes=[]; sfxOscillators=[];
 
   const layers = d.cocktail ? d.layers : [{freq:d.baseFreq, binaural:d.binauralHz}];
   layers.forEach(l => {
-    const oL=ctx.createOscillator(), gL=ctx.createGain(), pL=ctx.createStereoPanner();
-    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.2)/layers.length; pL.pan.value=-1;
-    oL.connect(gL).connect(pL).connect(analyser).connect(ctx.destination); oL.start();
-    oscillators.push(oL); gainNodes.push(gL);
-    const oR=ctx.createOscillator(), gR=ctx.createGain(), pR=ctx.createStereoPanner();
-    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.2)/layers.length; pR.pan.value=1;
-    oR.connect(gR).connect(pR).connect(analyser).connect(ctx.destination); oR.start();
-    oscillators.push(oR); gainNodes.push(gR);
+    const oL=ctx.createOscillator(), gL=ctx.createGain();
+    let pL; try { pL=ctx.createStereoPanner(); pL.pan.value=-1; } catch(e) { pL=null; }
+    oL.type='sine'; oL.frequency.value=l.freq; gL.gain.value=(intensity*0.2)/layers.length;
+    if (pL) { oL.connect(gL).connect(pL).connect(analyser).connect(ctx.destination); }
+    else { oL.connect(gL).connect(analyser).connect(ctx.destination); }
+    oL.start(); oscillators.push(oL); gainNodes.push(gL);
+    const oR=ctx.createOscillator(), gR=ctx.createGain();
+    let pR; try { pR=ctx.createStereoPanner(); pR.pan.value=1; } catch(e) { pR=null; }
+    oR.type='sine'; oR.frequency.value=l.freq+l.binaural; gR.gain.value=(intensity*0.2)/layers.length;
+    if (pR) { oR.connect(gR).connect(pR).connect(analyser).connect(ctx.destination); }
+    else { oR.connect(gR).connect(analyser).connect(ctx.destination); }
+    oR.start(); oscillators.push(oR); gainNodes.push(gR);
   });
 
   noiseSource=ctx.createBufferSource(); noiseSource.buffer=createNoiseBuffer(ctx); noiseSource.loop=true;
@@ -1823,9 +1830,6 @@ function getNoiseCtx() {
   if (!noiseCtx) {
     noiseCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
-  if (noiseCtx.state === 'suspended') {
-    noiseCtx.resume();
-  }
   return noiseCtx;
 }
 
@@ -1872,7 +1876,7 @@ function createBrownNoiseBuffer(ctx) {
   return buf;
 }
 
-function toggleNoise(type, btn) {
+async function toggleNoise(type, btn) {
   // If clicking the active noise type, turn it off
   if (activeNoiseType === type) {
     stopNoise();
@@ -1888,6 +1892,8 @@ function toggleNoise(type, btn) {
   btn.classList.add('active');
 
   const nCtx = getNoiseCtx();
+  // MUST await resume before creating nodes — mobile Safari blocks otherwise
+  if (nCtx.state === 'suspended') { try { await nCtx.resume(); } catch(e) {} }
 
   let buffer;
   if (type === 'white') buffer = createWhiteNoiseBuffer(nCtx);
@@ -1972,11 +1978,11 @@ function applyNoiseVolume(pct) {
   }
 }
 
-// Mobile audio fallback — resume suspended AudioContexts on first user gesture
+// Mobile audio fallback — resume suspended AudioContexts on ANY user gesture (not once — must persist)
 ['touchstart', 'click'].forEach(e => document.addEventListener(e, () => {
   if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
   if (typeof noiseCtx !== 'undefined' && noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
-}, { once: true }));
+}));
 </script>
 </body>
 </html>
