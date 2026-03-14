@@ -1048,50 +1048,23 @@
 
   /* ===================== */
   /* MOBILE RESPONSIVE     */
+  /* 15-POINT AUDIT FIX    */
   /* ===================== */
   @media (max-width: 768px) {
-    body { -webkit-text-size-adjust: 100%; }
 
-    /* 1. Single column layout */
-    .main { grid-template-columns: 1fr; }
-
-    /* 2. Sidebar stacks below */
-    .right-panel {
-      border-left: none;
-      border-top: 1px solid #222;
-      width: 100%;
+    /* 14. iOS text size adjust */
+    body {
+      -webkit-text-size-adjust: 100%;
+      overflow-x: hidden;
     }
 
-    /* 3. Scale down 3D icon */
-    .dose-icon-wrap { width: 100px; height: 100px; }
-
-    /* 4. Responsive dose name */
-    .dose-name {
-      font-size: clamp(20px, 5vw, 40px);
-      letter-spacing: 4px;
-    }
-    .dose-name.pixel-font {
-      font-size: clamp(18px, 5vw, 36px);
+    /* 1. Single column grid */
+    .main {
+      grid-template-columns: 1fr;
+      min-height: auto;
     }
 
-    /* 5. Waveform full width */
-    .waveform-container {
-      width: 100%;
-      max-width: none;
-    }
-
-    /* 6. Buttons — min 44px, full width */
-    .master-btn,
-    .dose-btn,
-    .noise-btn,
-    .timer-preset {
-      min-height: 44px;
-      width: 100%;
-    }
-
-    .master-btn { width: 100%; max-width: 300px; }
-
-    /* 7. Header stacks vertically */
+    /* 2. Header stacks vertically */
     .header {
       flex-direction: column;
       gap: 8px;
@@ -1104,67 +1077,161 @@
       gap: 12px;
     }
 
-    /* 8. Freq info stacks vertically */
+    /* 3. Sidebar full width, stacks below */
+    .right-panel {
+      width: 100%;
+      border-left: none;
+      border-top: 1px solid #222;
+      padding: 16px;
+    }
+
+    /* 4. Dose list — horizontal scroll */
+    .dose-grid {
+      display: flex;
+      overflow-x: auto;
+      gap: 8px;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 8px;
+    }
+    .dose-btn {
+      min-width: 140px;
+      flex-shrink: 0;
+      min-height: 44px;
+    }
+
+    /* 5. 3D icon scale down */
+    .dose-icon-wrap {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 16px;
+    }
+
+    /* 6. Dose name responsive */
+    .dose-name {
+      font-size: clamp(20px, 6vw, 40px);
+      letter-spacing: 6px;
+    }
+    .dose-name.pixel-font {
+      font-size: clamp(18px, 6vw, 36px);
+    }
+
+    /* 7. Freq info stacks vertically */
     .freq-info {
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
       align-items: center;
       text-align: center;
     }
 
-    /* 9. System log full width */
-    .status-log {
+    /* 8. Waveform full width */
+    .waveform-container {
+      max-width: 100%;
       width: 100%;
-      max-height: 200px;
-      overflow-y: auto;
     }
 
-    /* 10. Noise buttons stack on mobile */
+    /* 9. Master button full width */
+    .master-btn {
+      width: 100%;
+      max-width: 300px;
+      min-height: 48px;
+    }
+
+    /* 10. Noise buttons wrap */
     .noise-types {
       grid-template-columns: 1fr;
       gap: 8px;
     }
-
-    /* Freq core padding */
-    .freq-core { padding: 16px; }
-
-    /* Dose description */
-    .dose-desc { font-size: var(--fs-xs); padding: 0 8px; }
-
-    /* Dose grid wraps */
-    .dose-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    .noise-btn {
+      min-height: 44px;
+      width: 100%;
     }
 
-    /* Timer presets: 3 cols still fine, just ensure tap targets */
+    /* 11. Timer buttons wrap */
     .timer-presets {
       grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+    .timer-preset {
+      min-height: 44px;
     }
 
-    /* 11. Intro page mobile */
-    .intro-screen { padding: 20px; }
+    /* 12. Intro page mobile */
+    .intro-screen {
+      padding: 20px;
+      overflow-y: auto;
+    }
     .intro-title {
-      font-size: clamp(22px, 6vw, 40px);
+      font-size: clamp(22px, 7vw, 36px);
       letter-spacing: 8px;
     }
-    .intro-subtitle { letter-spacing: 3px; }
-    .intro-story { padding: 0 8px; }
-    .intro-story p { font-size: var(--fs-xs); }
-    .intro-disclaimer { font-size: 8px; padding: 0 8px; }
+    .intro-subtitle {
+      letter-spacing: 3px;
+      font-size: var(--fs-2xs);
+    }
+    .intro-story {
+      padding: 0 16px;
+    }
+    .intro-story p {
+      font-size: var(--fs-xs);
+      line-height: 1.8;
+    }
+    .intro-enter {
+      width: 100%;
+      max-width: 280px;
+      height: 52px;
+      min-height: 48px;
+    }
+    .intro-disclaimer {
+      font-size: 8px;
+      padding: 0 12px;
+    }
+    .age-gate {
+      padding: 12px 16px;
+    }
+    .age-checkbox {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+    }
 
-    /* Panels */
-    .panel-section { padding: 14px; }
+    /* 13. System log capped + scrollable */
+    .status-log {
+      width: 100%;
+      max-height: 150px;
+      overflow-y: auto;
+    }
 
+    /* 15. Freq core reduce padding */
+    .freq-core {
+      padding: 16px;
+    }
+
+    /* Dose description */
+    .dose-desc {
+      font-size: var(--fs-xs);
+      padding: 0 8px;
+    }
+
+    /* Panel sections */
+    .panel-section {
+      padding: 14px;
+    }
+
+    /* Slider tracks — ensure touchable */
+    .slider-track {
+      min-height: 24px;
+    }
   }
 
-  /* Extra small screens */
+  /* Extra small screens (iPhone SE, etc) */
   @media (max-width: 400px) {
     .dose-icon-wrap { width: 80px; height: 80px; }
+    .dose-name { font-size: clamp(18px, 5vw, 28px); letter-spacing: 4px; }
     .freq-val { font-size: var(--fs-md); }
     .header { padding: 8px 12px; }
-    .intro-title { letter-spacing: 4px; }
+    .intro-title { font-size: clamp(18px, 6vw, 28px); letter-spacing: 4px; }
+    .intro-story p { font-size: 10px; }
+    .dose-btn { min-width: 120px; }
   }
 </style>
 </head>
