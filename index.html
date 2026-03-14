@@ -1973,12 +1973,10 @@ function applyNoiseVolume(pct) {
 }
 
 // Mobile audio fallback — resume suspended AudioContexts on first user gesture
-['touchstart', 'click'].forEach(evt => {
-  document.addEventListener(evt, () => {
-    if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    if (noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
-  }, { once: true });
-});
+['touchstart', 'click'].forEach(e => document.addEventListener(e, () => {
+  if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  if (typeof noiseCtx !== 'undefined' && noiseCtx && noiseCtx.state === 'suspended') noiseCtx.resume();
+}, { once: true }));
 </script>
 </body>
 </html>
